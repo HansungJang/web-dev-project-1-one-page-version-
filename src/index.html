@@ -453,10 +453,27 @@ body.edit-mode [contenteditable="true"] { outline: 2px dashed #e0bc4a; backgroun
 
 <script type="module">
 import { getAuth, onAuthStateChanged, signOut } from "...firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc } from "...firebase-firestore.js";
 
 const TEXT_KEY = 'maum_text_v1';
+
+const db = getFirestore(app);
+const CONTENT_REF = doc(db, 'site', 'content');
+
 const IMG_KEY  = 'maum_imgs_v1';
 const TEXT_IDS = ['e-hero-h', 'e-hero-b', 'e-fields-h', 'e-info-h', 'e-cred-h', 'e-con-b', 'e-info-detail', 'copy-wright', 'e-c1', 'e-c2', 'e-c3', 'e-c4', 'e-c5', 'e-f1-h', 'e-f1-b', 'e-f2-h', 'e-f2-b', 'e-f3-h', 'e-f3-b', 'e-f4-h', 'e-f4-b', 'e-f5-h', 'e-f5-b', 'e-f6-h', 'e-f6-b', 'e-loc', 'e-email', 'tel', 'Fax', 'e-res', 'e-con-h'];
+
+// 불러오기
+async function restoreText() {
+  const snap = await getDoc(CONTENT_REF);
+  if (snap.exists()) {
+    const saved = snap.data();
+    TEXT_IDS.forEach(id => {
+      if (saved[id]) document.getElementById(id).innerHTML = saved[id];
+    });
+  }
+}
+
 
 window.addEventListener('DOMContentLoaded', () => {
 restoreText(); 
@@ -482,10 +499,11 @@ function activateEdit() {
   TEXT_IDS.forEach(id => { document.getElementById(id).setAttribute('contenteditable', 'true'); });
 }
 
-function saveAll() {
+// 저장
+window.saveAll = async function() {
   const texts = {};
   TEXT_IDS.forEach(id => { texts[id] = document.getElementById(id).innerHTML; });
-  localStorage.setItem(TEXT_KEY, JSON.stringify(texts));
+  await setDoc(CONTENT_REF, texts);
   showToast('변경 사항이 저장되었습니다.');
 }
 
