@@ -312,7 +312,7 @@ body.edit-mode [contenteditable="true"] { outline: 2px dashed #e0bc4a; backgroun
     <li><a href="#fields">상담분야</a></li>
     <li><a href="#fees">상담안내</a></li>
     <li><a href="#contact">문의·예약</a></li>
-    <li><a href="manager.html" class="nav-mgr">Manager ↗</a></li>
+    <li><a href="manager.html" class="nav-mgr" id="mgr-link">Manager ↗</a></li>
   </ul>
 </nav>
 
@@ -514,26 +514,45 @@ body.edit-mode [contenteditable="true"] { outline: 2px dashed #e0bc4a; backgroun
   }
 
   // 관리자 로그아웃
-  window.logout = () => {
-    signOut(auth).then(() => location.reload());
-  };
+// index.html 내 window.logout 수정
+window.logout = () => {
+  signOut(auth).then(() => {
+    // 404를 방지하기 위해 파일명을 명시하거나 메인 경로(/)로 이동
+    window.location.href = 'index.html'; 
+  }).catch((e) => console.error("로그아웃 오류:", e));
+};
 
-  // 실행 흐름
-  window.addEventListener('DOMContentLoaded', () => {
-    loadData(); // 데이터 먼저 불러오기
-    initScrollReveal();
+// 실행 흐름 부분 수정
+window.addEventListener('DOMContentLoaded', () => {
+  loadData();
+  initScrollReveal();
 
-    // 인증 상태 감시 (로그인 여부에 따라 편집모드 활성화)
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        document.body.classList.add('edit-mode');
-        document.getElementById('admin-bar').classList.add('on');
-        TEXT_IDS.forEach(id => {
-          const el = document.getElementById(id);
-          if (el) el.setAttribute('contenteditable', 'true');
+  // 인증 상태 감시
+  onAuthStateChanged(auth, (user) => {
+    const mgrLink = document.getElementById('mgr-link'); // 링크 요소 가져오기
+
+    if (user) {
+      // 1. 관리자 모드 활성화 (기존 로직)
+      document.body.classList.add('edit-mode');
+      document.getElementById('admin-bar').classList.add('on');
+      TEXT_IDS.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.setAttribute('contenteditable', 'true');
+      });
+
+      // 2. [추가] 로그인 상태일 때 Manager 버튼 클릭 제어
+      if (mgrLink) {
+        mgrLink.addEventListener('click', (e) => {
+          e.preventDefault(); // 페이지 이동 막기
+          showToast('이미 로그인된 상태입니다.'); // 토스트 알림
         });
       }
-    });
+    } else {
+      // 로그아웃 상태일 때는 기본 이동 허용 (필요 시 추가 로직 작성 가능)
+      document.body.classList.remove('edit-mode');
+      document.getElementById('admin-bar').classList.remove('on');
+    }
+  });
 
     window.addEventListener('scroll', () => {
       document.getElementById('nav').classList.toggle('stuck', window.scrollY > 50);
