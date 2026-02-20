@@ -341,7 +341,7 @@ body.edit-mode [contenteditable="true"] { outline: 2px dashed #e0bc4a; backgroun
   </div>
 
   <div class="therapist-photo drop-zone" id="drop-hero" data-key="img-hero">
-    <img id="img-hero" src="logo.png" alt="상담사 프로필">
+    <img id="img-hero" src="../assets/logo.png" alt="상담사 프로필">
   </div>
 </section>
 
@@ -451,130 +451,113 @@ body.edit-mode [contenteditable="true"] { outline: 2px dashed #e0bc4a; backgroun
 
 <div id="toast"></div>
 
-<script type="module">
-import { getAuth, onAuthStateChanged, signOut } from "...firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc } from "...firebase-firestore.js";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "...firebase-storage.js";
+ <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+  import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
-// text 편집
-const TEXT_KEY = 'maum_text_v1';
-const db = getFirestore(app);
-const CONTENT_REF = doc(db, 'site', 'content');
-const TEXT_IDS = ['e-hero-h', 'e-hero-b', 'e-fields-h', 'e-info-h', 'e-cred-h', 'e-con-b', 'e-info-detail', 'copy-wright', 'e-c1', 'e-c2', 'e-c3', 'e-c4', 'e-c5', 'e-f1-h', 'e-f1-b', 'e-f2-h', 'e-f2-b', 'e-f3-h', 'e-f3-b', 'e-f4-h', 'e-f4-b', 'e-f5-h', 'e-f5-b', 'e-f6-h', 'e-f6-b', 'e-loc', 'e-email', 'tel', 'Fax', 'e-res', 'e-con-h'];
-
-// 이미지 편집
-const storage = getStorage(app);
-const IMG_KEY  = 'maum_imgs_v1';
-
-// 불러오기
-async function restoreText() {
-  const snap = await getDoc(CONTENT_REF);
-  if (snap.exists()) {
-    const saved = snap.data();
-    TEXT_IDS.forEach(id => {
-      if (saved[id]) document.getElementById(id).innerHTML = saved[id];
-    });
-  }
-}
-
-window.addEventListener('DOMContentLoaded', () => {
-restoreText(); 
-const auth = getAuth(app);
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    activateEdit();   // 기존 함수 그대로 재사용
-  }
-});
-
-  initScrollReveal();
-  window.addEventListener('scroll', () => document.getElementById('nav').classList.toggle('stuck', window.scrollY > 50));
-});
-
-function restoreText() {
-  const saved = JSON.parse(localStorage.getItem(TEXT_KEY) || '{}');
-  TEXT_IDS.forEach(id => { if (saved[id]) document.getElementById(id).innerHTML = saved[id]; });
-}
-
-function activateEdit() {
-  document.body.classList.add('edit-mode');
-  document.getElementById('admin-bar').style.display = 'flex';
-  TEXT_IDS.forEach(id => { document.getElementById(id).setAttribute('contenteditable', 'true'); });
-}
-
-// drop-zone 클릭 시 파일 선택창 열기
-document.getElementById('drop-hero').addEventListener('click', () => {
-  if (!document.body.classList.contains('edit-mode')) return;
-  const input = document.createElement('input');
-  input.type = 'file'; input.accept = 'image/*';
-  input.onchange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    showToast('📤 이미지 업로드 중...');
-    const storageRef = ref(storage, 'images/hero.jpg');
-    await uploadBytes(storageRef, file);
-    const url = await getDownloadURL(storageRef);
-    document.getElementById('img-hero').src = url;
-    // Firestore에도 URL 저장
-    await setDoc(CONTENT_REF, { 'img-hero': url }, { merge: true });
-    showToast('✓ 이미지가 저장되었습니다.');
+  // 1. Firebase 설정 (제공해주신 정보 유지)
+  const firebaseConfig = {
+    apiKey: "AIzaSyBHAG_rdo3NxBWEJIGSnt34dYsXeP5G2lg",
+    authDomain: "web1-onepage-ver.firebaseapp.com",
+    projectId: "web1-onepage-ver",
+    storageBucket: "web1-onepage-ver.firebasestorage.app",
+    messagingSenderId: "790854514107",
+    appId: "1:790854514107:web:a14055b31f90844da8009e"
   };
-  input.click();
-});
 
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
 
-// 저장
-window.saveAll = async function() {
-  const texts = {};
-  TEXT_IDS.forEach(id => { texts[id] = document.getElementById(id).innerHTML; });
-  await setDoc(CONTENT_REF, texts);
-  showToast('변경 사항이 저장되었습니다.');
-}
+  const CONTENT_REF = doc(db, 'site', 'content');
+  const TEXT_IDS = ['e-hero-h', 'e-hero-b', 'e-fields-h', 'e-info-h', 'e-cred-h', 'e-con-b', 'e-info-detail', 'copy-wright', 'e-c1', 'e-c2', 'e-c3', 'e-c4', 'e-c5', 'e-f1-h', 'e-f1-b', 'e-f2-h', 'e-f2-b', 'e-f3-h', 'e-f3-b', 'e-f4-h', 'e-f4-b', 'e-f5-h', 'e-f5-b', 'e-f6-h', 'e-f6-b', 'e-loc', 'e-email', 'tel', 'Fax', 'e-res', 'e-con-h'];
 
-window.logout = async function() {
-  await signOut(auth);
-  location.reload();
-};
-
-function showToast(m) {
-  const t = document.getElementById('toast');
-  t.textContent = m; t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3000);
-}
-
-function toggleMenu() { 
-document.getElementById('nav-list').classList.toggle('open'); 
-document.querySelector('.burger').classList.toggle('active');
-}
-// 메뉴의 링크를 클릭했을 때 자동으로 메뉴를 닫는 기능
-document.querySelectorAll('.nav-list a').forEach(link => {
-  link.addEventListener('click', () => {
-    const navList = document.getElementById('nav-list');
-    // 'open' 클래스가 있을 때만 제거
-    if (navList.classList.contains('open')) {
-      navList.classList.remove('open');
-      burger.classList.remove('active'); // 버거 버튼 모양도 원래대로 복구
+  // [중요] 초기 데이터 로드 함수
+  async function loadData() {
+    try {
+      const snap = await getDoc(CONTENT_REF);
+      if (snap.exists()) {
+        const data = snap.data();
+        TEXT_IDS.forEach(id => {
+          const el = document.getElementById(id);
+          // DB에 해당 id의 데이터가 있는 경우에만 덮어쓰기
+          if (el && data[id]) {
+            el.innerHTML = data[id];
+          }
+        });
+        console.log("Firebase 데이터 로드 완료");
+      } else {
+        // 데이터가 없으면 콘솔에만 알리고 HTML 하드코딩 데이터 유지
+        console.log("DB에 저장된 데이터가 없습니다. 기본 설정을 유지합니다.");
+      }
+    } catch (e) {
+      console.error("데이터 로드 실패:", e);
     }
-  });
-});
-
-// (선택 사항) 메뉴 바깥 영역 클릭 시 닫기
-document.addEventListener('click', (e) => {
-  const navList = document.getElementById('nav-list');
-  const burger = document.querySelector('.burger');
-  
-  if (navList.classList.contains('open') && 
-      !navList.contains(e.target) && 
-      !burger.contains(e.target)) {
-    navList.classList.remove('open');
-    burger.classList.remove('active'); // 버거 버튼 모양도 원래대로 복구
   }
-});
-function initScrollReveal() {
-  const io = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); } });
-  }, { threshold: 0.1 });
-  document.querySelectorAll('.sr').forEach(el => io.observe(el));
-}
+
+  // [중요] 관리자 저장 함수 (전역 window 객체에 등록)
+  window.saveAll = async function() {
+    const texts = {};
+    TEXT_IDS.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) texts[id] = el.innerHTML;
+    });
+
+    try {
+      await setDoc(CONTENT_REF, texts);
+      showToast('✓ 클라우드에 성공적으로 저장되었습니다.');
+    } catch (e) {
+      console.error(e);
+      alert('저장 권한이 없습니다.');
+    }
+  }
+
+  // 관리자 로그아웃
+  window.logout = () => {
+    signOut(auth).then(() => location.reload());
+  };
+
+  // 실행 흐름
+  window.addEventListener('DOMContentLoaded', () => {
+    loadData(); // 데이터 먼저 불러오기
+    initScrollReveal();
+
+    // 인증 상태 감시 (로그인 여부에 따라 편집모드 활성화)
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        document.body.classList.add('edit-mode');
+        document.getElementById('admin-bar').classList.add('on');
+        TEXT_IDS.forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.setAttribute('contenteditable', 'true');
+        });
+      }
+    });
+
+    window.addEventListener('scroll', () => {
+      document.getElementById('nav').classList.toggle('stuck', window.scrollY > 50);
+    });
+  });
+
+  // 기타 UI 스크립트 (기존 유지)
+  window.toggleMenu = function() {
+    document.getElementById('nav-list').classList.toggle('open');
+    document.querySelector('.burger').classList.toggle('active');
+  }
+
+  function showToast(m) {
+    const t = document.getElementById('toast');
+    t.textContent = m; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  function initScrollReveal() {
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.sr').forEach(el => io.observe(el));
+  }
 </script>
 </body>
 </html>

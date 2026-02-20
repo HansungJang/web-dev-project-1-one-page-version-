@@ -91,6 +91,13 @@
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
 
+  function showToast(m) {
+  const t = document.getElementById('toast');
+  if(t) {
+    t.textContent = m; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }}; 
+
   window.doLogin = async function() {
     const email = document.getElementById('m-id').value.trim();
     const pw    = document.getElementById('m-pw').value;
@@ -102,6 +109,7 @@
     } catch(e) {
       err.style.display = 'block';
       document.getElementById('m-pw').value = '';
+      console.error("로그인 에러:", e);
     }
   }
 </script>
