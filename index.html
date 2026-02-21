@@ -160,8 +160,8 @@ nav.stuck {
   background: none; 
   border: none; 
   padding: 4px;
-  position: relative; /* 추가 */
-  z-index: 1000;      /* nav-list(799)보다 높게 설정하여 메뉴판 위로 올림 */
+  position: relative;  
+  z-index: 1000;       
 }
 
 .burger span { 
@@ -169,7 +169,6 @@ width: 22px; height: 1.5px; background: var(--c-ink); display: block;
 transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-/* 버거 버튼 활성화 상태 (X 모양) */
 .burger.active span:nth-child(1) {
   transform: translateY(6.5px) rotate(45deg);
 }
@@ -182,16 +181,14 @@ transition: transform 0.3s ease, opacity 0.3s ease;
 
 @media (max-width: 760px) {
   .burger { display: flex; }
-  /* 메뉴가 열렸을 때 버거 버튼을 메뉴판 안쪽 적절한 위치로 고정 */
-  .burger.active {
-    position: fixed;   /* 화면에 고정 */
-    right: 6vw;        /* 네비게이션 padding과 맞춤 */
-    top: 22px;         /* 네비게이션 상단 여백과 맞춤 */
+   .burger.active {
+    position: fixed;    
+    right: 6vw;         
+    top: 22px;          
   }
 
-  /* 관리자 모드일 때 버튼 위치 조정 (관리자 바 높이 48px 고려) */
-  body.edit-mode .burger.active {
-    top: 70px;         /* 22px + 48px */
+   body.edit-mode .burger.active {
+    top: 70px;          
   }
 
   .nav-list {
@@ -222,8 +219,7 @@ transition: transform 0.3s ease, opacity 0.3s ease;
 .sec-h em { font-style: italic; color: var(--c-sage); font-weight: 400; }
 .sec-sub { font-size: 16px; line-height: 1.85; color: var(--c-muted); font-weight: 300; word-break: keep-all; }
 
-/* Scroll reveal classes */
-.sr { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+ .sr { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
 .sr.in { opacity: 1; transform: translateY(0); }
 .sr.d1 { transition-delay: 0.1s; }
 .sr.d2 { transition-delay: 0.22s; }
@@ -438,7 +434,7 @@ body.edit-mode [contenteditable="true"] { outline: 2px dashed #e0bc4a; backgroun
     <p class="sec-sub sr"  id="e-con-b" style="margin:20px auto; max-width:600px;">
       심리적 어려움을 혼자 감당하지 마세요. 전문가와 함께라면 새로운 길을 찾을 수 있습니다.
     </p>
-    <a href="mailto:maum-2023@naver.com" class="btn-solid sr">이메일로 상담 신청하기</a>
+    <a href="mailto:maum-2023@naver.com" class="btn-solid sr" id="e-email-link">이메일로 상담 신청하기</a>
   </div>
 </section>
 
@@ -481,7 +477,7 @@ body.edit-mode [contenteditable="true"] { outline: 2px dashed #e0bc4a; backgroun
     })
   });
   const CONTENT_REF = doc(db, 'site', 'content');
-  const TEXT_IDS = ['e-hero-h', 'e-hero-b', 'e-fields-h', 'e-info-h', 'e-cred-h', 'e-con-b', 'e-info-detail', 'copy-wright', 'e-c1', 'e-c2', 'e-c3', 'e-c4', 'e-c5', 'e-f1-h', 'e-f1-b', 'e-f2-h', 'e-f2-b', 'e-f3-h', 'e-f3-b', 'e-f4-h', 'e-f4-b', 'e-f5-h', 'e-f5-b', 'e-f6-h', 'e-f6-b', 'e-loc', 'e-email', 'tel', 'Fax', 'e-res', 'e-con-h'];
+  const TEXT_IDS = ['e-hero-h', 'e-hero-b', 'e-fields-h', 'e-info-h', 'e-cred-h', 'e-con-b', 'e-info-detail', 'copy-wright', 'e-c1', 'e-c2', 'e-c3', 'e-c4', 'e-c5', 'e-f1-h', 'e-f1-b', 'e-f2-h', 'e-f2-b', 'e-f3-h', 'e-f3-b', 'e-f4-h', 'e-f4-b', 'e-f5-h', 'e-f5-b', 'e-f6-h', 'e-f6-b', 'e-loc', 'e-email', 'e-email-link', 'tel', 'Fax', 'e-res', 'e-con-h'];
 
   // [중요] 초기 데이터 로드 함수
   async function loadData() {
@@ -523,28 +519,56 @@ body.edit-mode [contenteditable="true"] { outline: 2px dashed #e0bc4a; backgroun
   }
 
 // UI에 데이터를 입히는 로직 분리
-function applyDataToUI(data) {
+ function applyDataToUI(data) {
   TEXT_IDS.forEach(id => {
     const el = document.getElementById(id);
-    if (el && data[id]) el.innerHTML = data[id];
+    const item = data[id];
+    if (!el || !item) return;
+
+    if (id === 'e-email-link') {
+      // 주소만 변경 (텍스트 유지)
+      if (item.href) el.setAttribute('href', item.href);
+    } 
+    else {
+      // 기본적으로 텍스트 반영
+      if (item.html) el.innerHTML = item.html;
+      // tel의 경우 저장된 주소가 있다면 추가 반영
+      if (id === 'tel' && item.href) {
+        el.querySelector('a')?.setAttribute('href', item.href);
+      }
+    }
   });
 }
   // [중요] 관리자 저장 함수 (전역 window 객체에 등록)
   window.saveAll = async function() {
-    const texts = {};
+    const data = {};
     TEXT_IDS.forEach(id => {
       const el = document.getElementById(id);
-      if (el) texts[id] = el.innerHTML;
+      if (!el) return;
+
+      if (id === 'e-email-link') {
+        // 1. 이메일 버튼: 텍스트는 무시하고 href만 저장
+        data[id] = { href: el.getAttribute('href') };
+      } 
+      else if (id === 'tel') {
+        // 2. 전화번호: 화면의 글자(innerHTML)와 href를 모두 저장
+        data[id] = { html: el.innerHTML, href: el.querySelector('a')?.getAttribute('href') };
+      } 
+      else {
+        // 3. 기타: 텍스트 내용만 저장
+        data[id] = { html: el.innerHTML };
+      }
     });
 
     try {
-      await setDoc(CONTENT_REF, texts);
+      await setDoc(CONTENT_REF, data);
+      localStorage.removeItem('site_content_time'); // 캐시 강제 만료
       showToast('✓ 클라우드에 성공적으로 저장되었습니다.');
     } catch (e) {
       console.error(e);
       alert('저장 권한이 없습니다.');
     }
-  }
+  };
 
   // 관리자 로그아웃
 // index.html 내 window.logout 수정
@@ -570,7 +594,7 @@ window.addEventListener('DOMContentLoaded', () => {
       document.getElementById('admin-bar').classList.add('on');
       TEXT_IDS.forEach(id => {
         const el = document.getElementById(id);
-        if (el) el.setAttribute('contenteditable', 'true');
+        if (id !== 'e-email-link') el.setAttribute('contenteditable', 'true');      
       });
 
       // 2. [추가] 로그인 상태일 때 Manager 버튼 클릭 제어
@@ -585,6 +609,26 @@ window.addEventListener('DOMContentLoaded', () => {
       document.body.classList.remove('edit-mode');
       document.getElementById('admin-bar').classList.remove('on');
     }
+
+      // 3. 전화번호 (tel): 텍스트 수정 시 href 자동 갱신 로직 (선택 사항)
+    const telBox = document.getElementById('tel');
+    if (telBox) {
+      telBox.oninput = () => {
+        const pureNum = telBox.innerText.replace(/[^0-9+]/g, '');
+        telBox.querySelector('a')?.setAttribute('href', `tel:${pureNum}`);
+      };
+    }
+
+      // 4. 이메일 (e-email-link): 텍스트 수정 시 href 자동 갱신 로직 (선택 사항)
+    const emailBox = document.getElementById('e-email-link');
+    const newEmailBox = document.getElementById('e-email');
+    if (emailBox && newEmailBox) {
+      newEmailBox.oninput = () => {
+        const pureEmail = newEmailBox.innerText.replace(/[^a-zA-Z0-9@.-]/g, '');
+        emailBox.setAttribute('href', `mailto:${pureEmail}`);
+      };
+    }
+
   });
 
     window.addEventListener('scroll', () => {
