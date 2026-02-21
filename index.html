@@ -484,34 +484,43 @@ body.edit-mode [contenteditable="true"] { outline: 2px dashed #e0bc4a; backgroun
   const TEXT_IDS = ['e-hero-h', 'e-hero-b', 'e-fields-h', 'e-info-h', 'e-cred-h', 'e-con-b', 'e-info-detail', 'copy-wright', 'e-c1', 'e-c2', 'e-c3', 'e-c4', 'e-c5', 'e-f1-h', 'e-f1-b', 'e-f2-h', 'e-f2-b', 'e-f3-h', 'e-f3-b', 'e-f4-h', 'e-f4-b', 'e-f5-h', 'e-f5-b', 'e-f6-h', 'e-f6-b', 'e-loc', 'e-email', 'tel', 'Fax', 'e-res', 'e-con-h'];
 
   // [중요] 초기 데이터 로드 함수
-async function loadData() {
-  const CACHE_KEY = 'site_content_cache';
-  const cachedData = localStorage.getItem(CACHE_KEY);
+  async function loadData() {
+    const CACHE_KEY = 'site_content_cache';
+    const TIME_KEY = 'site_content_time';
+    const cachedData = localStorage.getItem(CACHE_KEY);
+    const lastFetchTime = localStorage.getItem(TIME_KEY);
+    
+    const now = new Date().getTime();
+    const ONE_DAY = 24 * 60 * 60 * 1000; // 24시간을 밀리초로 계산
 
-  // 1. 로컬 캐시가 있다면 먼저 화면에 표시 (빠른 렌더링)
-  if (cachedData) {
-    const data = JSON.parse(cachedData);
-    applyDataToUI(data);
-    console.log("로컬 캐시 데이터 로드 완료");
-  }
-
-  // 2. 관리자가 아니거나 데이터가 오래된 경우에만 DB에서 새로 가져오기
-  try {
-    const snap = await getDoc(CONTENT_REF);
-    if (snap.exists()) {
-      const data = snap.data();
-      
-      // 로컬 데이터와 DB 데이터가 다를 때만 업데이트
-      if (JSON.stringify(data) !== cachedData) {
-        applyDataToUI(data);
-        localStorage.setItem(CACHE_KEY, JSON.stringify(data)); // 최신화
-        console.log("DB  데이터 업데이트 완료");
-      }
+    // 1. 먼저 로컬 캐시 데이터를 화면에 뿌림 (사용자에게 즉시 보여줌)
+    if (cachedData) {
+      applyDataToUI(JSON.parse(cachedData));
     }
-  } catch (e) {
-    console.error("데이터 로드 실패:", e);
+
+    // 2. 조건부 DB 호출
+    // 캐시가 없거나, 마지막으로 가져온 지 24시간이 지났을 때만 DB에 접속
+    if (!cachedData || !lastFetchTime || (now - lastFetchTime > ONE_DAY)) {
+      try {
+        const snap = await getDoc(CONTENT_REF);
+        if (snap.exists()) {
+          const data = snap.data();
+          
+          // 데이터가 변경되었을 때만 UI 업데이트 및 캐시 갱신
+          if (JSON.stringify(data) !== cachedData) {
+            applyDataToUI(data);
+            localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+            localStorage.setItem(TIME_KEY, now.toString()); // 업데이트 시간 기록
+            console.log("DB에서 새로운 데이터를 로드하고 캐시를 갱신했습니다.");
+          }
+        }
+      } catch (e) {
+        console.error("DB 로드 실패:", e);
+      }
+    } else {
+      console.log("24시간이 지나지 않아 로컬 캐시를 사용합니다. DB 호출 생략.");
+    }
   }
-}
 
 // UI에 데이터를 입히는 로직 분리
 function applyDataToUI(data) {
