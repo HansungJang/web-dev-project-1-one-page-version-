@@ -453,6 +453,11 @@ body.edit-mode [contenteditable="true"] { outline: 2px dashed #e0bc4a; backgroun
 
  <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+  import { 
+    initializeFirestore, 
+    persistentLocalCache, 
+    persistentMultipleTabManager 
+  } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";  
   import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
   import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
@@ -468,34 +473,53 @@ body.edit-mode [contenteditable="true"] { outline: 2px dashed #e0bc4a; backgroun
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
-  const db = getFirestore(app);
-
+  const db = initializeFirestore(app, {
+    // 로컬 캐시 사용 설정
+    localCache: persistentLocalCache({
+      // 여러 브라우저 탭에서 동시에 접속해도 캐시가 동기화되도록 관리
+      tabManager: persistentMultipleTabManager()
+    })
+  });
   const CONTENT_REF = doc(db, 'site', 'content');
   const TEXT_IDS = ['e-hero-h', 'e-hero-b', 'e-fields-h', 'e-info-h', 'e-cred-h', 'e-con-b', 'e-info-detail', 'copy-wright', 'e-c1', 'e-c2', 'e-c3', 'e-c4', 'e-c5', 'e-f1-h', 'e-f1-b', 'e-f2-h', 'e-f2-b', 'e-f3-h', 'e-f3-b', 'e-f4-h', 'e-f4-b', 'e-f5-h', 'e-f5-b', 'e-f6-h', 'e-f6-b', 'e-loc', 'e-email', 'tel', 'Fax', 'e-res', 'e-con-h'];
 
   // [중요] 초기 데이터 로드 함수
-  async function loadData() {
-    try {
-      const snap = await getDoc(CONTENT_REF);
-      if (snap.exists()) {
-        const data = snap.data();
-        TEXT_IDS.forEach(id => {
-          const el = document.getElementById(id);
-          // DB에 해당 id의 데이터가 있는 경우에만 덮어쓰기
-          if (el && data[id]) {
-            el.innerHTML = data[id];
-          }
-        });
-        console.log("Firebase 데이터 로드 완료");
-      } else {
-        // 데이터가 없으면 콘솔에만 알리고 HTML 하드코딩 데이터 유지
-        console.log("DB에 저장된 데이터가 없습니다. 기본 설정을 유지합니다.");
-      }
-    } catch (e) {
-      console.error("데이터 로드 실패:", e);
-    }
+async function loadData() {
+  const CACHE_KEY = 'site_content_cache';
+  const cachedData = localStorage.getItem(CACHE_KEY);
+
+  // 1. 로컬 캐시가 있다면 먼저 화면에 표시 (빠른 렌더링)
+  if (cachedData) {
+    const data = JSON.parse(cachedData);
+    applyDataToUI(data);
+    console.log("로컬 캐시 데이터 로드 완료");
   }
 
+  // 2. 관리자가 아니거나 데이터가 오래된 경우에만 DB에서 새로 가져오기
+  try {
+    const snap = await getDoc(CONTENT_REF);
+    if (snap.exists()) {
+      const data = snap.data();
+      
+      // 로컬 데이터와 DB 데이터가 다를 때만 업데이트
+      if (JSON.stringify(data) !== cachedData) {
+        applyDataToUI(data);
+        localStorage.setItem(CACHE_KEY, JSON.stringify(data)); // 최신화
+        console.log("DB  데이터 업데이트 완료");
+      }
+    }
+  } catch (e) {
+    console.error("데이터 로드 실패:", e);
+  }
+}
+
+// UI에 데이터를 입히는 로직 분리
+function applyDataToUI(data) {
+  TEXT_IDS.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && data[id]) el.innerHTML = data[id];
+  });
+}
   // [중요] 관리자 저장 함수 (전역 window 객체에 등록)
   window.saveAll = async function() {
     const texts = {};
