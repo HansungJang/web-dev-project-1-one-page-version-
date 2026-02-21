@@ -118,11 +118,14 @@ nav.stuck {
 
 .nav-brand {
   font-family: var(--f-display);
-  font-size: 21px;
+  font-size: clamp(13px, 4vw, 21px);
   font-weight: 700;
   letter-spacing: 0.04em;
-  color: var(--c-ink);
+  color: var(--c-ink); 
   flex-shrink: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap
 }
 .nav-brand span { color: var(--c-sage); }
 
@@ -183,7 +186,7 @@ transition: transform 0.3s ease, opacity 0.3s ease;
   .burger { display: flex; }
    .burger.active {
     position: fixed;    
-    right: 6vw;         
+    right: max(6vw, 16px);        
     top: 22px;          
   }
 
@@ -265,6 +268,12 @@ transition: transform 0.3s ease, opacity 0.3s ease;
 ══════════════════════════════════════════ */
 #fees { padding: 130px 0; background: var(--c-cream); }
 .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; }
+@media (max-width: 760px) {
+  .info-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}
 .ops-list { list-style: none; display: flex; flex-direction: column; gap: 24px; }
 .ops-item { display: flex; gap: 16px; align-items: flex-start; }
 .ops-ico { width: 42px; height: 42px; border-radius: 50%; background: var(--c-sage-xs); display: flex; align-items: center; justify-content: center; color: var(--c-sage); font-size: 20px; flex-shrink: 0; }
