@@ -264,22 +264,70 @@ transition: transform 0.3s ease, opacity 0.3s ease;
 @media (max-width: 860px) { .fields-grid { grid-template-columns: 1fr; } }
 
 /* ══════════════════════════════════════════
-   FEES & INFO
+   LOCATION & INFO (Updated Layout)
 ══════════════════════════════════════════ */
-#fees { padding: 130px 0; background: var(--c-cream); }
-.info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; }
-@media (max-width: 760px) {
-  .info-grid {
-    grid-template-columns: 1fr;
-    gap: 40px;
-  }
+#location {
+  padding: 130px 0;
+  background: var(--c-cream); /* Maintained original section color */
 }
-.ops-list { list-style: none; display: flex; flex-direction: column; gap: 24px; }
-.ops-item { display: flex; gap: 16px; align-items: flex-start; }
-.ops-ico { width: 42px; height: 42px; border-radius: 50%; background: var(--c-sage-xs); display: flex; align-items: center; justify-content: center; color: var(--c-sage); font-size: 20px; flex-shrink: 0; }
-.ops-val { font-size: 15px; color: var(--c-ink); }
-.ops-lbl { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--c-sage); font-weight: 700; display: block; margin-bottom: 4px; }
+.loc-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 72px; align-items: start;
+}
+.loc-body {
+  font-size: 16px; line-height: 1.85;
+  color: var(--c-muted); font-weight: 300;
+  margin: 22px 0 40px; word-break: keep-all;
+}
+.loc-list { list-style: none; display: flex; flex-direction: column; gap: 18px; }
+.loc-item {
+  display: flex; gap: 14px; align-items: flex-start;
+}
+.loc-ico {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: var(--c-sage-xs);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--c-sage); font-size: 17px; flex-shrink: 0;
+}
+.loc-meta { display: flex; flex-direction: column; gap: 3px; }
+.loc-lbl {
+  font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--c-sage); font-weight: 700;
+}
+.loc-val {
+  font-size: 15px; color: var(--c-ink); line-height: 1.6;
+}
 
+.map-box {
+  width: 100%; height: 440px;
+  border-radius: 2px; overflow: hidden;
+  border: 1px solid var(--c-border);
+  position: relative; /* 오버레이 배치를 위해 추가 */
+}
+
+.map-box a { display: block; width: 100%; height: 100%; }
+
+/* 이미지 위에 나타나는 안내 문구 */
+.map-overlay {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: rgba(26, 26, 24, 0.6);
+  color: #fff; padding: 12px; text-align: center;
+  font-size: 13px; letter-spacing: 0.05em;
+  opacity: 0; transition: opacity var(--t);
+}
+
+.map-box:hover .map-overlay { opacity: 1; }
+
+@media (max-width: 860px) {
+  .loc-grid { grid-template-columns: 1fr; }
+  .map-box { height: 280px; order: -1; }
+  .map-overlay { opacity: 1; font-size: 11px; padding: 8px; } /* 모바일은 항상 보임 */
+}
+
+@media (max-width: 860px) {
+  .loc-grid { grid-template-columns: 1fr; }
+  .map-box  { height: 280px; order: -1; } /* Map on top for mobile */
+}
 /* ══════════════════════════════════════════
    BUTTONS & FOOTER
 ══════════════════════════════════════════ */
@@ -315,7 +363,7 @@ body.edit-mode [contenteditable="true"] { outline: 2px dashed #e0bc4a; backgroun
   <ul class="nav-list" id="nav-list">
     <li><a href="#therapist">센터·전문가</a></li>
     <li><a href="#fields">상담분야</a></li>
-    <li><a href="#fees">상담안내</a></li>
+    <li><a href="#location">상담안내</a></li>
     <li><a href="#contact">문의·예약</a></li>
     <li><a href="manager.html" class="nav-mgr" id="mgr-link">Manager ↗</a></li>
   </ul>
@@ -384,54 +432,61 @@ body.edit-mode [contenteditable="true"] { outline: 2px dashed #e0bc4a; backgroun
   </div>
 </section>
 
-<section id="fees">
+<section id="location">
   <div class="wrap">
-    <div class="info-grid">
+    <div class="loc-grid">
       <div>
         <p class="sec-tag sr">Information</p>
         <h2 class="sec-h sr" id="e-info-h">상담 <em>안내</em></h2>
-        <p class="sec-sub sr" style="margin-top:20px;" id="e-info-detail">
+        <p class="loc-body sr" id="e-info-detail">
           모든 상담은 내담자의 프라이버시 보호를 위해 100% 사전 예약제로 운영됩니다. 편안한 마음으로 문의해 주세요.
         </p>
+
+        <ul class="loc-list">
+          <li class="loc-item sr">
+            <div class="loc-ico">📍</div>
+            <div class="loc-meta">
+              <span class="loc-lbl">상담 장소</span>
+              <span class="loc-val" id="e-loc">수원 및 용인 센터 운영<br>(문의 후 가까운 지점으로 배정해 드립니다)</span>
+            </div>
+          </li>
+          <li class="loc-item sr d1">
+            <div class="loc-ico">✉️</div>
+            <div class="loc-meta">
+              <span class="loc-lbl">이메일 문의</span>
+              <span class="loc-val" id="e-email">maum-2023@naver.com</span>
+            </div>
+          </li>
+          <li class="loc-item sr d2">
+            <div class="loc-ico">📞</div>
+            <div class="loc-meta">
+              <span class="loc-lbl">전화 문의</span>
+              <span class="loc-val" id="tel"><a href="tel:+821012345678">+82 10-1234-5678</a></span>
+            </div>
+          </li>
+          <li class="loc-item sr d3">
+            <div class="loc-ico">📠</div>
+            <div class="loc-meta">
+              <span class="loc-lbl">FAX 문의</span>
+              <span class="loc-val" id="Fax">0504-034-6940</span>
+            </div>
+          </li>
+          <li class="loc-item sr d4">
+            <div class="loc-ico">📅</div>
+            <div class="loc-meta">
+              <span class="loc-lbl">예약 방식</span>
+              <span class="loc-val" id="e-res">전화 또는 이메일을 통한 개별 스케줄 확정</span>
+            </div>
+          </li>
+        </ul>
       </div>
 
-      <ul class="ops-list">
-        <li class="ops-item sr">
-          <div class="ops-ico">📍</div>
-          <div class="ops-meta">
-            <span class="ops-lbl">상담 장소</span>
-            <span class="ops-val" id="e-loc">수원 및 용인 센터 운영<br>(문의 후 가까운 지점으로 배정해 드립니다)</span>
-          </div>
-        </li>
-        <li class="ops-item sr d1">
-          <div class="ops-ico">✉️</div>
-          <div class="ops-meta">
-            <span class="ops-lbl">이메일 문의</span>
-            <span class="ops-val" id="e-email">maum-2023@naver.com</span>
-          </div>
-        </li>
-        <li class="ops-item sr d2">
-          <div class="ops-ico">📞</div>
-          <div class="ops-meta">
-            <span class="ops-lbl">전화 문의</span>
-            <span class="ops-val" id="tel"><a href="tel:+821012345678">+82 10-1234-5678</a></span>
-          </div>
-        </li>
-        <li class="ops-item sr d3">
-          <div class="ops-ico">📠</div>
-          <div class="ops-meta">
-            <span class="ops-lbl">FAX 문의</span>
-            <span class="ops-val" id="Fax">0504-034-6940</span>
-          </div>
-        </li>
-        <li class="ops-item sr d4">
-          <div class="ops-ico">📅</div>
-          <div class="ops-meta">
-            <span class="ops-lbl">예약 방식</span>
-            <span class="ops-val" id="e-res">전화 또는 이메일을 통한 개별 스케줄 확정</span>
-          </div>
-        </li>
-      </ul>
+      <div class="map-box sr">
+        <a href="https://map.naver.com/" target="_blank" id="e-map-link">
+          <img src="assets/location.jpg" alt="지도 보기" id="img-map" style="width:100%; height:100%; object-fit:cover;">
+          <div class="map-overlay">클릭하시면 지도로 연결됩니다</div>
+        </a>
+      </div>
     </div>
   </div>
 </section>
@@ -638,7 +693,7 @@ window.addEventListener('DOMContentLoaded', () => {
       };
     }
 
-  });
+});
 
     window.addEventListener('scroll', () => {
       document.getElementById('nav').classList.toggle('stuck', window.scrollY > 50);
