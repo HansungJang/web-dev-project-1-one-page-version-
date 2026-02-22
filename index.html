@@ -72,7 +72,23 @@ button { cursor: pointer; font-family: var(--f-body); }
 #admin-bar.on { display: flex; }
 body.edit-mode { padding-top: 48px; }
 body.edit-mode nav { top: 48px; }
-
+/* 관리자 모드일 때 지도 박스 스타일 */
+body.edit-mode #e-map-link {
+  cursor: edit;
+  position: relative;
+}
+body.edit-mode #e-map-link::after {
+  content: '🔗 URL 수정 (클릭)';
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: var(--c-sage);
+  color: white;
+  padding: 4px 8px;
+  font-size: 11px;
+  border-radius: 4px;
+  z-index: 10;
+}
 .ab-badge {
   background: var(--c-sage); color: #fff;
   padding: 2px 10px; border-radius: 99px;
@@ -541,7 +557,7 @@ body.edit-mode [contenteditable="true"] { outline: 2px dashed #e0bc4a; backgroun
     })
   });
   const CONTENT_REF = doc(db, 'site', 'content');
-  const TEXT_IDS = ['e-hero-h', 'e-hero-b', 'e-fields-h', 'e-info-h', 'e-cred-h', 'e-con-b', 'e-info-detail', 'copy-wright', 'e-c1', 'e-c2', 'e-c3', 'e-c4', 'e-c5', 'e-f1-h', 'e-f1-b', 'e-f2-h', 'e-f2-b', 'e-f3-h', 'e-f3-b', 'e-f4-h', 'e-f4-b', 'e-f5-h', 'e-f5-b', 'e-f6-h', 'e-f6-b', 'e-loc', 'e-email', 'e-email-link', 'tel', 'Fax', 'e-res', 'e-con-h'];
+  const TEXT_IDS = ['e-hero-h', 'e-hero-b', 'e-fields-h', 'e-info-h', 'e-cred-h', 'e-con-b', 'e-info-detail', 'copy-wright', 'e-c1', 'e-c2', 'e-c3', 'e-c4', 'e-c5', 'e-f1-h', 'e-f1-b', 'e-f2-h', 'e-f2-b', 'e-f3-h', 'e-f3-b', 'e-f4-h', 'e-f4-b', 'e-f5-h', 'e-f5-b', 'e-f6-h', 'e-f6-b', 'e-loc', 'e-email', 'e-email-link', 'e-map-link', 'tel', 'Fax', 'e-res', 'e-con-h'];
 
   // [중요] 초기 데이터 로드 함수
   async function loadData() {
@@ -610,7 +626,7 @@ body.edit-mode [contenteditable="true"] { outline: 2px dashed #e0bc4a; backgroun
       const el = document.getElementById(id);
       if (!el) return;
 
-      if (id === 'e-email-link') {
+      if (id === 'e-email-link' || id === 'e-map-link') {
         // 1. 이메일 버튼: 텍스트는 무시하고 href만 저장
         data[id] = { href: el.getAttribute('href') };
       } 
@@ -651,6 +667,7 @@ window.addEventListener('DOMContentLoaded', () => {
   // 인증 상태 감시
   onAuthStateChanged(auth, (user) => {
     const mgrLink = document.getElementById('mgr-link'); // 링크 요소 가져오기
+    const mapLink = document.getElementById('e-map-link'); // 지도 링크 요소
 
     if (user) {
       // 1. 관리자 모드 활성화 (기존 로직)
@@ -662,6 +679,22 @@ window.addEventListener('DOMContentLoaded', () => {
       });
 
       // 2. [추가] 로그인 상태일 때 Manager 버튼 클릭 제어
+      // 지도 URL 수정 logic 
+      if (mapLink) {
+            mapLink.addEventListener('click', (e) => {
+              e.preventDefault(); // 페이지 이동 방지
+              
+              const currentUrl = mapLink.getAttribute('href');
+              // 브라우저 기본 prompt를 사용하여 새 URL 입력 받기
+              const newUrl = prompt("새로운 지도 URL 주소를 입력하세요:", currentUrl);
+              
+              if (newUrl !== null && newUrl !== "") {
+                mapLink.setAttribute('href', newUrl);
+                showToast('지도 연결 주소가 변경되었습니다. 저장 버튼을 눌러주세요.');
+              }
+            });
+          }
+
       if (mgrLink) {
         mgrLink.addEventListener('click', (e) => {
           e.preventDefault(); // 페이지 이동 막기
