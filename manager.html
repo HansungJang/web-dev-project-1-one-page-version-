@@ -78,17 +78,9 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
   import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
-
+  
   // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyBHAG_rdo3NxBWEJIGSnt34dYsXeP5G2lg",
-    authDomain: "web1-onepage-ver.firebaseapp.com",
-    projectId: "web1-onepage-ver",
-    storageBucket: "web1-onepage-ver.firebasestorage.app",
-    messagingSenderId: "790854514107",
-    appId: "1:790854514107:web:a14055b31f90844da8009e",
-    measurementId: "G-W9SZPT5JJ7"
-  };
+  const firebaseConfig = window.firebaseConfig; 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
 
