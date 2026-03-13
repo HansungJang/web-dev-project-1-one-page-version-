@@ -4,7 +4,7 @@
     persistentLocalCache, 
     persistentMultipleTabManager 
   } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";  
-  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+  import { getAuth, onAuthStateChanged, signOut, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
   import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
   // 1. Firebase 설정 (제공해주신 정보 유지)
@@ -221,3 +221,24 @@ window.addEventListener('DOMContentLoaded', () => {
     }, { threshold: 0.1 });
     document.querySelectorAll('.sr').forEach(el => io.observe(el));
   }
+
+    window.doLogin = async function() {
+      const emailEl = document.getElementById('m-id');
+      const pwEl = document.getElementById('m-pw');
+      const errEl = document.getElementById('m-err');
+  
+      if (!emailEl || !pwEl) return;
+  
+      const email = emailEl.value.trim();
+      const pw = pwEl.value;
+  
+      try {
+        await signInWithEmailAndPassword(auth, email, pw);
+        showToast('✓ 로그인 되었습니다.', 'ok');
+        setTimeout(() => { window.location.href = 'index.html'; }, 1000);
+      } catch(e) {
+        err.style.display = 'block';
+        document.getElementById('m-pw').value = '';
+        console.error("로그인 에러:", e);
+      }
+    };
