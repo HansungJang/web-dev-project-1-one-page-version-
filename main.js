@@ -91,27 +91,32 @@
 }
   // [중요] 관리자 저장 함수 (전역 window 객체에 등록)
   window.saveAll = async function() {
-    const data = {};
+    const snap = await getDoc(CONTENT_REF);   
+    const existingData = snap.exists() ? snap.data() : {};
+    const newData = {};
+
     TEXT_IDS.forEach(id => {
       const el = document.getElementById(id);
       if (!el) return;
 
       if (id === 'e-email-link' || id === 'e-map-link') {
         // 1. 이메일 버튼: 텍스트는 무시하고 href만 저장
-        data[id] = { href: el.getAttribute('href') };
+        newData[id] = { href: el.getAttribute('href') };
       } 
       else if (id === 'tel') {
         // 2. 전화번호: 화면의 글자(innerHTML)와 href를 모두 저장
-        data[id] = { html: el.innerHTML, href: el.querySelector('a')?.getAttribute('href') };
+        newData[id] = { html: el.innerHTML, href: el.querySelector('a')?.getAttribute('href') };
       } 
       else {
         // 3. 기타: 텍스트 내용만 저장
-        data[id] = { html: el.innerHTML };
+        newData[id] = { html: el.innerHTML };
       }
     });
 
+    const mergedData = { ...existingData, ...newData };
+
     try {
-      await setDoc(CONTENT_REF, data);
+      await setDoc(CONTENT_REF,  mergedData);
       localStorage.removeItem('site_content_time'); // 캐시 강제 만료
       showToast('✓ 클라우드에 성공적으로 저장되었습니다.');
     } catch (e) {
