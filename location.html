@@ -4,7 +4,7 @@
 <meta name="google-site-verification" content="6u8VGqjFS9anfKOoaCPpEUDmrA5ZB6H49vGUM3IbvgQ" />
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>마음 , 인지행동심리상담센터 - 센터소개</title>
+<title>마음 , 인지행동심리상담센터 - 오시는 방법</title>
     <script type="application/ld+json">
     {
       "@context" : "https://web-dev-project-1-one-page-version.pages.dev",
@@ -38,29 +38,50 @@
   <a class="nav-brand" href="index.html" >마음 ,<span>인지행동심리상담센터</span></a>
   <button class="burger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
   <ul class="nav-list" id="nav-list">
-    <li><a href="index.html" class="active">센터소개</a></li>
+    <li><a href="index.html">센터소개</a></li>
     <li><a href="specialties.html">전문분야</a></li>
     <li><a href="experts.html">전문가 소개</a></li>
     <li><a href="apply.html">상담 신청방법</a></li>
-    <li><a href="location.html">오시는 방법</a></li>
+    <li><a href="location.html" class="active">오시는 방법</a></li>
     <li><a href="manager.html" class="nav-mgr" id="mgr-link">Manager ↗</a></li>
   </ul>
 </nav>
 
-<section id="therapist" style="flex:1;">
-  <div class="therapist-content">
-    <p class="therapist-eyebrow">Mind & Cognitive Behavioral Therapy</p>
-    <h1 class="therapist-h1" id="e-hero-h">
-      당신의 마음이<br><em>다시 숨 쉴 수 있게</em><br>함께 걷겠습니다.
-    </h1>
-    <p class="therapist-body" id="e-hero-b-intro">
-      마음, 인지행동심리상담센터는 근거 기반의 인지행동치료(CBT)를 통해 개인의 심리적 회복과 성장을 돕는 전문 기관입니다. 
-      정신과 병원과의 협업을 통해 의학적 소견과 심리학적 개입의 균형을 유지하고 있습니다.
-    </p>
-  </div>
+<section id="location" style="flex:1;">
+  <div class="wrap">
+    <div class="loc-grid">
+      <div>
+        <p class="sec-tag sr">Information</p>
+        <h2 class="sec-h sr" id="e-info-h">오시는 <em>방법</em></h2>
+        <p class="loc-body sr" id="e-info-detail">
+          편안한 마음으로 문의해 주세요. 가까운 지점으로 안내해 드립니다.
+        </p>
 
-  <div class="therapist-photo drop-zone" id="drop-hero" data-key="img-hero">
-    <img id="img-hero" src="assets/logo.png" alt="센터소개">
+        <ul class="loc-list">
+          <li class="loc-item sr">
+            <div class="loc-ico">📍</div>
+            <div class="loc-meta">
+              <span class="loc-lbl">상담 장소</span>
+              <span class="loc-val" id="e-loc">수원 및 용인 센터 운영<br>(문의 후 가까운 지점으로 배정해 드립니다)</span>
+            </div>
+          </li>
+          <li class="loc-item sr d3">
+            <div class="loc-ico">📠</div>
+            <div class="loc-meta">
+              <span class="loc-lbl">FAX 문의</span>
+              <span class="loc-val" id="Fax">0504-034-6940</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="map-box sr">
+        <a href="https://map.naver.com/" target="_blank" id="e-map-link">
+          <img src="assets/location.jpg" alt="지도 보기" id="img-map" style="width:100%; height:100%; object-fit:cover;">
+          <div class="map-overlay">클릭하시면 지도로 연결됩니다</div>
+        </a>
+      </div>
+    </div>
   </div>
 </section>
 

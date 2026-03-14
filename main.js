@@ -138,13 +138,15 @@ window.addEventListener('DOMContentLoaded', () => {
   onAuthStateChanged(auth, (user) => {
     const mgrLink = document.getElementById('mgr-link'); // 링크 요소 가져오기
     const mapLink = document.getElementById('e-map-link'); // 지도 링크 요소
-
+    const adminBar = document.getElementById('admin-bar'); // 관리자 바 요소
     if (user) {
       // 1. 관리자 모드 활성화 (기존 로직)
       document.body.classList.add('edit-mode');
-      document.getElementById('admin-bar').classList.add('on');
+      if(adminBar) adminBar.classList.add('on');
       TEXT_IDS.forEach(id => {
-        const el = document.getElementById(id);
+        const el = document.getElementById(id); 
+        if(!el) return;
+
         if (id !== 'e-email-link') el.setAttribute('contenteditable', 'true');      
       });
 
@@ -174,7 +176,7 @@ window.addEventListener('DOMContentLoaded', () => {
     } else {
       // 로그아웃 상태일 때는 기본 이동 허용 (필요 시 추가 로직 작성 가능)
       document.body.classList.remove('edit-mode');
-      document.getElementById('admin-bar').classList.remove('on');
+      if (adminBar) { adminBar.classList.remove('on');}
     }
 
       // 3. 전화번호 (tel): 텍스트 수정 시 href 자동 갱신 로직 (선택 사항)
