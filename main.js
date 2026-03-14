@@ -150,6 +150,7 @@ window.addEventListener('DOMContentLoaded', () => {
       if(adminBar) adminBar.classList.add('on');
       TEXT_IDS.forEach(id => {
         const el = document.getElementById(id); 
+        // test for update
         if(!el) return;
 
         if (id !== 'e-email-link') el.setAttribute('contenteditable', 'true');      
