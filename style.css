@@ -445,15 +445,128 @@ body.edit-mode .edit-badge { display: block; }
 #toast.err  { border-left: 3px solid #e57373; }
 
 /* ══════════════════════════════════════════
-   MODAL AGREEMENT
+   CONSENT & DETAIL MODAL STYLE
 ══════════════════════════════════════════ */
 
+/* 모달 배경 오버레이 */
+.modal-overlay {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(26, 26, 24, 0.7); /* --c-ink 기반 반투명 */
+  backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 10000; padding: 20px;
+}
 
-#modal {
-  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-  background: var(--c-white); padding: 32px; border-radius: 4px;
-  box-shadow: var(--shadow-md); z-index: 10000;
-  width: 90%; max-width: 400px;
+/* 모달 컨텐츠 공통 박스 */
+.modal-content {
+  background: var(--c-ivory);
+  padding: 40px;
+  border-radius: 2px; /* 기존 디자인의 직선적인 느낌 유지 */
+  box-shadow: var(--shadow-md);
+  width: 100%;
+  max-width: 500px;
+  position: relative;
+  border: 1px solid var(--c-border);
+}
+
+.modal-content h2 {
+  font-family: var(--f-display);
+  font-size: 24px;
+  color: var(--c-sage);
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+/* 동의 폼 리스트 스타일 */
+.consent-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+/* 동의 항목 레이아웃 수정 */
+.consent-form label {
+  display: flex;
+  align-items: flex-start; /* 체크박스를 텍스트의 첫 줄 높이에 맞춤 */
+  gap: 12px;
+  cursor: pointer;
+  padding: 4px 0;
+}
+
+/* 체크박스 크기 고정 (Fixed Size) */
+.consent-form input[type="checkbox"] {
+  /* flex 환경에서도 크기가 줄어들지 않도록 고정 */
+  flex-shrink: 0; 
+  
+  /* 구체적인 픽셀 값 지정 */
+  width: 20px;
+  height: 20px;
+  
+  /* 상단 텍스트와 정렬을 맞추기 위한 미세 조정 */
+  margin: 0;
+  margin-top: 2px; 
+  
+  appearance: none; /* 브라우저 기본 스타일 제거 후 커스텀할 경우 */
+  border: 1.5px solid var(--c-sage);
+  border-radius: 2px;
+  background-color: var(--c-white);
+  position: relative;
+  cursor: pointer;
+}
+
+/* 체크 시 내부 표시 (선택 사항: 커스텀 스타일) */
+.consent-form input[type="checkbox"]:checked {
+  background-color: var(--c-sage);
+}
+
+.consent-form input[type="checkbox"]:checked::after {
+  content: '✓';
+  position: absolute;
+  color: white;
+  font-size: 14px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* 텍스트 영역 */
+.consent-form label span {
+  flex: 1; /* 남은 공간을 텍스트가 채우도록 설정 */
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--c-ink);
+  word-break: keep-all; /* 한글 단어 끊김 방지 */
+}
+
+/* 상세보기 링크 스타일 */
+.view-detail {
+  font-size: 12px;
+  color: var(--c-muted);
+  text-decoration: underline;
+  margin-left: auto;
+  transition: color var(--t);
+}
+
+.view-detail:hover {
+  color: var(--c-sage);
+}
+
+/* 진단 시작 버튼 (기존 .btn-solid 스타일 계승) */
+#btn-start {
+  width: 100%;
+  background: var(--c-ink);
+  color: #fff;
+  padding: 16px;
+  border: none;
+  border-radius: 2px;
+  font-size: 15px;
+  letter-spacing: 0.1em;
+  transition: var(--t);
+}
+
+#btn-start:hover {
+  background: var(--c-sage);
 }
 
 .dark-bg {

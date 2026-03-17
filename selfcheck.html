@@ -61,11 +61,34 @@
     </div>
 
 <!-- 사전 동의서 -->
-  <div id="modal" >
-    <h2>사전 동의서</h2>
-    <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. In dicta debitis culpa praesentium perferendis voluptatibus fuga cum minus. Temporibus voluptas dicta distinctio totam excepturi. Magni expedita mollitia culpa consequatur iure!</p>
-    <button id="agree-btn" >동의합니다</button>
+<div id="consent-modal" class="modal-overlay">
+  <div class="modal-content">
+    <h2>서비스 이용 사전 동의</h2>
+    <div class="consent-form">
+      <label>
+        <input type="checkbox" id="chk-privacy" required>
+        (필수) 개인정보 수집 및 민감정보(심리 진단 내역) 처리에 동의합니다.
+      </label>
+      
+      <label>
+        <input type="checkbox" id="chk-automated" required>
+        (필수) 알고리즘을 통한 자동화된 결정 방식에 대한 안내를 확인하였으며, 이에 동의합니다.
+      </label>
+
+      <label>
+        <input type="checkbox" id="chk-overseas" required>
+        (필수) 결과 리포트 전송을 위한 개인정보의 국외 이전 및 구글 위탁 처리에 동의합니다.
+      </label>
+
+      <label>
+        <input type="checkbox" id="chk-copyright" required>
+        (필수) 저작권 보호 및 개인적 용도 한정 이용 조항에 동의합니다.
+      </label>
+
+    </div>
+    <button onclick="startDiagnosis()" id="btn-start">진단 시작하기</button>
   </div>
+</div>
   
 
 <footer>
@@ -78,19 +101,45 @@
 <script type="module" src="main.js" defer></script>
 <script>
     const contents = document.getElementById('contents');
-    const modal = document.getElementById('modal');
-    const agreeBtn = document.getElementById('agree-btn');
+    const modal = document.getElementById('consent-modal');
+    const agreeBtn = document.getElementById('btn-start');
     const body = document.body;
 
     const chatContainer = document.getElementById('chat-container');
     const userInput = document.getElementById('user-input');
     const sendBtn = document.getElementById('send-btn');
-
+    
+    const essentialChecks = ['chk-privacy', 'chk-automated', 'chk-overseas', 'chk-copyright'];
     body.classList.add("dark-bg"); 
-    agreeBtn.addEventListener('click', () => {
-        localStorage.setItem('user_agreed', 'true'); // 동의 여부 저장
-        closeModal();
-    });
+// 2026년 보안 지침에 따른 sessionStorage 데이터 암호화 예시 
+// function saveEncryptedData(key, value) {
+//     // 실제 구현 시 CryptoJS 등 라이브러리 사용 권장
+//     const encrypted = btoa(unescape(encodeURIComponent(value))); 
+//     sessionStorage.setItem(key, encrypted);
+// }
+
+// 자동화된 결정에 대한 설명 요구권 및 거부권 처리 (Human-in-the-loop) [cite: 48]
+function requestHumanReview() {
+    alert("전문 상담사의 재검토 절차가 접수되었습니다. 24시간 이내에 연락드리겠습니다.");
+}
+
+function checkAllAgreements() {
+    for (const id of essentialChecks) {
+            sessionStorage.setItem(id, 'true'); // 동의 여부 저장
+        }
+ }
+
+function startDiagnosis() {
+    const allChecked = essentialChecks.every(id => document.getElementById(id).checked);
+    if (allChecked) {
+        checkAllAgreements(); // 동의 여부 저장
+        closeModal(); // 모달 닫기
+        console.log("진단 프로세스 시작");
+
+    } else {
+        alert("필수 동의 항목에 모두 체크해주세요.");
+    }
+}
 
     function closeModal() {
         contents.classList.remove("display-none");
@@ -155,85 +204,85 @@
         appendMessage("현재 가장 고민이 되는 부분을 자유롭게 적어주세요.", "bot");
     };
 
- document.getElementById('finish-btn').addEventListener('click', () => {
-    // 1. 데이터 수집 및 정렬
-    const surveyResults = [];
+//  document.getElementById('finish-btn').addEventListener('click', () => {
+//     // 1. 데이터 수집 및 정렬
+//     const surveyResults = [];
     
-    // sessionStorage의 모든 키를 순회
-    for (let i = 0; i < sessionStorage.length; i++) {
-        const key = sessionStorage.key(i);
-        if (key.startsWith('answer[')) {
-            try {
-                const data = JSON.parse(sessionStorage.getItem(key));
-                // key에서 숫자만 추출 (ex: answer[1] -> 1)
-                const qNum = key.match(/\d+/)[0]; 
-                // 해당 객체 내부의 실제 답변 텍스트 추출
-                const qText = data[qNum]; 
+//     // sessionStorage의 모든 키를 순회
+//     for (let i = 0; i < sessionStorage.length; i++) {
+//         const key = sessionStorage.key(i);
+//         if (key.startsWith('answer[')) {
+//             try {
+//                 const data = JSON.parse(sessionStorage.getItem(key));
+//                 // key에서 숫자만 추출 (ex: answer[1] -> 1)
+//                 const qNum = key.match(/\d+/)[0]; 
+//                 // 해당 객체 내부의 실제 답변 텍스트 추출
+//                 const qText = data[qNum]; 
                 
-                surveyResults.push({ no: parseInt(qNum), text: qText });
-            } catch (e) {
-                console.error("데이터 파싱 에러:", e);
-            }
-        }
-    }
+//                 surveyResults.push({ no: parseInt(qNum), text: qText });
+//             } catch (e) {
+//                 console.error("데이터 파싱 에러:", e);
+//             }
+//         }
+//     }
 
-    // 질문 번호 순으로 정렬
-    surveyResults.sort((a, b) => a.no - b.no);
+//     // 질문 번호 순으로 정렬
+//     surveyResults.sort((a, b) => a.no - b.no);
 
-    if (surveyResults.length === 0) {
-        alert("저장된 자가진단 데이터가 없습니다.");
-        return;
-    }
+//     if (surveyResults.length === 0) {
+//         alert("저장된 자가진단 데이터가 없습니다.");
+//         return;
+//     }
 
-    // 2. 보고서용 HTML 템플릿 생성
-    let reportContent = `
-        <div style="padding: 30px; font-family: 'Noto Sans KR', sans-serif; line-height: 1.6;">
-            <div style="border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px;">
-                <h1 style="margin: 0; color: #1a1a1a;">자가진단 결과 보고서</h1>
-                <p style="margin: 5px 0 0 0; color: #666;">마음 , 인지행동심리상담센터</p>
-            </div>
+//     // 2. 보고서용 HTML 템플릿 생성
+//     let reportContent = `
+//         <div style="padding: 30px; font-family: 'Noto Sans KR', sans-serif; line-height: 1.6;">
+//             <div style="border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px;">
+//                 <h1 style="margin: 0; color: #1a1a1a;">자가진단 결과 보고서</h1>
+//                 <p style="margin: 5px 0 0 0; color: #666;">마음 , 인지행동심리상담센터</p>
+//             </div>
             
-            <p style="text-align: right; font-size: 0.9em;">발행일시: ${new Date().toLocaleString()}</p>
+//             <p style="text-align: right; font-size: 0.9em;">발행일시: ${new Date().toLocaleString()}</p>
             
-            <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
-                <tr style="background-color: #f8f9fa;">
-                    <th style="border: 1px solid #dee2e6; padding: 12px; width: 20%;">항목</th>
-                    <th style="border: 1px solid #dee2e6; padding: 12px; width: 80%;">내용</th>
-                </tr>
-    `;
+//             <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+//                 <tr style="background-color: #f8f9fa;">
+//                     <th style="border: 1px solid #dee2e6; padding: 12px; width: 20%;">항목</th>
+//                     <th style="border: 1px solid #dee2e6; padding: 12px; width: 80%;">내용</th>
+//                 </tr>
+//     `;
 
-    surveyResults.forEach(item => {
-        reportContent += `
-            <tr>
-                <td style="border: 1px solid #dee2e6; padding: 12px; text-align: center; font-weight: bold;">질문 ${item.no}</td>
-                <td style="border: 1px solid #dee2e6; padding: 12px;">${item.text}</td>
-            </tr>
-        `;
-    });
+//     surveyResults.forEach(item => {
+//         reportContent += `
+//             <tr>
+//                 <td style="border: 1px solid #dee2e6; padding: 12px; text-align: center; font-weight: bold;">질문 ${item.no}</td>
+//                 <td style="border: 1px solid #dee2e6; padding: 12px;">${item.text}</td>
+//             </tr>
+//         `;
+//     });
 
-    reportContent += `
-            </table>
+//     reportContent += `
+//             </table>
             
-            <div style="margin-top: 40px; padding: 20px; background-color: #f1f3f5; border-radius: 8px;">
-                <p style="margin: 0; font-size: 0.9em; color: #495057;">
-                    * 본 진단 결과는 참고용이며, 정확한 진단은 전문가와의 상담을 통해 확인하시기 바랍니다.
-                </p>
-            </div>
-        </div>
-    `;
+//             <div style="margin-top: 40px; padding: 20px; background-color: #f1f3f5; border-radius: 8px;">
+//                 <p style="margin: 0; font-size: 0.9em; color: #495057;">
+//                     * 본 진단 결과는 참고용이며, 정확한 진단은 전문가와의 상담을 통해 확인하시기 바랍니다.
+//                 </p>
+//             </div>
+//         </div>
+//     `;
 
-    // 3. PDF 저장 실행
-    const worker = html2pdf();
-    const opt = {
-        margin: 15,
-        filename: `SelfCheck_Report_${new Date().getTime()}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    };
+//     // 3. PDF 저장 실행
+//     const worker = html2pdf();
+//     const opt = {
+//         margin: 15,
+//         filename: `SelfCheck_Report_${new Date().getTime()}.pdf`,
+//         image: { type: 'jpeg', quality: 0.98 },
+//         html2canvas: { scale: 2, useCORS: true },
+//         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+//     };
 
-    worker.from(reportContent).set(opt).save();
-});
+//     worker.from(reportContent).set(opt).save();
+// });
 </script>
 
 
