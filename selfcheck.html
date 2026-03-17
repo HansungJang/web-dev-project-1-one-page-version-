@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>마음 , 인지행동심리상담센터 - 자가진단</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Sans+KR:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  body { display: flex; flex-direction: column; min-height: 100vh; }
+  footer { margin-top: auto; }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+
+<div id="admin-bar">
+  <span class="ab-badge">관리자 모드</span>
+  <div class="ab-actions">
+    <button class="ab-btn save" onclick="saveAll()">💾 저장</button>
+    <button class="ab-btn" onclick="logout()">로그아웃</button>
+  </div>
+</div>
+
+<nav id="nav">
+  <a class="nav-brand" href="index.html" >마음 ,<span>인지행동심리상담센터</span></a>
+  <button class="burger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+  <ul class="nav-list" id="nav-list">
+    <li><a href="index.html">센터소개</a></li>
+    <li><a href="specialties.html">전문분야</a></li>
+    <li><a href="experts.html">전문가 소개</a></li>
+    <li><a href="apply.html">상담 신청</a></li>
+    <li><a href="location.html">오시는 방법</a></li>
+    <li><a href="manager.html" class="nav-mgr" id="mgr-link">Manager ↗</a></li>
+  </ul>
+</nav>
+
+
+<!-- 설문지 본문 -->
+    <div class="display-none" id="contents">
+        <h1 class="selfcheck-h1" id="s-hero-h">
+        간단한 자가진단으로<br><em>마음의 상태를 점검해보세요</em>
+        </h1>
+        <p class="selfcheck-body" id="s-hero-b">
+        아래의 간단한 질문들을 통해 현재 자신의 마음 상태를 점검해보세요. 
+        이 자가진단은 전문적인 상담을 대체하지 않으며, 필요시 전문가의 도움을 받는 것을 권장드립니다.
+        </p>
+
+        <div id="chat-window" class="chat-window">
+          <div id="chat-container" class="chat-container">
+            </div>
+          
+          <div class="chat-input-area">
+            <input type="text" id="user-input" placeholder="답변을 입력해주세요..." />
+            <button id="send-btn">전송</button>
+          </div>
+        </div>
+      <button id="end-btn" class="end-btn">자가진단 종료</button>
+    </div>
+
+<!-- 사전 동의서 -->
+  <div id="modal" >
+    <h2>사전 동의서</h2>
+    <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. In dicta debitis culpa praesentium perferendis voluptatibus fuga cum minus. Temporibus voluptas dicta distinctio totam excepturi. Magni expedita mollitia culpa consequatur iure!</p>
+    <button id="agree-btn" >동의합니다</button>
+  </div>
+  
+
+<footer>
+  <div class "foot-row">
+    <div class "foot-brand" >마음 , 인지행동심리상담센터</div>
+    <p class "foot-copy" id "copy-wright">© 2024 Maum CBT Center · Suwon & Yongin</p>
+  </div>
+</footer>
+
+<script type="module" src="main.js" defer></script>
+<script>
+    const contents = document.getElementById('contents');
+    const modal = document.getElementById('modal');
+    const agreeBtn = document.getElementById('agree-btn');
+    const body = document.body;
+
+    const chatContainer = document.getElementById('chat-container');
+    const userInput = document.getElementById('user-input');
+    const sendBtn = document.getElementById('send-btn');
+
+    body.classList.add("dark-bg"); 
+    agreeBtn.addEventListener('click', () => {
+        localStorage.setItem('user_agreed', 'true'); // 동의 여부 저장
+        closeModal();
+    });
+
+    function closeModal() {
+        contents.classList.remove("display-none");
+        modal.classList.add("display-none");
+        body.classList.remove("dark-bg");
+    }
+
+    // 페이지 로드 시 기존 동의 여부 확인
+    window.onload = () => {
+        const isAgreed = localStorage.getItem('user_agreed');
+        if (isAgreed === 'true') {
+            closeModal(); // 이미 동의했다면 모달 없이 바로 콘텐츠 표시
+        }
+    };
+
+    // 메시지 화면 출력 함수
+    function appendMessage(text, sender) {
+        const bubble = document.createElement('div');
+        bubble.className = `bubble ${sender}-bubble`;
+        bubble.innerText = text;
+        chatContainer.appendChild(bubble);
+        
+        // 스크롤을 항상 아래로 유지
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    // SessionStorage에 답변 저장 함수
+    function saveToSession(key, value) {
+        let surveyData = JSON.parse(sessionStorage.getItem('survey_results')) || {};
+        surveyData[key] = value;
+        sessionStorage.setItem('answer[' + key + ']', JSON.stringify(surveyData)); // 배열 형태로 저장 변경, 다수 답변에 대해서 저장 가능
+    }
+
+    // 전송 버튼 클릭 이벤트
+    window.answer_number = 1; // 질문 번호 초기화
+    sendBtn.addEventListener('click', () => {
+        const text  = userInput.value.trim();
+        if (text !== "") {
+            // 1. 사용자 말풍선 추가
+            appendMessage(text, 'user');
+            
+            // 2. 데이터 저장 (예: 질문 키값을 'subjective_ans'로 지정)
+            saveToSession(window.answer_number, text); // 
+            window.answer_number += 1; // 다음 질문을 위해 번호 증가
+            // 3. 입력창 비우기
+            userInput.value = "";
+            
+            // 4. (선택사항) 봇의 다음 반응 시뮬레이션
+            setTimeout(() => {
+                appendMessage("답변 감사합니다. 다음 질문으로 넘어갈까요?", 'bot');
+            }, 600);
+        }
+    });
+
+    // 엔터키 지원
+    userInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendBtn.click();
+    });
+
+    // 초기 질문 실행
+    window.onload = () => {
+        appendMessage("현재 가장 고민이 되는 부분을 자유롭게 적어주세요.", "bot");
+    };
+
+ document.getElementById('finish-btn').addEventListener('click', () => {
+    // 1. 데이터 수집 및 정렬
+    const surveyResults = [];
+    
+    // sessionStorage의 모든 키를 순회
+    for (let i = 0; i < sessionStorage.length; i++) {
+        const key = sessionStorage.key(i);
+        if (key.startsWith('answer[')) {
+            try {
+                const data = JSON.parse(sessionStorage.getItem(key));
+                // key에서 숫자만 추출 (ex: answer[1] -> 1)
+                const qNum = key.match(/\d+/)[0]; 
+                // 해당 객체 내부의 실제 답변 텍스트 추출
+                const qText = data[qNum]; 
+                
+                surveyResults.push({ no: parseInt(qNum), text: qText });
+            } catch (e) {
+                console.error("데이터 파싱 에러:", e);
+            }
+        }
+    }
+
+    // 질문 번호 순으로 정렬
+    surveyResults.sort((a, b) => a.no - b.no);
+
+    if (surveyResults.length === 0) {
+        alert("저장된 자가진단 데이터가 없습니다.");
+        return;
+    }
+
+    // 2. 보고서용 HTML 템플릿 생성
+    let reportContent = `
+        <div style="padding: 30px; font-family: 'Noto Sans KR', sans-serif; line-height: 1.6;">
+            <div style="border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px;">
+                <h1 style="margin: 0; color: #1a1a1a;">자가진단 결과 보고서</h1>
+                <p style="margin: 5px 0 0 0; color: #666;">마음 , 인지행동심리상담센터</p>
+            </div>
+            
+            <p style="text-align: right; font-size: 0.9em;">발행일시: ${new Date().toLocaleString()}</p>
+            
+            <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                <tr style="background-color: #f8f9fa;">
+                    <th style="border: 1px solid #dee2e6; padding: 12px; width: 20%;">항목</th>
+                    <th style="border: 1px solid #dee2e6; padding: 12px; width: 80%;">내용</th>
+                </tr>
+    `;
+
+    surveyResults.forEach(item => {
+        reportContent += `
+            <tr>
+                <td style="border: 1px solid #dee2e6; padding: 12px; text-align: center; font-weight: bold;">질문 ${item.no}</td>
+                <td style="border: 1px solid #dee2e6; padding: 12px;">${item.text}</td>
+            </tr>
+        `;
+    });
+
+    reportContent += `
+            </table>
+            
+            <div style="margin-top: 40px; padding: 20px; background-color: #f1f3f5; border-radius: 8px;">
+                <p style="margin: 0; font-size: 0.9em; color: #495057;">
+                    * 본 진단 결과는 참고용이며, 정확한 진단은 전문가와의 상담을 통해 확인하시기 바랍니다.
+                </p>
+            </div>
+        </div>
+    `;
+
+    // 3. PDF 저장 실행
+    const worker = html2pdf();
+    const opt = {
+        margin: 15,
+        filename: `SelfCheck_Report_${new Date().getTime()}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+
+    worker.from(reportContent).set(opt).save();
+});
+</script>
+
+
+
+</body>
+</html>
