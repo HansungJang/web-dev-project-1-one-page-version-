@@ -39,26 +39,34 @@
 
 
 <!-- 설문지 본문 -->
-    <div class="display-none" id="contents">
-        <h1 class="selfcheck-h1" id="s-hero-h">
-        간단한 자가진단으로<br><em>마음의 상태를 점검해보세요</em>
-        </h1>
-        <p class="selfcheck-body" id="s-hero-b">
-        아래의 간단한 질문들을 통해 현재 자신의 마음 상태를 점검해보세요. 
-        이 자가진단은 전문적인 상담을 대체하지 않으며, 필요시 전문가의 도움을 받는 것을 권장드립니다.
-        </p>
-
-        <div id="chat-window" class="chat-window">
-          <div id="chat-container" class="chat-container">
-            </div>
-          
-          <div class="chat-input-area">
-            <input type="text" id="user-input" placeholder="답변을 입력해주세요..." />
-            <button id="send-btn">전송</button>
-          </div>
+<div id="survey-app" class="survey-container" class="display-none">
+    <header class="survey-header">
+        <div class="progress-info">
+            <span id="cat-title">준비 중...</span>
+            <span id="progress-percent">0%</span>
         </div>
-      <button id="end-btn" class="end-btn">자가진단 종료</button>
-    </div>
+        <div class="progress-track">
+            <div id="progress-fill"></div>
+        </div>
+    </header>
+
+    <main id="chat-window" class="chat-window">
+        </main>
+
+    <footer id="input-control" class="input-area">
+        <input type="text" id="answer-input" placeholder="답변을 입력하세요..." autofocus>
+        <button id="send-btn">전송</button>
+    </footer>
+
+    <section id="final-step" class="final-step hidden">
+        <p class="finish-msg"><strong>모든 질의응답이 종료되었습니다.</strong></p>
+        <div class="button-group">
+            <button onclick="exportPDF()" class="btn-pdf">1. 답변 PDF 출력하기</button>
+            <button onclick="applyConsult('interpretation')" class="btn-info">2. 해석 상담 신청</button>
+            <button onclick="applyConsult('personal')" class="btn-primary">3. 개인 상담 신청</button>
+        </div>
+    </section>
+</div>
 
 <!-- 사전 동의서 -->
 <div id="consent-modal" class="modal-overlay">
@@ -100,14 +108,10 @@
 
 <script type="module" src="main.js" defer></script>
 <script>
-    const contents = document.getElementById('contents');
+    const contents = document.getElementById('survey-app');
     const modal = document.getElementById('consent-modal');
     const agreeBtn = document.getElementById('btn-start');
     const body = document.body;
-
-    const chatContainer = document.getElementById('chat-container');
-    const userInput = document.getElementById('user-input');
-    const sendBtn = document.getElementById('send-btn');
     
     const essentialChecks = ['chk-privacy', 'chk-automated', 'chk-overseas', 'chk-copyright'];
     body.classList.add("dark-bg"); 
@@ -155,54 +159,114 @@ function startDiagnosis() {
         }
     };
 
-    // 메시지 화면 출력 함수
-    function appendMessage(text, sender) {
-        const bubble = document.createElement('div');
-        bubble.className = `bubble ${sender}-bubble`;
-        bubble.innerText = text;
-        chatContainer.appendChild(bubble);
-        
-        // 스크롤을 항상 아래로 유지
-        chatContainer.scrollTop = chatContainer.scrollHeight;
-    }
+    // 설문 데이터 정의
+    const surveyData = [
+        { title: "문제 및 주 증상", questions: ["현재 가장 불편한 증상은 무엇인가요?" ] },
+        { title: "의학적/치료 병력", questions: Array(1).fill("의학적 병력에 대해 기술해주세요.") },
+        { title: "개인 습관/경험", questions: Array(1).fill("성장 과정의 주요 사건은?") },
+        { title: "사회생활", questions: Array(1).fill("대인관계나 직장생활은?") },
+        { title: "가족관계", questions: Array(1).fill("가족 구성원과의 관계는?") },
+        { title: "약물/범죄 이력", questions: ["약물 복용 이력"] },
+        { title: "애인/결혼 생활", questions: Array(1).fill("결혼 생활 혹은 파트너 관계는?") }
+    ];
 
-    // SessionStorage에 답변 저장 함수
-    function saveToSession(key, value) {
-        let surveyData = JSON.parse(sessionStorage.getItem('survey_results')) || {};
-        surveyData[key] = value;
-        sessionStorage.setItem('answer[' + key + ']', JSON.stringify(surveyData)); // 배열 형태로 저장 변경, 다수 답변에 대해서 저장 가능
-    }
-
-    // 전송 버튼 클릭 이벤트
-    window.answer_number = 1; // 질문 번호 초기화
-    sendBtn.addEventListener('click', () => {
-        const text  = userInput.value.trim();
-        if (text !== "") {
-            // 1. 사용자 말풍선 추가
-            appendMessage(text, 'user');
-            
-            // 2. 데이터 저장 (예: 질문 키값을 'subjective_ans'로 지정)
-            saveToSession(window.answer_number, text); // 
-            window.answer_number += 1; // 다음 질문을 위해 번호 증가
-            // 3. 입력창 비우기
-            userInput.value = "";
-            
-            // 4. (선택사항) 봇의 다음 반응 시뮬레이션
-            setTimeout(() => {
-                appendMessage("답변 감사합니다. 다음 질문으로 넘어갈까요?", 'bot');
-            }, 600);
-        }
-    });
-
-    // 엔터키 지원
-    userInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') sendBtn.click();
-    });
-
-    // 초기 질문 실행
-    window.onload = () => {
-        appendMessage("현재 가장 고민이 되는 부분을 자유롭게 적어주세요.", "bot");
+    let state = {
+        catIdx: 0,
+        queIdx: 0,
+        doneCount: 0,
+        totalCount: surveyData.reduce((acc, cur) => acc + cur.questions.length, 0)
     };
+
+    // 초기화
+    document.addEventListener('DOMContentLoaded', () => {
+        renderQuestion();
+        document.getElementById('send-btn').addEventListener('click', handleAnswer);
+        document.getElementById('answer-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleAnswer();
+        });
+    });
+
+    // 질문 렌더링
+    function renderQuestion() {
+        const qText = surveyData[state.catIdx].questions[state.queIdx];
+        addMessage(`[${surveyData[state.catIdx].title}] ${qText}`, 'bot');
+        updateUI();
+    }
+
+    // 메시지 추가
+    function addMessage(text, type) {
+        const chatWin = document.getElementById('chat-window');
+        const msg = document.createElement('div');
+        msg.className = `bubble ${type}`;
+        msg.innerText = text;
+        chatWin.appendChild(msg);
+        chatWin.scrollTop = chatWin.scrollHeight;
+    }
+
+    // 답변 제출 로직
+    function handleAnswer() {
+        const input = document.getElementById('answer-input');
+        const val = input.value.trim();
+        if (!val) return;
+
+        addMessage(val, 'user');
+        saveToStorage(val);
+        input.value = "";
+
+        // 이어쓰기 확인 로직
+        setTimeout(() => {
+            if (confirm("다음 문항으로 넘어가시겠습니까?\n(취소 시 현재 문항 보충 작성)")) {
+                moveNext();
+            } else {
+                addMessage("현재 문항에 내용을 이어서 입력해주세요.", 'bot');
+            }
+        }, 100);
+    }
+
+    // 데이터 저장 (SessionStorage)
+    function saveToStorage(answer) {
+        const key = `survey_ans_${state.catIdx}_${state.queIdx}`;
+        const prev = sessionStorage.getItem(key) || "";
+        sessionStorage.setItem(key, prev ? `${prev} ${answer}` : answer);
+    }
+
+    // 다음 단계 이동
+    function moveNext() {
+        state.doneCount++;
+        state.queIdx++;
+
+        if (state.queIdx >= surveyData[state.catIdx].questions.length) {
+            state.catIdx++;
+            state.queIdx = 0;
+        }
+
+        if (state.catIdx >= surveyData.length) {
+            console.log('donecount:', state.doneCount, 'totalcount:', state.totalCount); 
+            updateUI();
+            completeSurvey();
+        } else {
+            renderQuestion();
+        }
+    }
+
+    // UI 업데이트 (진행도)
+    function updateUI() {
+        const percent = Math.floor((state.doneCount / state.totalCount) * 100);
+        document.getElementById('progress-fill').style.width = `${percent}%`;
+        document.getElementById('progress-percent').innerText = `${percent}%`;
+        document.getElementById('cat-title').innerText = state.catIdx < surveyData.length ? `Ch.${state.catIdx + 1}. ${surveyData[state.catIdx].title}` :  "설문 완료";
+    }
+
+    // 종료 처리
+    function completeSurvey() {
+        document.getElementById('input-control').classList.add('hidden');
+        document.getElementById('final-step').classList.remove('hidden');
+        addMessage("설문이 모두 끝났습니다. 고생하셨습니다!", 'bot');
+    }
+
+    // 기능 확장용 함수들
+    function exportPDF() { alert("PDF 생성을 준비 중입니다."); }
+    function applyConsult(type) { alert(`${type} 상담 신청이 완료되었습니다.`); }
 
 //  document.getElementById('finish-btn').addEventListener('click', () => {
 //     // 1. 데이터 수집 및 정렬
