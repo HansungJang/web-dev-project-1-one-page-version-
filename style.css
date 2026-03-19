@@ -635,3 +635,9 @@ body.edit-mode .edit-badge { display: block; }
 .btn-pdf { background: #27ae60; }
 .btn-info { background: #3498db; }
 .btn-primary { background: #8e44ad; }
+
+/*testtttttingg*/
+#type-select{
+  position: relative;
+  top: 100px;
+}
