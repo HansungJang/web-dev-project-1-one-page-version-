@@ -123,8 +123,10 @@
     
     body.classList.add("dark-bg"); 
 
+    const essentialCheckcontents = ["(필수) 개인정보 수집 및 민감정보(심리 진단 내역) 처리에 동의합니다.", "(필수) 알고리즘을 통한 자동화된 결정 방식에 대한 안내를 확인하였으며, 이에 동의합니다.", "(필수) 결과 리포트 전송을 위한 개인정보의 국외 이전 및 구글 위탁 처리에 동의합니다.", "(필수) 저작권 보호 및 개인적 용도 한정 이용 조항에 동의합니다."];
 
-// 2026년 보안 지침에 따른 sessionStorage 데이터 암호화 예시 
+
+    // 2026년 보안 지침에 따른 sessionStorage 데이터 암호화 예시 
 // function saveEncryptedData(key, value) {
 //     // 실제 구현 시 CryptoJS 등 라이브러리 사용 권장
 //     const encrypted = btoa(unescape(encodeURIComponent(value))); 
@@ -367,17 +369,14 @@ typeSelect.addEventListener('change', (e) => {
                         <th style="border: 1px solid #dee2e6; padding: 12px; width: 70%;">내용</th>
                     </tr>
         `;
-            essentialChecks.forEach(id => {
-                const label = document.querySelector(`label[for="${id}"]`);
-                if (label) {
-                    consentContent += `
+            essentialCheckcontents.forEach( id => {
+                     consentContent += `
                         <tr>
-                            <td style="border: 1px solid #dee2e6; padding: 12px; font-weight: bold;">${label.innerText}</td>
+                            <td style="border: 1px solid #dee2e6; padding: 12px; font-weight: bold;">${id}</td>
                             <td style="border: 1px solid #dee2e6; padding: 12px;">동의함</td>
                         </tr>
                     `;
-                }
-            });
+             });
 
         consentContent += `
                 </table>
