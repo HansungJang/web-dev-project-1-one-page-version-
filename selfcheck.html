@@ -39,11 +39,15 @@
 
 
 <!-- 설문지 본문 -->
- <select id="type-select">
-    <option value="">설문지를 선택하세요</option>
-    <option value="adult">성인 자가진단</option>
-    <option value="student">청소년 자가진단</option>
- </select>
+ <div class="survey-selector-wrapper">
+    <div class="selector-label">자가진단 유형을 선택해주세요</div>
+    <select id="type-select">
+        <option value="">설문지를 선택하세요</option>
+        <option value="adult">성인 자가진단</option>
+        <option value="student">청소년 자가진단</option>
+    </select>
+ </div>
+
 <div id="survey-app" class="survey-container" class="display-none">
     <header class="survey-header">
         <div class="progress-info">

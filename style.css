@@ -636,8 +636,59 @@ body.edit-mode .edit-badge { display: block; }
 .btn-info { background: #3498db; }
 .btn-primary { background: #8e44ad; }
 
-/*testtttttingg*/
-#type-select{
-  position: relative;
-  top: 100px;
+ /* ══════════════════════════════════════════
+   SURVEY SELECTOR UI IMPROVEMENT
+══════════════════════════════════════════ */
+
+.survey-selector-wrapper {
+    max-width: 600px;
+    margin: 120px auto 20px auto; /* 네비게이션 바 높이를 고려한 상단 여백 */
+    padding: 0 20px;
+    text-align: center;
+}
+
+.selector-label {
+    font-family: var(--f-display);
+    font-size: 18px;
+    color: var(--c-sage);
+    margin-bottom: 15px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+}
+
+.custom-select {
+    width: 100%;
+    max-width: 400px;
+    padding: 15px 25px;
+    font-family: var(--f-body);
+    font-size: 16px;
+    color: var(--c-ink);
+    background-color: var(--c-ivory);
+    border: 2px solid var(--c-border);
+    border-radius: 50px; /* 둥근 캡슐형 디자인 */
+    appearance: none; /* 기본 화살표 제거 */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%233d5c35' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 20px center;
+    background-size: 18px;
+    cursor: pointer;
+    transition: all var(--t);
+    box-shadow: var(--shadow-sm);
+}
+
+.custom-select:hover {
+    border-color: var(--c-sage);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.custom-select:focus {
+    outline: none;
+    border-color: var(--c-sage);
+    background-color: var(--c-white);
+}
+
+/* 설문이 시작되면 선택창을 부드럽게 숨기기 위한 처리 (선택 사항) */
+.survey-container:not(.display-none) ~ .survey-selector-wrapper {
+    display: none;
 }
