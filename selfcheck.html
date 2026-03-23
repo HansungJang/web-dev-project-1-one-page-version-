@@ -325,10 +325,7 @@ typeSelect.addEventListener('change', (e) => {
             const key = sessionStorage.key(i);
             if (key.startsWith('survey_ans_')) {
                 const data = sessionStorage.getItem(key);
-                // const qCatIdx = key.split('_')[2]; // 카테고리 인덱스
-                // const qQueIdx = key.split('_')[3]; // 질문 인덱스
-                // //const qAnswer = JSON.parse(data); // 저장된 답변 텍스트
-                // console.log(`질문 카테고리: ${qCatIdx}, 질문 번호: ${qQueIdx}, 답변: ${data}`);
+
                 const match = key.match(/survey_ans_(\d+)_(\d+)/);
                 if (match) {
                     const catIdx = parseInt(match[1]);
@@ -442,83 +439,6 @@ typeSelect.addEventListener('change', (e) => {
 
         alert("PDF 생성을 준비 중입니다."); }
     function applyConsult(type) { alert(`${type} 상담 신청이 완료되었습니다.`); }
-
- 
-    
-//     // sessionStorage의 모든 키를 순회
-//     for (let i = 0; i < sessionStorage.length; i++) {
-//         const key = sessionStorage.key(i);
-//         if (key.startsWith('answer[')) {
-//             try {
-//                 const data = JSON.parse(sessionStorage.getItem(key));
-//                 // key에서 숫자만 추출 (ex: answer[1] -> 1)
-//                 const qNum = key.match(/\d+/)[0]; 
-//                 // 해당 객체 내부의 실제 답변 텍스트 추출
-//                 const qText = data[qNum]; 
-                
-//                 surveyResults.push({ no: parseInt(qNum), text: qText });
-//             } catch (e) {
-//                 console.error("데이터 파싱 에러:", e);
-//             }
-//         }
-//     }
-
-//     // 질문 번호 순으로 정렬
-//     surveyResults.sort((a, b) => a.no - b.no);
-
-//     if (surveyResults.length === 0) {
-//         alert("저장된 자가진단 데이터가 없습니다.");
-//         return;
-//     }
-
-//     // 2. 보고서용 HTML 템플릿 생성
-//     let reportContent = `
-//         <div style="padding: 30px; font-family: 'Noto Sans KR', sans-serif; line-height: 1.6;">
-//             <div style="border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px;">
-//                 <h1 style="margin: 0; color: #1a1a1a;">자가진단 결과 보고서</h1>
-//                 <p style="margin: 5px 0 0 0; color: #666;">마음 , 인지행동심리상담센터</p>
-//             </div>
-            
-//             <p style="text-align: right; font-size: 0.9em;">발행일시: ${new Date().toLocaleString()}</p>
-            
-//             <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
-//                 <tr style="background-color: #f8f9fa;">
-//                     <th style="border: 1px solid #dee2e6; padding: 12px; width: 20%;">항목</th>
-//                     <th style="border: 1px solid #dee2e6; padding: 12px; width: 80%;">내용</th>
-//                 </tr>
-//     `;
-
-//     surveyResults.forEach(item => {
-//         reportContent += `
-//             <tr>
-//                 <td style="border: 1px solid #dee2e6; padding: 12px; text-align: center; font-weight: bold;">질문 ${item.no}</td>
-//                 <td style="border: 1px solid #dee2e6; padding: 12px;">${item.text}</td>
-//             </tr>
-//         `;
-//     });
-
-//     reportContent += `
-//             </table>
-            
-//             <div style="margin-top: 40px; padding: 20px; background-color: #f1f3f5; border-radius: 8px;">
-//                 <p style="margin: 0; font-size: 0.9em; color: #495057;">
-//                     * 본 진단 결과는 참고용이며, 정확한 진단은 전문가와의 상담을 통해 확인하시기 바랍니다.
-//                 </p>
-//             </div>
-//         </div>
-//     `;
-
-//     // 3. PDF 저장 실행
-//     const worker = html2pdf();
-//     const opt = {
-//         margin: 15,
-//         filename: `SelfCheck_Report_${new Date().getTime()}.pdf`,
-//         image: { type: 'jpeg', quality: 0.98 },
-//         html2canvas: { scale: 2, useCORS: true },
-//         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-//     };
-
-//     worker.from(reportContent).set(opt).save();
  </script>
 
 
