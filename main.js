@@ -250,3 +250,38 @@ window.addEventListener('DOMContentLoaded', () => {
         console.error("로그인 에러:", e);
       }
     };
+
+// apply.html 함수 
+// function submitForm(event) {
+//     event.preventDefault(); // 폼 새로고침 방지
+
+//     // 1. 데이터 수집
+//     const templateParams = {
+//         f_name: document.getElementById('f-name').value,
+//         f_email: document.getElementById('f-email').value,
+//         f_phone: document.getElementById('f-phone-con').value,
+//         f_svc: document.getElementById('f-svc').value,
+//         f_modality: document.getElementById('f-modality').value,
+//         f_msg: document.getElementById('f-msg').value,
+//         timestamp: new Date().toLocaleString() // 작성일
+//     };
+
+//     // 2. 필수값 체크 (이름, 이메일)
+//     if (!templateParams.f_name || !templateParams.f_email) {
+//         alert("이름과 이메일은 필수 입력 항목입니다.");
+//         return;
+//     }
+
+//     // 3. EmailJS 전송
+//     // 'YOUR_SERVICE_ID'와 'YOUR_TEMPLATE_ID'를 EmailJS 대시보드 값으로 교체하세요.
+//     emailjs.send('service_n5nvrll', 'template_5kncb8h', templateParams)
+//         .then(function(response) {
+//             console.log('SUCCESS!', response.status, response.text);
+//             alert("상담 신청이 완료되었습니다. 곧 연락드리겠습니다.");
+//             // 폼 초기화
+//             document.querySelectorAll('.form input, .form textarea, .form select').forEach(el => el.value = '');
+//         }, function(error) {
+//             console.log('FAILED...', error);
+//             alert("전송에 실패했습니다. 잠시 후 다시 시도해 주세요.");
+//         });
+// }
