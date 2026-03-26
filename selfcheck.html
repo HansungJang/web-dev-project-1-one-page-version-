@@ -42,9 +42,12 @@
  <div class="survey-selector-wrapper">
     <div class="selector-label">자가진단 유형을 선택해주세요</div>
     <select id="type-select">
-        <option value="">설문지를 선택하세요</option>
+        <option value="">자가진단 대상선택</option>
         <option value="adult">성인 자가진단</option>
         <option value="student">청소년 자가진단</option>
+    </select>
+    <select id="category-select" style="display: none; margin-top: 10px;">
+        <option value="">세부 항목 선택</option>
     </select>
  </div>
 
@@ -124,7 +127,8 @@
     
     const essentialChecks = ['chk-privacy', 'chk-automated', 'chk-overseas', 'chk-copyright'];
     const typeSelect = document.getElementById('type-select');
-    
+    const categorySelect = document.getElementById('category-select');
+
     body.classList.add("dark-bg"); 
 
     const essentialCheckcontents = ["(필수) 개인정보 수집 및 민감정보(심리 진단 내역) 처리에 동의합니다.", "(필수) 알고리즘을 통한 자동화된 결정 방식에 대한 안내를 확인하였으며, 이에 동의합니다.", "(필수) 결과 리포트 전송을 위한 개인정보의 국외 이전 및 구글 위탁 처리에 동의합니다.", "(필수) 저작권 보호 및 개인적 용도 한정 이용 조항에 동의합니다."];
@@ -177,19 +181,14 @@ function startDiagnosis() {
     //
     const surveyConfigs = {
     adult: [
-        { title: "문제 및 주 증상", questions: ["현재 가장 불편한 증상은 무엇인가요?"] },
-        { title: "의학적/치료 병력", questions: ["의학적 병력에 대해 기술해주세요."] },
-        { title: "개인 습관/경험", questions: ["성장 과정의 주요 사건은?"] },
-        { title: "사회생활", questions: ["대인관계나 직장생활은?"] },
-        { title: "가족관계", questions: ["가족 구성원과의 관계는?"] },
-        { title: "약물/범죄 이력", questions: ["약물 복용 이력"] },
-        { title: "애인/결혼 생활", questions: ["결혼 생활 혹은 파트너 관계는?"] }
-    ],
+        { title: "type 1", questions: ["현재 가장 불편한 증상은 무엇인가요?", "대인관계나 직장생활은?", "대인관계나 직장생활은?"] },
+        { title: "type 2", questions: ["의학적 병력에 대해 기술해주세요.", "대인관계나 직장생활은?"] },
+        { title: "type 3", questions: ["성장 과정의 주요 사건은?"] }
+     ],
     student: [
-        { title: "개인 습관/경험", questions: ["성장 과정의 주요 사건은?" ] }
-        // { title: "학교생활", questions: ["학교 내 대인관계나 생활은?", "성장 과정의 주요 사건은?"] },
-        // { title: "가족관계", questions: ["가족 구성원과의 관계는?", "성장 과정의 주요 사건은?"] }
-    ]
+        { title: "type 1", questions: ["성장 과정의 주요 사건은?" ] },
+        { title: "type 2", questions: ["학교 내 대인관계나 생활은?", "성장 과정의 주요 사건은?"] }
+     ]
 };
 
     let surveyData = []; // 현재 선택된 설문 데이터
@@ -204,22 +203,61 @@ function startDiagnosis() {
     // 설문 데이터 정의
 typeSelect.addEventListener('change', (e) => {
     const selectedType = e.target.value;
-    
-    // 3. 조건부 상태 활용 (Optional Chaining 및 기본값 설정)
-    surveyData = surveyConfigs[selectedType] || [];
+    const categories = surveyConfigs[selectedType] || [];
 
-    console.log("선택된 설문 데이터:", surveyData);
-    if(surveyData.length > 0) {
-        state.catIdx = 0;
-        state.queIdx = 0;
-        state.doneCount = 0;
-        state.totalCount = surveyData.reduce((sum, cat) => sum + cat.questions.length, 0);
-        addMessage(`"${typeSelect.options[typeSelect.selectedIndex].text}" 설문이 선택되었습니다. 진단을 시작합니다.`, 'bot');
-    }
-    // 이후 surveyData를 활용해 UI를 렌더링하는 함수를 호출하면 됩니다.
-    renderQuestion();
+    // 세부 선택창 초기화
+    categorySelect.innerHTML = '<option value="">세부 항목을 선택하세요</option>';
+
+    if (categories.length > 0) {
+            categories.forEach((cat, index) => {
+                const option = document.createElement('option');
+                option.value = index; // 카테고리 인덱스 저장
+                option.innerText = cat.title;
+                categorySelect.appendChild(option);
+            });
+            categorySelect.style.display = 'block'; // 보이게 설정
+        } else {
+            categorySelect.style.display = 'none';
+        }
+        
+        // 진행 중이던 설문 UI 초기화 (선택 전까지 대기)
+        resetSurvey();
 });
 
+    // 2. 세부 항목 선택 시 해당 질문들만 독립적으로 로드
+    categorySelect.addEventListener('change', (e) => {
+        const type = typeSelect.value;
+        const catIdx = e.target.value;
+
+        if (type && catIdx !== "") {
+            const selectedCategory = surveyConfigs[type][catIdx];
+            
+            // 핵심: 전체 배열이 아닌 "선택한 카테고리 하나"만 surveyData에 넣음
+            surveyData = [selectedCategory]; 
+
+            // 상태 초기화
+            state = {
+                catIdx: 0,
+                queIdx: 0,
+                doneCount: 0,
+                totalCount: selectedCategory.questions.length
+            };
+
+            // 채팅창 비우고 시작
+            document.getElementById('chat-window').innerHTML = "";
+            addMessage(`"${selectedCategory.title}" 진단을 시작합니다.`, 'bot');
+            renderQuestion();
+        }
+    });
+
+    // 초기화 함수 추가
+    function resetSurvey() {
+        surveyData = [];
+        document.getElementById('chat-window').innerHTML = "";
+        document.getElementById('progress-fill').style.width = `0%`;
+        document.getElementById('progress-percent').innerText = `0%`;
+        document.getElementById('cat-title').innerText = "준비 중...";
+    }
 
 
     // 초기화
