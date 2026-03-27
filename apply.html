@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta name="google-site-verification" content="6u8VGqjFS9anfKOoaCPpEUDmrA5ZB6H49vGUM3IbvgQ" />
+<!--<meta name="google-site-verification" content="6u8VGqjFS9anfKOoaCPpEUDmrA5ZB6H49vGUM3IbvgQ" />
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>마음 , 인지행동심리상담센터 - 상담 신청방법</title>
@@ -13,8 +13,8 @@
       "alternateName": ["마음 쉼(표)CBT", "마음, CBT상담", "수지 마음,인지행동상담센터"], 
       "url" : "https://web-dev-project-1-one-page-version.pages.dev/"
     }
-  </script>
-
+  </script> -->
+ <header basic-components="components/header.html"></header>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Sans+KR:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
@@ -24,6 +24,8 @@
   footer { margin-top: auto; }
 </style>
 <script type="module" src="main.js" defer></script>
+<script  src="components/components.js" defer></script>
+
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <script type="text/javascript">
    (function(){
@@ -34,7 +36,7 @@
 </head>
 <body>
 
-<div id="admin-bar">
+<!-- <div id="admin-bar">
   <span class="ab-badge">관리자 모드</span>
   <div class="ab-actions">
     <button class="ab-btn save" onclick="saveAll()">💾 저장</button>
@@ -53,7 +55,7 @@
     <li><a href="location.html">오시는 방법</a></li>
     <li><a href="manager.html" class="nav-mgr" id="mgr-link">Manager ↗</a></li>
   </ul>
-</nav>
+</nav> -->
 
 <!-- 메인 문의 폼 -->
 <section class="contact" id="contact-form">
@@ -160,12 +162,14 @@
   </div>
 </section>
 
-<footer>
+<!-- <footer>
   <div class="foot-row">
     <div class="foot-brand" >마음 , 인지행동심리상담센터</div>
     <p class="foot-copy" id="copy-wright">© 2024 Maum CBT Center · Suwon & Yongin</p>
   </div>
-</footer>
+</footer> -->
+ <div basic-components="components/footer.html"></div>
+
 <div id="toast"></div>
 
 <script>

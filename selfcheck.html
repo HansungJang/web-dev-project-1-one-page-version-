@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
+<!-- <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>마음 , 인지행동심리상담센터 - 자가진단</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,12 +11,13 @@
 <style>
   body { display: flex; flex-direction: column; min-height: 100vh; }
   footer { margin-top: auto; }
-</style>
+</style> -->
+    <header basic-components="components/header.html"></header>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
 
-<div id="admin-bar">
+<!-- <div id="admin-bar">
   <span class="ab-badge">관리자 모드</span>
   <div class="ab-actions">
     <button class="ab-btn save" onclick="saveAll()">💾 저장</button>
@@ -35,7 +36,7 @@
     <li><a href="location.html">오시는 방법</a></li>
     <li><a href="manager.html" class="nav-mgr" id="mgr-link">Manager ↗</a></li>
   </ul>
-</nav>
+</nav> -->
 
 
 <!-- 설문지 본문 -->
@@ -111,14 +112,17 @@
 </div>
   
 
-<footer>
+<!-- <footer>
   <div class "foot-row">
     <div class "foot-brand" >마음 , 인지행동심리상담센터</div>
     <p class "foot-copy" id "copy-wright">© 2024 Maum CBT Center · Suwon & Yongin</p>
   </div>
-</footer>
+</footer> -->
+ <div basic-components="components/footer.html"></div>
 
 <script type="module" src="main.js" defer></script>
+<script  src="components/components.js" defer></script>
+
 <script>
     const contents = document.getElementById('survey-app');
     const modal = document.getElementById('consent-modal');
