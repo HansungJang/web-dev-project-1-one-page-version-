@@ -353,14 +353,101 @@ transition: transform 0.3s ease, opacity 0.3s ease;
   .map-box  { height: 280px; order: -1; } /* Map on top for mobile */
 }
 /* ══════════════════════════════════════════
-   BUTTONS & FOOTER
+   BUTTONS 
 ══════════════════════════════════════════ */
 .btn-solid { display: inline-block; background: var(--c-ink); color: #fff; padding: 14px 32px; border-radius: 2px; font-size: 13px; letter-spacing: 0.1em; transition: 0.3s; }
 .btn-solid:hover { background: var(--c-sage); transform: translateY(-2px); }
 
-footer { background: var(--c-ink); color: rgba(255,255,255,0.4); padding: 60px 6vw 40px; }
-.foot-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
-.foot-brand { font-family: var(--f-display); font-size: 20px; font-weight: 700; color: #fff; }
+/* ══════════════════════════════════════════
+   FOOTER ENHANCED STYLE
+══════════════════════════════════════════ */
+footer {
+  background: var(--c-ink);
+  color: rgba(255, 255, 255, 0.4);
+  padding: 80px 0 50px;
+  font-family: var(--f-body);
+}
+
+.foot-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+.foot-brand {
+  font-family: var(--f-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--c-white);
+  margin-bottom: 16px;
+}
+
+.foot-brand span { color: var(--c-sage-lt); font-weight: 400; }
+
+.foot-biz-info {
+  font-size: 13px;
+  line-height: 1.8;
+  margin-bottom: 12px;
+}
+
+.foot-biz-info span { color: rgba(255, 255, 255, 0.7); font-weight: 500; }
+
+.divider {
+  display: inline-block;
+  margin: 0 8px;
+  color: rgba(255, 255, 255, 0.1);
+}
+
+.foot-copy {
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+/* 법적 고지 링크 스타일 */
+.foot-links {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.foot-link-item {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  transition: color var(--t);
+}
+
+.foot-link-item:hover { color: var(--c-white); }
+
+/* .privacy-link {
+  color: var(--c-white);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 5px;
+} */
+
+.dot-divider::before {
+  content: '·';
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.foot-security-note {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 25px;
+  font-size: 12px;
+  font-weight: 300;
+  letter-spacing: 0.02em;
+}
+
+.foot-security-note strong { color: var(--c-sage-lt); font-weight: 500; }
+
+@media (max-width: 860px) {
+  .foot-row { flex-direction: column; text-align: left; }
+  .foot-links { flex-wrap: wrap; justify-content: flex-start; }
+}
 
 /* ══════════════════════════════════════════
    ANIMATIONS & EDIT TOOLS
