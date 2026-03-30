@@ -125,12 +125,7 @@ window.saveAll = async () => {
 window.logout = async () => {
   if (confirm("로그아웃 하시겠습니까?")) {
     try {
-      await signOut(auth);
-      // Clean up UI state
-      document.body.classList.remove('edit-mode');
-      const adminBar = document.getElementById('admin-bar');
-      if (adminBar) adminBar.classList.remove('on');
-      
+      await signOut(auth); 
       showToast("로그아웃 되었습니다.");
       // The onAuthStateChanged listener will handle the rest of the UI
     } catch (e) {
@@ -155,18 +150,21 @@ onAuthStateChanged(auth, (user) => {
     if(adminBar) adminBar.classList.add('on');
     document.body.classList.add('edit-mode');
     adminElements.forEach(el => el.style.display = 'flex');
-  } else {
-    if (adminBar) { adminBar.classList.remove('on');}
-    document.body.classList.remove('edit-mode');
-    adminElements.forEach(el => el.style.display = 'none');
-  }
-
-        if (mgrLink) {
+    
+    if (mgrLink) {
         mgrLink.addEventListener('click', (e) => {
           e.preventDefault(); // 페이지 이동 막기
           showToast('이미 로그인된 상태입니다.'); // 토스트 알림
         });
       }
+  
+  } else {
+    document.body.classList.remove('edit-mode');
+    if(adminBar) adminBar.classList.remove('on');
+    adminElements.forEach(el => el.style.display = 'none');
+  }
+
+
     
   // Refresh the expert grid to enable/disable editing features
   renderExpertGrid(); 
