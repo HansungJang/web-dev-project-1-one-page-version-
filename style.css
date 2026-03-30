@@ -141,6 +141,8 @@ nav.stuck {
 }
 
 .nav-brand {
+  display: flex; align-items: center; gap: 6px;
+
   font-family: var(--f-display);
   font-size: clamp(13px, 4vw, 21px);
   font-weight: 700;
@@ -151,6 +153,13 @@ nav.stuck {
   text-overflow: ellipsis;
   white-space: nowrap
 }
+
+.nav-logo {
+  height: 32px;
+  width : auto;
+  object-fit: contain;
+}
+
 .nav-brand span { color: var(--c-sage); }
 
 .nav-list {
@@ -378,6 +387,7 @@ footer {
 }
 
 .foot-brand {
+  display: flex; align-items: center; gap: 12px;
   font-family: var(--f-display);
   font-size: 20px;
   font-weight: 700;
