@@ -8,7 +8,7 @@
   import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
   // [추가] experts.html 파일, 이미지 & 양력 업로드 
   import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-storage.js";
-  import { collection, onSnapshot, addDoc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+  import { collection, onSnapshot, addDoc, deleteDoc, query, orderBy, updateDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
   // 1. Firebase 설정 (제공해주신 정보 유지)
   const firebaseConfig = {
@@ -77,145 +77,99 @@
   }
 
 // UI에 데이터를 입히는 로직 분리
- function applyDataToUI(data) {
-  TEXT_IDS.forEach(id => {
-    const el = document.getElementById(id);
-    const item = data[id];
-    if (!el || !item) return;
+// main.js
 
-    if (id === 'e-email-link' || id === 'e-map-link') {
-      // 주소만 변경 (텍스트 유지)
-      if (item.href) el.setAttribute('href', item.href);
-    } 
-    else {
-      // 기본적으로 텍스트 반영
-      if (item.html) el.innerHTML = item.html;
-      // tel의 경우 저장된 주소가 있다면 추가 반영
-      if (id === 'tel' && item.href) {
-        el.querySelector('a')?.setAttribute('href', item.href);
-      }
+async function applyDataToUI(data) {
+  if (!data) return;
+  // Existing field mapping...
+  for (const key in data) {
+    const el = document.getElementById(key);
+    if (el) {
+      if (el.tagName === 'IMG') el.src = data[key];
+      else el.innerText = data[key];
     }
-  });
+  }
+
+  // Ensure the expert listener is active when data is applied
+  initExpertListener();
 }
   // [중요] 관리자 저장 함수 (전역 window 객체에 등록)
-  window.saveAll = async function() {
-    const snap = await getDoc(CONTENT_REF);   
-    const existingData = snap.exists() ? snap.data() : {};
+// main.js
+
+window.saveAll = async () => {
+  const adminBar = document.getElementById('admin-bar');
+  if (!adminBar || !adminBar.classList.contains('on')) return;
+
+  try {
     const newData = {};
-
-    TEXT_IDS.forEach(id => {
-      const el = document.getElementById(id);
-      if (!el) return;
-
-      if (id === 'e-email-link' || id === 'e-map-link') {
-        // 1. 이메일 버튼: 텍스트는 무시하고 href만 저장
-        newData[id] = { href: el.getAttribute('href') };
-      } 
-      else if (id === 'tel') {
-        // 2. 전화번호: 화면의 글자(innerHTML)와 href를 모두 저장
-        newData[id] = { html: el.innerHTML, href: el.querySelector('a')?.getAttribute('href') };
-      } 
-      else {
-        // 3. 기타: 텍스트 내용만 저장
-        newData[id] = { html: el.innerHTML };
-      }
+    // Collect all editable fields except those inside the expert grid
+    document.querySelectorAll('[id^="e-"], [id^="img-"]').forEach(el => {
+      if (el.closest('#expert-dynamic-grid')) return; // Skip experts (they auto-save)
+      
+      if (el.tagName === 'IMG') newData[el.id] = el.src;
+      else newData[el.id] = el.innerText;
     });
 
-    const mergedData = { ...existingData, ...newData };
-
-    try {
-      await setDoc(CONTENT_REF,  mergedData);
-      localStorage.removeItem('site_content_time'); // 캐시 강제 만료
-      showToast('✓ 클라우드에 성공적으로 저장되었습니다.');
-    } catch (e) {
-      console.error(e);
-      alert('저장 권한이 없습니다.');
-    }
-  };
+    await setDoc(doc(db, 'site', 'content'), newData);
+    showToast("사이트 설정이 저장되었습니다. (전문가 정보는 실시간 저장됨)");
+  } catch (e) {
+    console.error("Save Error:", e);
+    showToast("저장 중 오류가 발생했습니다.", "err");
+  }
+};
 
   // 관리자 로그아웃
 // index.html 내 window.logout 수정
-window.logout = () => {
-  signOut(auth).then(() => {
-    // 404를 방지하기 위해 파일명을 명시하거나 메인 경로(/)로 이동
-    window.location.href = 'index.html'; 
-  }).catch((e) => console.error("로그아웃 오류:", e));
+// main.js
+
+window.logout = async () => {
+  if (confirm("로그아웃 하시겠습니까?")) {
+    try {
+      await signOut(auth);
+      // Clean up UI state
+      document.body.classList.remove('edit-mode');
+      const adminBar = document.getElementById('admin-bar');
+      if (adminBar) adminBar.classList.remove('on');
+      
+      showToast("로그아웃 되었습니다.");
+      // The onAuthStateChanged listener will handle the rest of the UI
+    } catch (e) {
+      console.error("Logout Error:", e);
+    }
+  }
 };
 
 // 실행 흐름 부분 수정
 window.addEventListener('DOMContentLoaded', () => {
-  loadData();
+  // loadData(); (for test)
   initScrollReveal();
 
   // 인증 상태 감시
-  onAuthStateChanged(auth, (user) => {
-    const mgrLink = document.getElementById('mgr-link'); // 링크 요소 가져오기
-    const mapLink = document.getElementById('e-map-link'); // 지도 링크 요소
-    const adminBar = document.getElementById('admin-bar'); // 관리자 바 요소
-    const adminElements = document.querySelectorAll('.admin-only');
-    if (user) {
-      // 1. 관리자 모드 활성화 (기존 로직)
-      document.body.classList.add('edit-mode');
-      adminElements.forEach(el => el.style.display = 'flex');
-      if(adminBar) adminBar.classList.add('on');
-      TEXT_IDS.forEach(id => {
-        const el = document.getElementById(id); 
-        // test for update
-        if(!el) return;
+onAuthStateChanged(auth, (user) => {
+  const adminElements = document.querySelectorAll('.admin-only');
+  const mgrLink = document.getElementById('mgr-link'); // 링크 요소 가져오기
+  const adminBar = document.getElementById('admin-bar'); // 관리자 바 요소
 
-        if (id !== 'e-email-link') el.setAttribute('contenteditable', 'true');      
-      });
+  if (user) {
+    console.log("Admin logged in:", user.email);
+    if(adminBar) adminBar.classList.add('on');
+    document.body.classList.add('edit-mode');
+    adminElements.forEach(el => el.style.display = 'flex');
+  } else {
+    if (adminBar) { adminBar.classList.remove('on');}
+    document.body.classList.remove('edit-mode');
+    adminElements.forEach(el => el.style.display = 'none');
+  }
 
-      // 2. [추가] 로그인 상태일 때 Manager 버튼 클릭 제어
-      // 지도 URL 수정 logic 
-      if (mapLink) {
-            mapLink.addEventListener('click', (e) => {
-              e.preventDefault(); // 페이지 이동 방지
-              
-              const currentUrl = mapLink.getAttribute('href');
-              // 브라우저 기본 prompt를 사용하여 새 URL 입력 받기
-              const newUrl = prompt("새로운 지도 URL 주소를 입력하세요:", currentUrl);
-              
-              if (newUrl !== null && newUrl !== "") {
-                mapLink.setAttribute('href', `${newUrl}`);
-                showToast('지도 연결 주소가 변경되었습니다. 저장 버튼을 눌러주세요.');
-              }
-            });
-          }
-
-      if (mgrLink) {
+        if (mgrLink) {
         mgrLink.addEventListener('click', (e) => {
           e.preventDefault(); // 페이지 이동 막기
           showToast('이미 로그인된 상태입니다.'); // 토스트 알림
         });
       }
-    } else {
-      // 로그아웃 상태일 때는 기본 이동 허용 (필요 시 추가 로직 작성 가능)
-      document.body.classList.remove('edit-mode');
-      adminElements.forEach(el => el.style.display = 'none');
-      if (adminBar) { adminBar.classList.remove('on');}
-    }
-
-      // 3. 전화번호 (tel): 텍스트 수정 시 href 자동 갱신 로직 (선택 사항)
-    const telBox = document.getElementById('tel');
-    if (telBox) {
-      telBox.oninput = () => {
-        const pureNum = telBox.innerText.replace(/[^0-9+]/g, '');
-        telBox.querySelector('a')?.setAttribute('href', `tel:${pureNum}`);
-      };
-    }
-
-    // 4. 이메일 (e-email-link): 텍스트 수정 시 href 자동 갱신 로직 (선택 사항)
-    const emailBox = document.getElementById('e-email-link');
-    const newEmailBox = document.getElementById('e-email');
-    if (emailBox && newEmailBox) {
-      newEmailBox.oninput = () => {
-        const pureEmail = newEmailBox.innerText.replace(/[^a-zA-Z0-9@.-]/g, '');
-        emailBox.setAttribute('href', `mailto:${pureEmail}`);
-      };
-    }
-
-    renderExpertGrid();
+    
+  // Refresh the expert grid to enable/disable editing features
+  renderExpertGrid(); 
 });
 
     window.addEventListener('scroll', () => {
@@ -371,19 +325,41 @@ window.deleteExp = async (id) => {
 // 4. Image Upload Logic
 window.triggerUpload = (id) => document.getElementById(`file-${id}`).click();
 
+// 4. Image Upload Logic
 window.uploadPhoto = async (id, input) => {
-  if (!input.files) return;
-  const file = input.files;
-  const storageRef = ref(storage, `experts/${id}_${Date.now()}`);
+  // [수정] 파일이 선택되지 않았을 경우 예외 처리
+  console.log("꾸러미 전체:", input.files);      // FileList {0: File, length: 1} -> 객체 형태
+  console.log("진짜 파일 하나:", input.files[0]); // File {name: "test.jpg", size: 1690000, ...} -> 실제 데이터
+
+  if (!input.files || input.files.length === 0) {
+    console.error("선택된 파일이 없습니다.");
+    return;
+  }
+
+  // [중요!] .files가 아니라 .files을 가져와야 실제 '파일 데이터'가 담깁니다.
+  const file = input.files[0]; 
+  
+  // 파일 확장자 유지 (선택 사항이지만 권장)
+  const extension = file.name.split('.').pop();
+  const storageRef = ref(storage, `experts/${id}_${Date.now()}.${extension}`);
   
   try {
     showToast("이미지 업로드 중...");
-    const result = await uploadBytes(storageRef, file);
+    
+    // 업로드 실행 (metadata를 추가하여 octet-stream 방지)
+    const metadata = { contentType: file.type };
+    const result = await uploadBytes(storageRef, file, metadata);
+    
+    // 다운로드 URL 생성
     const url = await getDownloadURL(result.ref);
+    console.log("새 이미지 URL:", url);
+
+    // Firestore 업데이트
     await updateDoc(doc(db, 'experts', id), { img: url });
+    
     showToast("업로드 완료!");
   } catch (e) {
-    console.error(e);
+    console.error("Upload Error:", e);
     alert("업로드 실패: " + e.message);
   }
 };

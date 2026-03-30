@@ -267,7 +267,7 @@ transition: transform 0.3s ease, opacity 0.3s ease;
 /* Expert Grid: Max 3 columns */
 .expert-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 30px;
 }
 
@@ -281,8 +281,8 @@ transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
 .exp-img-wrapper {
-  width: 110px;
-  height: 140px;
+  width: fit-content;
+  height: 435px;
   flex-shrink: 0;
   position: relative;
   overflow: hidden;
