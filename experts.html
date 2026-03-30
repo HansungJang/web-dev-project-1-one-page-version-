@@ -6,7 +6,7 @@
 
 <body>
 
-<section id="therapist" style="flex:1;">
+<!-- <section id="therapist" style="flex:1;">
   <div class="therapist-content">
     <p class="therapist-eyebrow">Expertise</p>
     <h1 class="therapist-h1" id="e-hero-h-expert">
@@ -29,7 +29,20 @@
   <div class="therapist-photo drop-zone" id="drop-hero-exp" data-key="img-hero-exp">
     <img id="img-hero-exp" src="assets/logo.png" alt="전문가 프로필">
   </div>
+</section> -->
+
+<section id="experts-section" class="wrap" style="padding: 100px 0;">
+  <div class="sec-tag">Our Team</div>
+  <h2 class="sec-h" style="margin-bottom: 50px;">함께하는 <em>전문가</em></h2>
+  
+  <div id="expert-dynamic-grid" class="expert-grid"></div>
+
+  <div class="admin-only" style="margin-top: 40px; display: none; gap: 10px;">
+    <button onclick="addNewExpert()" class="ab-btn save">+ 전문가 추가</button>
+    <button onclick="checkStorageConnection()" class="ab-btn" style="background:#444;">Storage 연결 확인</button>
+  </div>
 </section>
+
 
 <div basic-components="components/footer.html"></div>
 

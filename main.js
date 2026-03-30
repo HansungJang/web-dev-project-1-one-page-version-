@@ -6,6 +6,9 @@
   } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";  
   import { getAuth, onAuthStateChanged, signOut, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
   import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+  // [추가] experts.html 파일, 이미지 & 양력 업로드 
+  import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-storage.js";
+  import { collection, onSnapshot, addDoc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
   // 1. Firebase 설정 (제공해주신 정보 유지)
   const firebaseConfig = {
@@ -28,6 +31,11 @@
   });
   const CONTENT_REF = doc(db, 'site', 'content');
   const TEXT_IDS = ['e-hero-h', 'e-hero-b', 'e-fields-h', 'e-info-h', 'e-cred-h', 'e-con-b', 'e-info-detail', 'copy-wright', 'e-c1', 'e-c2', 'e-c3', 'e-c4', 'e-c5', 'e-f1-h', 'e-f1-b', 'e-f2-h', 'e-f2-b', 'e-f3-h', 'e-f3-b', 'e-f4-h', 'e-f4-b', 'e-f5-h', 'e-f5-b', 'e-f6-h', 'e-f6-b', 'e-loc', 'e-email', 'e-email-link', 'e-map-link', 'tel', 'Fax', 'e-res', 'e-con-h'];
+
+  // experts.html 
+  const storage = getStorage(app);
+  const expertsCol = collection(db, 'experts');
+
 
   // [중요] 초기 데이터 로드 함수
   async function loadData() {
@@ -144,9 +152,11 @@ window.addEventListener('DOMContentLoaded', () => {
     const mgrLink = document.getElementById('mgr-link'); // 링크 요소 가져오기
     const mapLink = document.getElementById('e-map-link'); // 지도 링크 요소
     const adminBar = document.getElementById('admin-bar'); // 관리자 바 요소
+    const adminElements = document.querySelectorAll('.admin-only');
     if (user) {
       // 1. 관리자 모드 활성화 (기존 로직)
       document.body.classList.add('edit-mode');
+      adminElements.forEach(el => el.style.display = 'flex');
       if(adminBar) adminBar.classList.add('on');
       TEXT_IDS.forEach(id => {
         const el = document.getElementById(id); 
@@ -182,6 +192,7 @@ window.addEventListener('DOMContentLoaded', () => {
     } else {
       // 로그아웃 상태일 때는 기본 이동 허용 (필요 시 추가 로직 작성 가능)
       document.body.classList.remove('edit-mode');
+      adminElements.forEach(el => el.style.display = 'none');
       if (adminBar) { adminBar.classList.remove('on');}
     }
 
@@ -204,6 +215,7 @@ window.addEventListener('DOMContentLoaded', () => {
       };
     }
 
+    renderExpertGrid();
 });
 
     window.addEventListener('scroll', () => {
@@ -251,37 +263,130 @@ window.addEventListener('DOMContentLoaded', () => {
       }
     };
 
-// apply.html 함수 
-// function submitForm(event) {
-//     event.preventDefault(); // 폼 새로고침 방지
+    // experts.html 
+    // I've separated this so it can be called whenever auth state changes
+    async function renderExpertGrid() {
+      const q = query(expertsCol, orderBy("createdAt", "asc"));
+      
+      onSnapshot(q, (snapshot) => {
+        const grid = document.getElementById('expert-dynamic-grid');
+        if (!grid) return;
+        
+        const isEdit = document.body.classList.contains('edit-mode');
+        
+        grid.innerHTML = snapshot.docs.map(docSnap => {
+          const data = docSnap.data();
+          const id = docSnap.id;
+          
+          return `
+            <div class="expert-card">
+              <div class="exp-img-wrapper" onclick="${isEdit ? `triggerUpload('${id}')` : ''}">
+                <img src="${data.img || 'assets/logo.png'}" id="img-${id}">
+                ${isEdit ? '<div class="img-edit-overlay">변경</div>' : ''}
+              </div>
+              <div class="exp-info">
+                <div class="exp-name" ${isEdit ? `contenteditable="true" onblur="updateExp('${id}', 'name', this.innerText)"` : ''}>
+                  ${data.name}
+                </div>
+                <div class="exp-bio" ${isEdit ? `contenteditable="true" onblur="updateExp('${id}', 'bio', this.innerText)"` : ''}>
+                  ${data.bio}
+                </div>
+                ${isEdit ? `<button onclick="deleteExp('${id}')" class="delete-btn">삭제</button>` : ''}
+              </div>
+              <input type="file" id="file-${id}" style="display:none" onchange="uploadPhoto('${id}', this)" accept="image/*">
+            </div>
+          `;
+        }).join('');
+      });
+    }
 
-//     // 1. 데이터 수집
-//     const templateParams = {
-//         f_name: document.getElementById('f-name').value,
-//         f_email: document.getElementById('f-email').value,
-//         f_phone: document.getElementById('f-phone-con').value,
-//         f_svc: document.getElementById('f-svc').value,
-//         f_modality: document.getElementById('f-modality').value,
-//         f_msg: document.getElementById('f-msg').value,
-//         timestamp: new Date().toLocaleString() // 작성일
-//     };
 
-//     // 2. 필수값 체크 (이름, 이메일)
-//     if (!templateParams.f_name || !templateParams.f_email) {
-//         alert("이름과 이메일은 필수 입력 항목입니다.");
-//         return;
-//     }
 
-//     // 3. EmailJS 전송
-//     // 'YOUR_SERVICE_ID'와 'YOUR_TEMPLATE_ID'를 EmailJS 대시보드 값으로 교체하세요.
-//     emailjs.send('service_n5nvrll', 'template_5kncb8h', templateParams)
-//         .then(function(response) {
-//             console.log('SUCCESS!', response.status, response.text);
-//             alert("상담 신청이 완료되었습니다. 곧 연락드리겠습니다.");
-//             // 폼 초기화
-//             document.querySelectorAll('.form input, .form textarea, .form select').forEach(el => el.value = '');
-//         }, function(error) {
-//             console.log('FAILED...', error);
-//             alert("전송에 실패했습니다. 잠시 후 다시 시도해 주세요.");
-//         });
-// }
+ // 1. Storage Connection Check Function
+window.checkStorageConnection = async () => {
+  try {
+    console.log("Current Bucket:", firebaseConfig.storageBucket);
+    showToast("Storage 연결 확인 중... 콘솔을 확인하세요.");
+  } catch (e) {
+    console.error("Storage Error:", e);
+    alert("연결 오류: " + e.message);
+  }
+};
+
+// 2. Real-time Expert Listener
+function initExpertListener() {
+  const q = query(expertsCol, orderBy("createdAt", "asc"));
+  
+  onSnapshot(q, (snapshot) => {
+    const grid = document.getElementById('expert-dynamic-grid');
+    if (!grid) return;
+    
+    const isEdit = document.body.classList.contains('edit-mode');
+    
+    grid.innerHTML = snapshot.docs.map(docSnap => {
+      const data = docSnap.data();
+      const id = docSnap.id;
+      
+      return `
+        <div class="expert-card">
+          <div class="exp-img-wrapper" onclick="${isEdit ? `triggerUpload('${id}')` : ''}">
+            <img src="${data.img || 'assets/logo.png'}" id="img-${id}">
+          </div>
+          <div class="exp-info">
+            <div class="exp-name" ${isEdit ? `contenteditable="true" onblur="updateExp('${id}', 'name', this.innerText)"` : ''}>
+              ${data.name}
+            </div>
+            <div class="exp-bio" ${isEdit ? `contenteditable="true" onblur="updateExp('${id}', 'bio', this.innerText)"` : ''}>
+              ${data.bio}
+            </div>
+            ${isEdit ? `<button onclick="deleteExp('${id}')" style="color:red; font-size:11px; border:none; background:none; cursor:pointer; margin-top:10px;">[삭제]</button>` : ''}
+          </div>
+          <input type="file" id="file-${id}" style="display:none" onchange="uploadPhoto('${id}', this)">
+        </div>
+      `;
+    }).join('');
+  });
+}
+
+// 3. CRUD Operations
+window.addNewExpert = async () => {
+  await addDoc(expertsCol, {
+    name: "성함 입력",
+    bio: "약력을 입력해주세요.",
+    img: "",
+    createdAt: new Date()
+  });
+};
+
+window.updateExp = async (id, field, value) => {
+  await updateDoc(doc(db, 'experts', id), { [field]: value });
+};
+
+window.deleteExp = async (id) => {
+  if(confirm("이 전문가를 삭제하시겠습니까?")) {
+    await deleteDoc(doc(db, 'experts', id));
+  }
+};
+
+// 4. Image Upload Logic
+window.triggerUpload = (id) => document.getElementById(`file-${id}`).click();
+
+window.uploadPhoto = async (id, input) => {
+  if (!input.files) return;
+  const file = input.files;
+  const storageRef = ref(storage, `experts/${id}_${Date.now()}`);
+  
+  try {
+    showToast("이미지 업로드 중...");
+    const result = await uploadBytes(storageRef, file);
+    const url = await getDownloadURL(result.ref);
+    await updateDoc(doc(db, 'experts', id), { img: url });
+    showToast("업로드 완료!");
+  } catch (e) {
+    console.error(e);
+    alert("업로드 실패: " + e.message);
+  }
+};
+
+// Call the listener when the page loads
+initExpertListener();
