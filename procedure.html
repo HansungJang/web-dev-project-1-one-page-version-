@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상담안내 - 마음, 인지행동심리상담센터</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        /* 상담안내 페이지 전용 추가 스타일 */
+        .procedure-body{
+            text-align: center;
+            color: var(--c-muted);
+            line-height: 1.8;
+            margin-top: 20px;
+            word-break: keep-all;
+        }
+
+
+        .procedure-hero {
+            padding: 120px 20px 60px;
+            text-align: center;
+            background-color: var(--c-bg);
+        }
+
+        .procedure-section {
+            padding: 80px 0;
+            background-color: var(--c-white);
+        }
+
+        .procedure-section.alt {
+            background-color: var(--c-ivory);
+        }
+
+        .section-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .proc-title {
+            font-family: var(--f-display);
+            font-size: 2.5rem;
+            color: var(--c-sage);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .proc-desc {
+            text-align: center;
+            color: var(--c-muted);
+            line-height: 1.8;
+            margin-bottom: 50px;
+            word-break: keep-all;
+        }
+
+        .diagram-box {
+            background: var(--c-white);
+            border: 1px solid var(--c-border);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: var(--shadow-sm);
+            text-align: center;
+            transition: var(--t);
+        }
+
+        .diagram-box:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .diagram-img {
+            display: block;      /* 인라인에서 블록 요소로 변경 */
+            margin-left: auto;   /* 왼쪽 마진 자동 */
+            margin-right: auto;  /* 오른쪽 마진 자동 */
+
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+         }
+
+        .step-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(316px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .step-card {
+            background: var(--c-bg);
+            padding: 30px;
+            border-radius: 15px;
+        }
+
+        .step-card:hover {
+            background: var(--c-white);
+            box-shadow: var(--shadow-sm);
+            cursor: pointer;
+        }
+
+        .step-card h4 {
+            color: var(--c-sage);
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .step-card h4::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--c-sage);
+            border-radius: 50%;
+        }
+
+        .step-card p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--c-muted);
+        }
+ 
+
+        @media (max-width: 768px) {
+            .proc-title { font-size: 1.8rem; }
+            .diagram-box { padding: 20px; }
+        }
+
+        #pr-quick-btn {
+         display: flex; gap: 10px; margin-left: auto; margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div basic-components="components/header.html"></div>
+
+    <main>
+        <section class="procedure-hero">
+            <div class="wrap">
+                <span class="therapist-eyebrow">GUIDE</span>
+                <h1 class="therapist-h1">상담 <em>절차 안내</em></h1>
+                <p class="procedure-body">마음의 회복을 위한 첫걸음, 체계적이고 전문적인 과정을 통해 당신과 함께하겠습니다.</p>
+            </div>
+        </section>
+
+        <section class="procedure-section">
+            <div class="section-container">
+                <h2 class="proc-title">상담 흐름도</h2>
+                <p class="proc-desc">예약부터 종결까지, 마음 센터의 상담은 아래와 같은 단계로 진행됩니다.</p>
+                
+                <div class="diagram-box">
+                    <img src="assets/procedure_diagram1.png" alt="상담 전체 절차 다이어그램" class="diagram-img">
+                </div>
+
+                <div class="step-info-grid">
+                    <div class="step-card s1" onclick="window.location.href='apply.html'">
+                        <h4>01. 상담접수</h4>
+                        <p>100% 예약제로 운영되고 있습니다. 원하시는 상담 유형과 상담진행방식에 대해서 선택하실 수 있습니다.(예: 온라인 상담, 오프라인 상담)
+                        홈페이지의 '상담예약' form을 통해 상담신청을 진행하실 수 있습니다.<br><br></p>
+                     </div>
+                    <div class="step-card" onclick="window.location.href='selfcheck.html'">
+                        <h4>02. 초기 상담</h4>
+                        <p>전문 상담사와 만나 현재 겪고 있는 어려움과 상담의 목표를 설정하는 과정입니다. 
+                        ('자가진단' / '나를 알아보기') 메뉴를 통해서 무료로 현재 마음건강상태를 점검해 보실 수 있습니다.<br><br></p>
+                       </div>
+                    <div class="step-card">
+                        <h4>03. 검사 & 해석상담</h4>
+                        <p>전문 상담사와 함께 심리검사 결과를 해석하고, 개인의 상황에 맞춘 치료 방향을 논의하는 과정입니다.</p>
+                    </div>
+                    <div class="step-card">
+                        <h4>04. 본 상담 & 종결</h4>
+                        <p>인지행동치료(CBT) 등 전문 프로그램을 진행하며, 내담자 마다 1:1 맞춤 프로그램을 통해 진행 프로그램의 항목은 다를 수 있습니다. 내담자 본인 스스로 마음을 돌볼 힘을 얻었다고 판단하는 경우 종결합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="procedure-section alt">
+            <div class="section-container">
+                <h2 class="proc-title">심층 분석 및 맞춤형 상담</h2>
+                <p class="proc-desc">객관적인 검사를 바탕으로 개인에게 최적화된 심리 치료 프로그램을 구성합니다.</p>
+                
+                <div class="diagram-box">
+                    <img src="assets/procedure_diagram2.png" alt="집중 상담 및 심리검사 다이어그램" class="diagram-img">
+                </div>
+
+                <div class="step-info-grid">
+                    <div class="step-card">
+                        <h4>03. 심리검사 및 해석</h4>
+                        <p>종합심리검사 등을 통해 정밀한 심리 상태를 파악하고, 결과를 바탕으로 치료 방향을 논의합니다.</p>
+                    </div>
+                    <div class="step-card">
+                        <h4>04. 본 상담 및 종결</h4>
+                        <p>인지행동치료(CBT) 등 전문 프로그램을 진행하며, 목표 달성 시 스스로 마음을 돌볼 힘을 얻고 종결합니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div basic-components="components/footer.html"></div>
+<div id="toast"></div>
+
+    <script src="components/components.js"></script>
+</body>
+</html>
