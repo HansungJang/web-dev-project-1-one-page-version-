@@ -1,489 +1,357 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-<!-- <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>마음 , 인지행동심리상담센터 - 자가진단</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Sans+KR:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-<style>
-  body { display: flex; flex-direction: column; min-height: 100vh; }
-  footer { margin-top: auto; }
-</style> -->
-    <header basic-components="components/header.html"></header>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        /* 요청하신 CSS Layout 기반 스타일링 */
+        .test_tabnav { 
+            width: 82.14vw; margin: 0 auto 5.00vw; 
+            display: flex; justify-content: center; gap: 10px; list-style: none;
+        }
+        .test_tabnav li a { 
+            display: block; line-height: 4.64vw; font-size: 1.57vw; 
+            padding: 0 2vw; color: var(--c-muted); transition: var(--t);
+            border-bottom: 2px solid transparent;
+        }
+        .test_tabnav li.active a { 
+            color: var(--c-sage); font-weight: 700; border-bottom: 2px solid var(--c-sage); 
+        }
+
+        .test_wrap .tp_box { 
+            background: var(--c-ivory); border-radius: 2.14vw; 
+            padding: 3.57vw 10.71vw; box-shadow: var(--shadow-sm);
+        }
+        .test_wrap .tp_box p { font-size: 1.71vw; color: var(--c-ink); line-height: 1.6; }
+        
+        .test_wrap .tp_box .bt_wrap { 
+            margin-top: 5.36vw; position: relative; border-top: 1px solid var(--c-border); 
+            padding-top: 2vw;
+        }
+        .test_wrap .tp_box .bt_wrap dl { 
+            display: flex; font-size: 1.71vw; padding-left: 6.07vw; margin-bottom: 1.07vw; 
+        }
+        .test_wrap .tp_box .bt_wrap dt { font-weight: 700; color: var(--c-sage); margin-right: 15px; }
+
+        .test_table_wrap { margin-top: 5.71vw; }
+        .test_table_wrap table { width: 100%; border-collapse: collapse; }
+        .test_table_wrap table th { 
+            background: var(--c-cream); font-size: 1.43vw; padding: 1.43vw; 
+            border-bottom: 1px solid var(--c-border); color: var(--c-sage);
+        }
+        .test_table_wrap table td { 
+            font-size: 1.57vw; padding: 2.14vw; border-bottom: 1px solid var(--c-border); 
+            text-align: center; 
+        }
+        .test_table_wrap table td:first-child { text-align: left; }
+        .test_table_wrap table th:nth-child(1) { width: 60%; }
+        .test_table_wrap table th:nth-child(n+2) { width: 10%; }
+        
+        .test_table_wrap table td .num { 
+            display: inline-block; min-width: 2.14vw; margin-right: 0.71vw; 
+            font-weight: 700; color: var(--c-sage); 
+        }
+        .test_table_wrap table input[type="radio"] { 
+            width: 1.43vw; height: 1.43vw; cursor: pointer; accent-color: var(--c-sage);
+        }
+
+        .test_wrap .btn_wrap { margin-top: 4.29vw; text-align: center; }
+        .test_wrap .btn_wrap button { 
+            font-size: 1.71vw; padding: 1.43vw 3.57vw; border-radius: 50px; 
+            border: none; transition: var(--t); font-weight: 500;
+        }
+        .test_wrap .btn_wrap .result_btn { background: var(--c-sage); color: #df1212; margin-right: 1.43vw; }
+        .test_wrap .btn_wrap .reset_btn { background: var(--c-cream); color: var(--c-muted); }
+
+        /* 결과 영역 디자인 */
+        .result_box { 
+            margin-top: 5vw; padding: 4vw; background: var(--c-cream); 
+            border-radius: 2vw; text-align: center; display: none;
+        }
+        #my_score { font-size: 3vw; color: var(--c-sage); font-weight: 700; }
+    </style>
 </head>
-<body>
 
-<!-- <div id="admin-bar">
-  <span class="ab-badge">관리자 모드</span>
-  <div class="ab-actions">
-    <button class="ab-btn save" onclick="saveAll()">💾 저장</button>
-    <button class="ab-btn" onclick="logout()">로그아웃</button>
-  </div>
-</div>
-
-<nav id="nav">
-  <a class="nav-brand" href="index.html" >마음 ,<span>인지행동심리상담센터</span></a>
-  <button class="burger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
-  <ul class="nav-list" id="nav-list">
-    <li><a href="index.html">센터소개</a></li>
-    <li><a href="specialties.html">전문분야</a></li>
-    <li><a href="experts.html">전문가 소개</a></li>
-    <li><a href="apply.html">상담 신청</a></li>
-    <li><a href="location.html">오시는 방법</a></li>
-    <li><a href="manager.html" class="nav-mgr" id="mgr-link">Manager ↗</a></li>
-  </ul>
-</nav> -->
-
-
-<!-- 설문지 본문 -->
- <div class="survey-selector-wrapper">
-    <div class="selector-label">자가진단 유형을 선택해주세요</div>
-    <select id="type-select">
-        <option value="">자가진단 대상선택</option>
-        <option value="adult">성인 자가진단</option>
-        <option value="student">청소년 자가진단</option>
-    </select>
-    <select id="category-select" style="display: none; margin-top: 10px;">
-        <option value="">세부 항목 선택</option>
-    </select>
- </div>
-
-<div id="survey-app" class="survey-container" class="display-none">
-    <header class="survey-header">
-        <div class="progress-info">
-            <span id="cat-title">준비 중...</span>
-            <span id="progress-percent">0%</span>
+<div id="sub_content">
+    <div class="sub_inner">
+        <div class="sub_title_txt" style="text-align: center; padding: 80px 0;">
+            <div class="sec-tag">Self Check</div>
+            <h3 class="sec-h">마음 건강 <em>자가진단</em></h3>
+            <p class="sec-sub">현재 나의 마음 상태를 객관적으로 확인해 보세요.</p>
         </div>
-        <div class="progress-track">
-            <div id="progress-fill"></div>
-        </div>
-    </header>
 
-    <main id="chat-window" class="chat-window">
-        </main>
+        <div class="test_wrap wrap">
+            <ul class="test_tabnav" id="target-tabs"></ul>
+            <ul class="test_tabnav" id="category-tabs">
+                </ul>
 
-    <footer id="input-control" class="input-area">
-        <input type="text" id="answer-input" placeholder="답변을 입력하세요..." autofocus>
-        <button id="send-btn">전송</button>
-    </footer>
-
-    <section id="final-step" class="final-step hidden">
-        <p class="finish-msg"><strong>모든 질의응답이 종료되었습니다.</strong></p>
-        <div class="button-group">
-            <button onclick="exportPDF()" class="btn-pdf">1. 답변 PDF 출력하기</button>
-            <button onclick="applyConsult('interpretation')" class="btn-info">2. 해석 상담 신청</button>
-            <button onclick="applyConsult('personal')" class="btn-primary">3. 개인 상담 신청</button>
-        </div>
-    </section>
-</div>
-
-<!-- 사전 동의서 -->
-<div id="consent-modal" class="modal-overlay">
-  <div class="modal-content">
-    <h2>서비스 이용 사전 동의</h2>
-    <div class="consent-form">
-      <label>
-        <input type="checkbox" id="chk-privacy" required>
-        (필수) 개인정보 수집 및 민감정보(심리 진단 내역) 처리에 동의합니다.
-      </label>
-      
-      <label>
-        <input type="checkbox" id="chk-automated" required>
-        (필수) 알고리즘을 통한 자동화된 결정 방식에 대한 안내를 확인하였으며, 이에 동의합니다.
-      </label>
-
-      <label>
-        <input type="checkbox" id="chk-overseas" required>
-        (필수) 결과 리포트 전송을 위한 개인정보의 국외 이전 및 구글 위탁 처리에 동의합니다.
-      </label>
-
-      <label>
-        <input type="checkbox" id="chk-copyright" required>
-        (필수) 저작권 보호 및 개인적 용도 한정 이용 조항에 동의합니다.
-      </label>
-
-    </div>
-    <button onclick="startDiagnosis()" id="btn-start">진단 시작하기</button>
-  </div>
-</div>
-  
-
-<!-- <footer>
-  <div class "foot-row">
-    <div class "foot-brand" >마음 , 인지행동심리상담센터</div>
-    <p class "foot-copy" id "copy-wright">© 2024 Maum CBT Center · Suwon & Yongin</p>
-  </div>
-</footer> -->
- <div basic-components="components/footer.html"></div>
-
-<script type="module" src="main.js" defer></script>
-<script  src="components/components.js" defer></script>
-
-<script>
-    const contents = document.getElementById('survey-app');
-    const modal = document.getElementById('consent-modal');
-    const agreeBtn = document.getElementById('btn-start');
-    const body = document.body;
-    
-    const essentialChecks = ['chk-privacy', 'chk-automated', 'chk-overseas', 'chk-copyright'];
-    const typeSelect = document.getElementById('type-select');
-    const categorySelect = document.getElementById('category-select');
-
-    body.classList.add("dark-bg"); 
-
-    const essentialCheckcontents = ["(필수) 개인정보 수집 및 민감정보(심리 진단 내역) 처리에 동의합니다.", "(필수) 알고리즘을 통한 자동화된 결정 방식에 대한 안내를 확인하였으며, 이에 동의합니다.", "(필수) 결과 리포트 전송을 위한 개인정보의 국외 이전 및 구글 위탁 처리에 동의합니다.", "(필수) 저작권 보호 및 개인적 용도 한정 이용 조항에 동의합니다."];
-
-
-    // 2026년 보안 지침에 따른 sessionStorage 데이터 암호화 예시 
-// function saveEncryptedData(key, value) {
-//     // 실제 구현 시 CryptoJS 등 라이브러리 사용 권장
-//     const encrypted = btoa(unescape(encodeURIComponent(value))); 
-//     sessionStorage.setItem(key, encrypted);
-// }
-
-// 자동화된 결정에 대한 설명 요구권 및 거부권 처리 (Human-in-the-loop) [cite: 48]
-function requestHumanReview() {
-    alert("전문 상담사의 재검토 절차가 접수되었습니다. 24시간 이내에 연락드리겠습니다.");
-}
-
-function checkAllAgreements() {
-    for (const id of essentialChecks) {
-            sessionStorage.setItem(id, 'true'); // 동의 여부 저장
-        }
- }
-
-function startDiagnosis() {
-    const allChecked = essentialChecks.every(id => document.getElementById(id).checked);
-    if (allChecked) {
-        checkAllAgreements(); // 동의 여부 저장
-        closeModal(); // 모달 닫기
-        console.log("진단 프로세스 시작");
-
-    } else {
-        alert("필수 동의 항목에 모두 체크해주세요.");
-    }
-}
-
-    function closeModal() {
-        contents.classList.remove("display-none");
-        modal.classList.add("display-none");
-        body.classList.remove("dark-bg");
-    }
-
-    // 페이지 로드 시 기존 동의 여부 확인
-    window.onload = () => {
-        const isAgreed = localStorage.getItem('user_agreed');
-        if (isAgreed === 'true') {
-            closeModal(); // 이미 동의했다면 모달 없이 바로 콘텐츠 표시
-        }
-    };
-
-    //
-    const surveyConfigs = {
-    adult: [
-        { title: "type 1", questions: ["현재 가장 불편한 증상은 무엇인가요?", "대인관계나 직장생활은?", "대인관계나 직장생활은?"] },
-        { title: "type 2", questions: ["의학적 병력에 대해 기술해주세요.", "대인관계나 직장생활은?"] },
-        { title: "type 3", questions: ["성장 과정의 주요 사건은?"] }
-     ],
-    student: [
-        { title: "type 1", questions: ["성장 과정의 주요 사건은?" ] },
-        { title: "type 2", questions: ["학교 내 대인관계나 생활은?", "성장 과정의 주요 사건은?"] }
-     ]
-};
-
-    let surveyData = []; // 현재 선택된 설문 데이터
-
-    let state = {
-        catIdx: 0,
-        queIdx: 0,
-        doneCount: 0,
-        totalCount: 0 
-    };
-
-    // 설문 데이터 정의
-typeSelect.addEventListener('change', (e) => {
-    const selectedType = e.target.value;
-    const categories = surveyConfigs[selectedType] || [];
-
-    // 세부 선택창 초기화
-    categorySelect.innerHTML = '<option value="">세부 항목을 선택하세요</option>';
-
-    if (categories.length > 0) {
-            categories.forEach((cat, index) => {
-                const option = document.createElement('option');
-                option.value = index; // 카테고리 인덱스 저장
-                option.innerText = cat.title;
-                categorySelect.appendChild(option);
-            });
-            categorySelect.style.display = 'block'; // 보이게 설정
-        } else {
-            categorySelect.style.display = 'none';
-        }
-        
-        // 진행 중이던 설문 UI 초기화 (선택 전까지 대기)
-        resetSurvey();
-});
-
-    // 2. 세부 항목 선택 시 해당 질문들만 독립적으로 로드
-    categorySelect.addEventListener('change', (e) => {
-        const type = typeSelect.value;
-        const catIdx = e.target.value;
-
-        if (type && catIdx !== "") {
-            const selectedCategory = surveyConfigs[type][catIdx];
-            
-            // 핵심: 전체 배열이 아닌 "선택한 카테고리 하나"만 surveyData에 넣음
-            surveyData = [selectedCategory]; 
-
-            // 상태 초기화
-            state = {
-                catIdx: 0,
-                queIdx: 0,
-                doneCount: 0,
-                totalCount: selectedCategory.questions.length
-            };
-
-            // 채팅창 비우고 시작
-            document.getElementById('chat-window').innerHTML = "";
-            addMessage(`"${selectedCategory.title}" 진단을 시작합니다.`, 'bot');
-            renderQuestion();
-        }
-    });
-
-    // 초기화 함수 추가
-    function resetSurvey() {
-        surveyData = [];
-        document.getElementById('chat-window').innerHTML = "";
-        document.getElementById('progress-fill').style.width = `0%`;
-        document.getElementById('progress-percent').innerText = `0%`;
-        document.getElementById('cat-title').innerText = "준비 중...";
-    }
-
-
-    // 초기화
-    document.addEventListener('DOMContentLoaded', () => {
-        renderQuestion();
-        document.getElementById('send-btn').addEventListener('click', handleAnswer);
-        document.getElementById('answer-input').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') handleAnswer();
-        });
-    });
-
-    // 질문 렌더링
-    function renderQuestion() {
-        if(surveyData.length === 0) {
-            addMessage("설문지를 선택해주세요.", 'bot');
-            return;
-        }
-        
-        const qText = surveyData[state.catIdx].questions[state.queIdx];
-        addMessage(`[${surveyData[state.catIdx].title}] ${qText}`, 'bot');
-        updateUI();
-    }
-
-    // 메시지 추가
-    function addMessage(text, type) {
-        const chatWin = document.getElementById('chat-window');
-        const msg = document.createElement('div');
-        msg.className = `bubble ${type}`;
-        msg.innerText = text;
-        chatWin.appendChild(msg);
-        chatWin.scrollTop = chatWin.scrollHeight;
-    }
-
-    // 답변 제출 로직
-    function handleAnswer() {
-        const input = document.getElementById('answer-input');
-        const val = input.value.trim();
-        if (!val) return;
-
-        addMessage(val, 'user');
-        saveToStorage(val);
-        input.value = "";
-
-        // 이어쓰기 확인 로직
-        setTimeout(() => {
-            if (confirm("다음 문항으로 넘어가시겠습니까?\n(취소 시 현재 문항 보충 작성)")) {
-                moveNext();
-            } else {
-                addMessage("현재 문항에 내용을 이어서 입력해주세요.", 'bot');
-            }
-        }, 100);
-    }
-
-    // 데이터 저장 (SessionStorage)
-    function saveToStorage(answer) {
-        const key = `survey_ans_${state.catIdx}_${state.queIdx}`;
-        const prev = sessionStorage.getItem(key) || "";
-        sessionStorage.setItem(key, prev ? `${prev} ${answer}` : answer);
-    }
-
-    // 다음 단계 이동
-    function moveNext() {
-        state.doneCount++;
-        state.queIdx++;
-
-        if (state.queIdx >= surveyData[state.catIdx].questions.length) {
-            state.catIdx++;
-            state.queIdx = 0;
-        }
-
-        if (state.catIdx >= surveyData.length) {
-            console.log('donecount:', state.doneCount, 'totalcount:', state.totalCount); 
-            updateUI();
-            completeSurvey();
-        } else {
-            renderQuestion();
-        }
-    }
-
-    // UI 업데이트 (진행도)
-    function updateUI() {
-        const percent = Math.floor((state.doneCount / state.totalCount) * 100);
-        document.getElementById('progress-fill').style.width = `${percent}%`;
-        document.getElementById('progress-percent').innerText = `${percent}%`;
-        document.getElementById('cat-title').innerText = state.catIdx < surveyData.length ? `Ch.${state.catIdx + 1}. ${surveyData[state.catIdx].title}` :  "설문 완료";
-    }
-
-    // 종료 처리
-    function completeSurvey() {
-        document.getElementById('input-control').classList.add('hidden');
-        document.getElementById('final-step').classList.remove('hidden');
-        addMessage("설문이 모두 끝났습니다. 고생하셨습니다!", 'bot');
-    }
-
-    // 기능 확장용 함수들
-    function exportPDF() { 
-        // step 1. sessionStorage 순회 (동의서, 설문 항목 | 2가지로 분리 [배열 텍스트 추출])
-
-        let surveyResults = [];
-        //let policyAgreements = []; essentialChecks 를 통해서 allAgreement로 인해서 동의를 이미 받은 상태이므로 별도 추출은 생략
-
-        for(let i = 0; i < sessionStorage.length; i++) {
-            const key = sessionStorage.key(i);
-            if (key.startsWith('survey_ans_')) {
-                const data = sessionStorage.getItem(key);
-
-                const match = key.match(/survey_ans_(\d+)_(\d+)/);
-                if (match) {
-                    const catIdx = parseInt(match[1]);
-                    const queIdx = parseInt(match[2]);
-                    const qText = surveyData[catIdx]?.questions[queIdx] || "질문 텍스트 없음";
-                    //console.log({ catIdx, queIdx, qText, answer: data });
-                    surveyResults.push({ catIdx, queIdx, qText, answer: data });
-                }
-            }
-        }
-        console.log("추출된 설문 결과:", surveyResults);
-        // step 2. 보고서 답변 항목 정렬 (질문 번호 기준)
-        surveyResults.sort((a, b) => {
-            if (a.catIdx === b.catIdx) {
-                return a.queIdx - b.queIdx; // 같은 카테고리 내에서는 질문 번호로 정렬
-            }
-            return a.catIdx - b.catIdx; // 카테고리 번호로 정렬
-        });
-
-        // step 3. HTML 템플릿 생성
-        function typeAnnounce() {
-            switch(typeSelect.value) {
-                case 'adult': return "성인 자가진단";
-                case 'student': return "청소년 자가진단";
-                default: return "알 수 없는 유형";
-            }
-        }
-
-        // 사전 동의서 문서  
-        let consentContent = `
-            <div style="padding: 30px; font-family: 'Noto Sans KR', sans-serif; line-height: 1.6;">
-                <div style="border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px;">
-                    <h1 style="margin: 0; color: #1a1a1a;">자가진단 사전 동의서</h1>
-                    <p style="margin: 5px 0 0 0; color: #666;">마음 , 인지행동심리상담센터</p>
-                </div>
-                
-                <p style="text-align: right; font-size: 0.9em;">발행일시: ${new Date().toLocaleString()}</p>
-
-                <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
-                    <tr style="background-color: #f8f9fa;">
-                        <th style="border: 1px solid #dee2e6; padding: 12px; width: 30%;">항목</th>
-                        <th style="border: 1px solid #dee2e6; padding: 12px; width: 70%;">내용</th>
-                    </tr>
-        `;
-            essentialCheckcontents.forEach( id => {
-                     consentContent += `
-                        <tr>
-                            <td style="border: 1px solid #dee2e6; padding: 12px; font-weight: bold;">${id}</td>
-                            <td style="border: 1px solid #dee2e6; padding: 12px;">동의함</td>
-                        </tr>
-                    `;
-             });
-
-        consentContent += `
-                </table>
-        `;
-
-        // 자가진단 설문 응답 문서  
-        let reportContent = `
-            <div style="padding: 30px; font-family: 'Noto Sans KR', sans-serif; line-height: 1.6;">
-                <div style="border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px;">
-                    <h1 style="margin: 0; color: #1a1a1a;">자가진단 결과 보고서</h1>
-                    <p style="margin: 5px 0 0 0; color: #666;">마음 , 인지행동심리상담센터</p>
-                </div>
-                
-                <p style="text-align: right; font-size: 0.9em;">발행일시: ${new Date().toLocaleString()}</p>
-                <p style="text-align: right; font-size: 0.9em;">자가진단 유형: ${typeAnnounce()}</p>
-
-                <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
-                    <tr style="background-color: #f8f9fa;">
-                        <th style="border: 1px solid #dee2e6; padding: 12px; width: 20%;">항목</th>
-                        <th style="border: 1px solid #dee2e6; padding: 12px; width: 20%;">질문</th>
-                        <th style="border: 1px solid #dee2e6; padding: 12px; width: 60%;">내용</th>
-                    </tr>
-        `;
-
-        surveyResults.forEach(item => {
-            reportContent += `
-                <tr>
-                    <td style="border: 1px solid #dee2e6; padding: 12px; text-align: center; font-weight: bold;">Ch.${item.catIdx + 1}</td>
-                    <td style="border: 1px solid #dee2e6; padding: 12px;">${item.qText}</td>
-                    <td style="border: 1px solid #dee2e6; padding: 12px;">${item.answer}</td>
-                </tr>
-            `;
-        });
-
-        reportContent += `
-                </table>
-                
-                <div style="margin-top: 40px; padding: 20px; background-color: #f1f3f5; border-radius: 8px;">
-                    <p style="margin: 0; font-size: 0.9em; color: #495057;">
-                        * 본 진단 결과는 참고용이며, 정확한 진단은 전문가와의 상담을 통해 확인하시기 바랍니다.
-                    </p>
+            <div class="tp_box">
+                <p id="cat-description">진단 항목을 선택해 주세요. 각 문항을 읽고 자신에게 해당되는 정도를 체크해 주시기 바랍니다.</p>
+                <div class="bt_wrap">
+                    <dl>
+                        <dt>대상</dt>
+                        <dd id="target-label">항목을 선택하면 대상이 표시됩니다.</dd>
+                    </dl>
                 </div>
             </div>
+
+            <div class="test_table_wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>평가 문항</th>
+                            <th>전혀 아님</th>
+                            <th>가끔 그럼</th>
+                            <th>자주 그럼</th>
+                            <th>항상 그럼</th>
+                        </tr>
+                    </thead>
+                    <tbody id="survey-tbody">
+                        </tbody>
+                </table>
+            </div>
+
+            <div id="result-area" class="result_box hidden">
+                <div class="score">나의 점수 <strong id="my_score">0</strong>점</div>
+                <p id="my_res" class="sec-sub" style="margin-top: 15px;"></p>
+                <div class="btn_wrap" style="margin-top: 20px;">
+                    <a href="/apply" class="btn-solid" style="padding: 1.2vw 3vw;">전문가 상담 예약하기</a>
+                </div>
+            </div>
+
+            <div class="btn_wrap">
+                <button type="button" class="result_btn" onclick="calculateResult()">결과 확인하기</button>
+                <button type="button" class="reset_btn" onclick="resetSurvey()">다시하기</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+/**
+ * 자가진단 데이터 통합 관리
+ */
+
+const surveyTarget = {
+    "adult" : "성인 (만 19세 이상)",
+    "student" : "청소년 (초 ~ 중/고등학생)"
+};
+
+
+const surveyMaster1 = [
+    { 
+        id: "adult_depress",
+        category: "우울증", 
+        target: "성인 (만 19세 이상)",
+        questions: ["내가 처한 상황이 비참하다.", "이유 없이 피곤하다.", "체중이 변화했다.", "집중력이 예전만 못하다.", "무기력함을 자주 느낀다."],
+        results: [
+            { min: 0, max: 4, text: "안정적인 상태입니다." },
+            { min: 5, max: 9, text: "경증의 우울감이 있습니다. 상담을 권장합니다." },
+            { min: 10, max: 20, text: "중증 우울상태입니다. 빠른 내원을 권장합니다." }
+        ]
+    },
+    { 
+        id: "adult_adhd",
+        category: "성인 ADHD", 
+        target: "성인 (만 19세 이상)",
+        questions: ["일의 마지막 세부사항을 마무리하기 힘들다.", "체계적인 순서 정하기가 어렵다.", "약속이나 일정을 자주 잊는다."],
+        results: [
+            { min: 0, max: 4, text: "정상 범위입니다." },
+            { min: 5, max: 12, text: "주의 깊은 관찰과 진단이 필요합니다." }
+        ]
+    },
+    { 
+        id: "student_stress",
+        category: "학업 스트레스", 
+        target: "청소년 (중/고등학생)",
+        questions: ["공부 때문에 잠을 설친다.", "시험 기간에 극도로 예민하다.", "학교 가는 것이 두렵다."],
+        results: [
+            { min: 0, max: 12, text: "적절히 관리되고 있습니다." }
+        ]
+    }
+];
+
+const surveyMaster2 = [
+    { 
+        id: "adult_depress",
+        category: "햄버거", 
+        target: "성인 (만 19세 이상)",
+        questions: ["내가 처한 상황이 비참하다.", "이유 없이 피곤하다.", "체중이 변화했다.", "집중력이 예전만 못하다.", "무기력함을 자주 느낀다."],
+        results: [
+            { min: 0, max: 4, text: "안정적인 상태입니다." },
+            { min: 5, max: 9, text: "경증의 우울감이 있습니다. 상담을 권장합니다." },
+            { min: 10, max: 20, text: "중증 우울상태입니다. 빠른 내원을 권장합니다." }
+        ]
+    },
+    { 
+        id: "adult_adhd",
+        category: "피지", 
+        target: "성인 (만 19세 이상)",
+        questions: ["일의 마지막 세부사항을 마무리하기 힘들다.", "체계적인 순서 정하기가 어렵다.", "약속이나 일정을 자주 잊는다."],
+        results: [
+            { min: 0, max: 4, text: "정상 범위입니다." },
+            { min: 5, max: 12, text: "주의 깊은 관찰과 진단이 필요합니다." }
+        ]
+    },
+    { 
+        id: "student_stress",
+        category: "학업 스트레스", 
+        target: "청소년 (중/고등학생)",
+        questions: ["공부 때문에 잠을 설친다.", "시험 기간에 극도로 예민하다.", "학교 가는 것이 두렵다."],
+        results: [
+            { min: 0, max: 12, text: "적절히 관리되고 있습니다." }
+        ]
+    }
+];
+
+// 상위 타겟과 데이터 셋을 매핑
+const targetDataMap = {
+    "adult": surveyMaster1,
+    "student": surveyMaster2
+};
+
+let currentTargetKey = "adult"; // 현재 선택된 타겟 (기본값)
+let currentSurvey = null;
+
+
+
+$(document).ready(function() {
+renderTargetTabs(); // 1. 상위 타겟 탭 생성
+    updateCategoryTabs("adult"); // 2. 초기값인 성인용 카테고리 생성 및 첫 설문 로드});
+});
+
+// 탭 메뉴 토글
+function renderTargetTabs() {
+    const $tabs = $('#target-tabs').empty();
+    Object.entries(surveyTarget).forEach(([key, value]) => {
+        const isActive = key === currentTargetKey ? 'active' : '';
+        $tabs.append(`
+            <li class="${isActive}" data-target="${key}" onclick="changeTarget('${key}', this)">
+                <a href="javascript:;">${value}</a>
+            </li>
+        `);
+    });
+}
+
+// 타겟 변경 시 실행되는 함수
+function changeTarget(targetKey, el) {
+    currentTargetKey = targetKey;
+    
+    // 탭 활성화 UI 변경
+    $('#target-tabs li').removeClass('active');
+    $(el).addClass('active');
+
+    // 하위 카테고리 탭 갱신 및 첫 번째 설문 로드
+    updateCategoryTabs(targetKey);
+}
+
+// 하위 카테고리 탭 생성 (우울증 / ADHD 등)
+function updateCategoryTabs(targetKey) {
+    const $tabs = $('#category-tabs').empty();
+    const masterData = targetDataMap[targetKey];
+
+    masterData.forEach((item, idx) => {
+        const isActive = idx === 0 ? 'active' : '';
+        $tabs.append(`
+            <li class="${isActive}" onclick="loadSurvey(${idx}, this)">
+                <a href="javascript:;">${item.category}</a>
+            </li>
+        `);
+    });
+
+    // 해당 타겟의 첫 번째 설문 내용을 화면에 로드
+    loadSurvey(0);
+}
+
+// 질문지 테이블 렌더링
+function loadSurvey(idx, el) {
+    if(el) {
+        $('#category-tabs li').removeClass('active');
+        $(el).addClass('active');
+    }
+
+    const masterData = targetDataMap[currentTargetKey];
+    currentSurvey = masterData[idx];
+
+    $('#target-label').text(currentSurvey.target);
+    $('#cat-description').text(`${currentSurvey.category} 진단 항목입니다. 각 문항을 읽고 체크해 주세요.`);
+    $('#result-area').hide();
+    
+    const $tbody = $('#survey-tbody').empty();
+    currentSurvey.questions.forEach((q, qIdx) => {
+        const row = `
+            <tr>
+                <td><span class="num">${String(qIdx+1).padStart(2, '0')}</span> ${q}</td>
+                <td><input type="radio" name="q_${qIdx}" value="0"></td>
+                <td><input type="radio" name="q_${qIdx}" value="1"></td>
+                <td><input type="radio" name="q_${qIdx}" value="2"></td>
+                <td><input type="radio" name="q_${qIdx}" value="3"></td>
+            </tr>
         `;
+        $tbody.append(row);
+    });
+}
 
-        // step 4. html2pdf로 PDF 저장 실행
-            const worker = html2pdf();
-            const opt = {
-                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] },
-                margin: 15,
-                filename: `SelfCheck_Report_${new Date().getTime()}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };          
+// 결과값 저장   
+     function saveToStorage(idx, answer) {
+        const key = `selfcheck_answers_${idx}`;
+        const prev =   "";
+        sessionStorage.setItem(key, answer);
+    }
 
-            worker.from(consentContent + reportContent).set(opt).save();
- 
+    function resetStorage() {
+        for(let i =0; i<sessionStorage.length; i++) {
+            const key = sessionStorage.key(i);
+            if(key.startsWith("selfcheck_answers_")) {
+                sessionStorage.clear(key);
+            }
+        }
+    }
 
-        alert("PDF 생성을 준비 중입니다."); }
-    function applyConsult(type) { alert(`${type} 상담 신청이 완료되었습니다.`); }
- </script>
+// 결과 계산
+function calculateResult() {
+    let score = 0;
+    let complete = true;
+    
+    resetStorage();
+    
+    currentSurvey.questions.forEach((_, idx) => {
+        const val = $(`input[name="q_${idx}"]:checked`).val();
+        if(val === undefined) complete = false;
+        else {
+            score += parseInt(val);
+            saveToStorage(idx, parseInt(val));
+         }
+    });
+
+    if(!complete) {
+        alert("모든 문항에 체크해 주세요.");
+        return;
+    }
+
+    let resultTxt = "결과 데이터가 없습니다.";
+    currentSurvey.results.forEach(res => {
+        if(score >= res.min && score <= res.max) resultTxt = res.text;
+    });
 
 
 
-</body>
+    $('#my_score').text(score);
+    $('#my_res').html(resultTxt);
+    $('#result-area').fadeIn();
+    
+    // 결과 확인 후 하단으로 스크롤
+    $('html, body').animate({ scrollTop: $('#result-area').offset().top - 100 }, 500);
+}
+
+function resetSurvey() {
+    $('input[type="radio"]').prop('checked', false);
+    $('#result-area').hide();
+    window.scrollTo(0, 0);
+}
+
+
+
+</script>
 </html>
