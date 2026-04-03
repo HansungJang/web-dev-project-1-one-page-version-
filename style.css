@@ -987,3 +987,154 @@ body.edit-mode .edit-badge { display: block; }
   .therapist-content { padding: 120px 6vw 56px; }
   .therapist-photo { height: 60vw; }
 }
+
+
+/* ══════════════════════════════════════════
+    SELF CHECK / SURVEY (설문조사) 
+══════════════════════════════════════════ */
+/* 자가진단 전용 커스텀 스타일 */
+
+/* 상단 타이틀 정렬 */
+.sub_title_txt { text-align: center; padding: 100px 0 60px; }
+
+/* 탭 메뉴 디자인 */
+.test_tabnav { 
+    display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; 
+    list-style-type: none;
+}
+.test_tabnav li a {
+    padding: 12px 30px; background: var(--c-cream); border-radius: 50px;
+    font-size: 15px; color: var(--c-muted); transition: var(--t);
+ 
+ }
+.test_tabnav li.active a {
+    background: var(--c-sage); color: var(--c-white); font-weight: 600;     
+ 
+}
+
+/* 하위 카테고리 탭 (라인형) */
+.test_category_nav {
+    display: flex; justify-content: center; gap: 30px; margin-bottom: 50px;
+    border-bottom: 1px solid var(--c-border);
+    list-style-type: none;
+}
+.test_category_nav li { position: relative; padding-bottom: 15px; cursor: pointer;     
+}
+.test_category_nav li a { font-size: 16px; color: var(--c-muted);     
+}
+.test_category_nav li.active a { color: var(--c-sage); font-weight: 700;     }
+.test_category_nav li.active::after {
+    content: ''; position: absolute; bottom: -1px; left: 0; width: 100%; height: 2px;
+    background: var(--c-sage);
+ }
+
+/* 설명 박스 */
+.tp_box {
+    background: var(--c-ivory); padding: 40px; border-radius: 4px;
+    border: 1px solid var(--c-border); margin-bottom: 40px; text-align: center;
+}
+.info_header { margin-bottom: 15px; }
+.info_header .badge {
+    display: inline-block; padding: 4px 12px; background: var(--c-sage-xs);
+    color: var(--c-sage); font-size: 12px; border-radius: 2px; margin-bottom: 10px;
+}
+.info_header h4 { font-family: var(--f-display); font-size: 24px; color: var(--c-ink); }
+
+/* 테이블 스타일 현대화 */
+.test_table_wrap table { width: 100%; border-spacing: 0; border-collapse: separate; }
+.test_table_wrap th {
+    background: var(--c-cream); padding: 20px 10px; font-size: 14px;
+    color: var(--c-sage); border-top: 1px solid var(--c-sage);
+}
+.test_table_wrap td {
+    padding: 25px 10px; border-bottom: 1px solid var(--c-border);
+    text-align: center; font-size: 16px;
+}
+.test_table_wrap td:first-child { text-align: left; padding-left: 20px; font-weight: 500; }
+
+/* 라디오 버튼 커스텀 */
+input[type="radio"] {
+    width: 22px; height: 22px; accent-color: var(--c-sage); cursor: pointer;
+}
+
+/* 결과 영역 디자인 */
+.result_box {
+    display: none; margin-top: 60px; padding: 60px 40px;
+    background: var(--c-sage-xs); border: 1px dashed var(--c-sage); border-radius: 8px;
+    animation: fadeUp 0.8s ease forwards;
+}
+.score_circle {
+    width: 150px; height: 150px; border: 4px solid var(--c-sage); border-radius: 50%;
+    margin: 0 auto 30px; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; background: #fff;
+}
+.score_lbl { font-size: 13px; color: var(--c-muted); }
+#my_score { font-size: 48px; color: var(--c-sage); line-height: 1; }
+.unit { font-size: 16px; color: var(--c-sage); }
+#my_res { font-size: 20px; color: var(--c-ink); font-weight: 500; margin-bottom: 30px; text-align: center; }
+
+/* 버튼 그룹 */
+.action_wrap { text-align: center; margin-top: 50px; }
+.result_btn {
+    background: var(--c-sage); color: #fff; padding: 18px 60px;
+    border-radius: 2px; font-size: 16px; border: none; transition: var(--t);
+}
+.result_btn:hover { background: var(--c-ink); transform: translateY(-3px); }
+
+.reset_btn_text {
+    background: none; border: none; color: var(--c-muted);
+    text-decoration: underline; margin-top: 20px; cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    /* 1. 테이블 헤더(제목줄)를 완전히 숨깁니다. */
+    .test_table_wrap thead {
+        display: none;
+    }
+
+    /* 2. 각 행(TR)을 하나의 독립된 '카드'처럼 만듭니다. */
+    .test_table_wrap tr {
+        display: block;
+        padding: 25px 15px;
+        border-bottom: 8px solid var(--c-ivory); /* 문항 사이 구분 */
+        background: #fff;
+    }
+
+    /* 3. 질문 내용이 담긴 첫 번째 칸(TD)을 강조합니다. */
+    .test_table_wrap td:first-child {
+        display: block;
+        width: 100% !important;
+        padding: 0 0 20px 0;
+        text-align: left;
+        font-size: 18px;
+        line-height: 1.4;
+        color: var(--c-ink);
+        border: none;
+    }
+
+    /* 4. 라디오 버튼이 있는 칸들을 가로로 나열합니다. */
+    .test_table_wrap td:not(:first-child) {
+        display: inline-flex;
+        flex-direction: column; /* 라벨을 버튼 아래에 배치 */
+        align-items: center;
+        width: 23%; /* 4개 문항이므로 약 25%씩 배분 */
+        border: none;
+        padding: 10px 0;
+        font-size: 12px;
+        gap: 8px;
+    }
+
+    /* 5. [핵심] 숨겨진 타이틀을 라디오 버튼 밑에 강제로 표시합니다. */
+    .test_table_wrap td:not(:first-child)::after {
+        content: attr(data-label); /* HTML의 data-label 값을 가져옴 */
+        color: var(--c-muted);
+        white-space: nowrap;
+    }
+
+    /* 라디오 버튼 크기 최적화 */
+    input[type="radio"] {
+        width: 24px;
+        height: 24px;
+        margin: 0;
+    }
+}

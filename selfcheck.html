@@ -4,78 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <style>
-        /* 요청하신 CSS Layout 기반 스타일링 */
-        .test_tabnav { 
-            width: 82.14vw; margin: 0 auto 5.00vw; 
-            display: flex; justify-content: center; gap: 10px; list-style: none;
-        }
-        .test_tabnav li a { 
-            display: block; line-height: 4.64vw; font-size: 1.57vw; 
-            padding: 0 2vw; color: var(--c-muted); transition: var(--t);
-            border-bottom: 2px solid transparent;
-        }
-        .test_tabnav li.active a { 
-            color: var(--c-sage); font-weight: 700; border-bottom: 2px solid var(--c-sage); 
-        }
-
-        .test_wrap .tp_box { 
-            background: var(--c-ivory); border-radius: 2.14vw; 
-            padding: 3.57vw 10.71vw; box-shadow: var(--shadow-sm);
-        }
-        .test_wrap .tp_box p { font-size: 1.71vw; color: var(--c-ink); line-height: 1.6; }
-        
-        .test_wrap .tp_box .bt_wrap { 
-            margin-top: 5.36vw; position: relative; border-top: 1px solid var(--c-border); 
-            padding-top: 2vw;
-        }
-        .test_wrap .tp_box .bt_wrap dl { 
-            display: flex; font-size: 1.71vw; padding-left: 6.07vw; margin-bottom: 1.07vw; 
-        }
-        .test_wrap .tp_box .bt_wrap dt { font-weight: 700; color: var(--c-sage); margin-right: 15px; }
-
-        .test_table_wrap { margin-top: 5.71vw; }
-        .test_table_wrap table { width: 100%; border-collapse: collapse; }
-        .test_table_wrap table th { 
-            background: var(--c-cream); font-size: 1.43vw; padding: 1.43vw; 
-            border-bottom: 1px solid var(--c-border); color: var(--c-sage);
-        }
-        .test_table_wrap table td { 
-            font-size: 1.57vw; padding: 2.14vw; border-bottom: 1px solid var(--c-border); 
-            text-align: center; 
-        }
-        .test_table_wrap table td:first-child { text-align: left; }
-        .test_table_wrap table th:nth-child(1) { width: 60%; }
-        .test_table_wrap table th:nth-child(n+2) { width: 10%; }
-        
-        .test_table_wrap table td .num { 
-            display: inline-block; min-width: 2.14vw; margin-right: 0.71vw; 
-            font-weight: 700; color: var(--c-sage); 
-        }
-        .test_table_wrap table input[type="radio"] { 
-            width: 1.43vw; height: 1.43vw; cursor: pointer; accent-color: var(--c-sage);
-        }
-
-        .test_wrap .btn_wrap { margin-top: 4.29vw; text-align: center; }
-        .test_wrap .btn_wrap button { 
-            font-size: 1.71vw; padding: 1.43vw 3.57vw; border-radius: 50px; 
-            border: none; transition: var(--t); font-weight: 500;
-        }
-        .test_wrap .btn_wrap .result_btn { background: var(--c-sage); color: #df1212; margin-right: 1.43vw; }
-        .test_wrap .btn_wrap .reset_btn { background: var(--c-cream); color: var(--c-muted); }
-
-        /* 결과 영역 디자인 */
-        .result_box { 
-            margin-top: 5vw; padding: 4vw; background: var(--c-cream); 
-            border-radius: 2vw; text-align: center; display: none;
-        }
-        #my_score { font-size: 3vw; color: var(--c-sage); font-weight: 700; }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <div id="sub_content">
     <div class="sub_inner">
-        <div class="sub_title_txt" style="text-align: center; padding: 80px 0;">
+        <div class="sub_title_txt">
             <div class="sec-tag">Self Check</div>
             <h3 class="sec-h">마음 건강 <em>자가진단</em></h3>
             <p class="sec-sub">현재 나의 마음 상태를 객관적으로 확인해 보세요.</p>
@@ -83,17 +17,15 @@
 
         <div class="test_wrap wrap">
             <ul class="test_tabnav" id="target-tabs"></ul>
-            <ul class="test_tabnav" id="category-tabs">
-                </ul>
+            
+            <ul class="test_category_nav" id="category-tabs"></ul>
 
             <div class="tp_box">
-                <p id="cat-description">진단 항목을 선택해 주세요. 각 문항을 읽고 자신에게 해당되는 정도를 체크해 주시기 바랍니다.</p>
-                <div class="bt_wrap">
-                    <dl>
-                        <dt>대상</dt>
-                        <dd id="target-label">항목을 선택하면 대상이 표시됩니다.</dd>
-                    </dl>
+                <div class="info_header">
+                    <span class="badge" id="target-label">대상 로딩중...</span>
+                    <h4 id="cat-title">진단 항목을 선택해 주세요</h4>
                 </div>
+                <p id="cat-description" class="sec-sub">각 문항을 읽고 자신에게 해당되는 정도를 체크해 주시기 바랍니다.</p>
             </div>
 
             <div class="test_table_wrap">
@@ -101,10 +33,10 @@
                     <thead>
                         <tr>
                             <th>평가 문항</th>
-                            <th>전혀 아님</th>
-                            <th>가끔 그럼</th>
-                            <th>자주 그럼</th>
-                            <th>항상 그럼</th>
+                            <th>전혀<br>아님</th>
+                            <th>가끔<br>그럼</th>
+                            <th>자주<br>그럼</th>
+                            <th>항상<br>그럼</th>
                         </tr>
                     </thead>
                     <tbody id="survey-tbody">
@@ -112,17 +44,23 @@
                 </table>
             </div>
 
-            <div id="result-area" class="result_box hidden">
-                <div class="score">나의 점수 <strong id="my_score">0</strong>점</div>
-                <p id="my_res" class="sec-sub" style="margin-top: 15px;"></p>
-                <div class="btn_wrap" style="margin-top: 20px;">
-                    <a href="/apply" class="btn-solid" style="padding: 1.2vw 3vw;">전문가 상담 예약하기</a>
+            <div id="result-area" class="result_box">
+                <div class="result_inner">
+                    <div class="score_circle">
+                        <span class="score_lbl">나의 점수</span>
+                        <strong id="my_score">0</strong>
+                        <span class="unit">점</span>
+                    </div>
+                    <p id="my_res"></p>
+                    <div class="btn_group">
+                        <a href="/apply" class="btn-solid">전문가 상담 예약하기</a>
+                        <button type="button" class="reset_btn_text" onclick="resetSurvey()">테스트 다시하기</button>
+                    </div>
                 </div>
             </div>
 
-            <div class="btn_wrap">
+            <div class="action_wrap">
                 <button type="button" class="result_btn" onclick="calculateResult()">결과 확인하기</button>
-                <button type="button" class="reset_btn" onclick="resetSurvey()">다시하기</button>
             </div>
         </div>
     </div>
@@ -272,6 +210,7 @@ function loadSurvey(idx, el) {
     }
 
     const masterData = targetDataMap[currentTargetKey];
+    const labels = ["전혀 아님", "가끔 그럼", "자주 그럼", "항상 그럼"]; // 라벨 정의
     currentSurvey = masterData[idx];
 
     $('#target-label').text(currentSurvey.target);
@@ -283,10 +222,10 @@ function loadSurvey(idx, el) {
         const row = `
             <tr>
                 <td><span class="num">${String(qIdx+1).padStart(2, '0')}</span> ${q}</td>
-                <td><input type="radio" name="q_${qIdx}" value="0"></td>
-                <td><input type="radio" name="q_${qIdx}" value="1"></td>
-                <td><input type="radio" name="q_${qIdx}" value="2"></td>
-                <td><input type="radio" name="q_${qIdx}" value="3"></td>
+                <td data-label="${labels[0]}"><input type="radio" name="q_${qIdx}" value="0"></td>
+                <td data-label="${labels[1]}"><input type="radio" name="q_${qIdx}" value="1"></td>
+                <td data-label="${labels[2]}"><input type="radio" name="q_${qIdx}" value="2"></td>
+                <td data-label="${labels[3]}"><input type="radio" name="q_${qIdx}" value="3"></td>            
             </tr>
         `;
         $tbody.append(row);
