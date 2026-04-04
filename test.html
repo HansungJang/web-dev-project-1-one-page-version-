@@ -1,227 +1,70 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <title>HTML to PDF Export</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        #content-to-export { padding: 20px; border: 1px solid #ccc; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #444; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        button { padding: 10px 20px; background-color: #007bff; color: white; border: none; cursor: pointer; }
+        button:hover { background-color: #0056b3; }
+    </style>
 </head>
-
 <body>
- <!doctype html>
-<html lang="ko">
-    <>
- 
- 
- <div id="sub_content">
-    <div class="sub_inner">
-        <div class="sub_title_txt">
-            <h3>성인</h3>
-            <p>15년간의 노하우로 타 상담센터와의 <br class="mob">차별화된 상담을 약속드립니다.</p>
-        </div>
-        <div class="sub_wrap">
 
-            	
-<div class="test_wrap">
-	<ul class="test_tabnav">
-		<li><a href="sub02.php" class="active">우울증</a></li>
-		<li><a href="sub02.php?st_idx=7" class="">공황장애</a></li>
-		<li><a href="sub02.php?st_idx=8" class="">불안장애</a></li>
-		<li><a href="sub02.php?st_idx=9" class="">스트레스</a></li>
-		<li><a href="sub02.php?st_idx=10" class="">성인 ADHD</a></li>
-	</ul>
-	<div class="test_tabcont">
-        <input type="hidden" name="st_res_1" id="st_res_1" value="0">
-        <input type="hidden" name="st_res_2" id="st_res_2" value="41">
-        <input type="hidden" name="st_res_3" id="st_res_3" value="51">
-        <input type="hidden" name="st_res_4" id="st_res_4" value="60">
-        <input type="hidden" name="st_res_5" id="st_res_5" value="">
-        <input type="hidden" name="st_res_1_txt" id="st_res_1_txt" value="다행히 지금 상태는 우울증은 아니십니다. &lt;br /&gt;
-계속 마음건강에 힘써 주세요.">
-        <input type="hidden" name="st_res_2_txt" id="st_res_2_txt" value="경증의 우울상태라 볼 수 있습니다. &lt;br /&gt;
-힘들다고 느끼신다면 조기에 전문적인 도움을 받아보세요.">
-        <input type="hidden" name="st_res_3_txt" id="st_res_3_txt" value="상당한 정도의 우울상태에 있습니다. &lt;br /&gt;
-지금 같은 상태가 한 달 이상 지속되었다면 가급적 빨리 전문가에게 도움을 요청하십시오.">
-        <input type="hidden" name="st_res_4_txt" id="st_res_4_txt" value="중증 우울상태에 있습니다. &lt;br /&gt;
-우울함은 의지로 이겨낼 수 있는 증상이 아닙니다. &lt;br /&gt;
-속히 전문가에게 치료를 받으십시오.">
-        <input type="hidden" name="st_res_5_txt" id="st_res_5_txt" value="">
-		<div class="test_table_wrap">
-			<table>
-				<tbody><tr>
-					<th>문항</th>
-                                <th>전혀 <br>그렇지 않다</th>
-					<th>때때로 <br>그렇다</th>
-					<th>자주 <br>그렇다</th>
-					<th>매우 <br>자주 그렇다</th>
-            		
-				</tr>
+    <div id="content-to-export">
+        <h2>판매 보고서 샘플</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>품목</th>
+                    <th>수량</th>
+                    <th>가격</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>노트북</td>
+                    <td>5</td>
+                    <td>$5,000</td>
+                </tr>
+                <tr>
+                    <td>모니터</td>
+                    <td>10</td>
+                    <td>$3,000</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
-                                <tr>
-                        <td>
-                            <div class="flex">
-                                <span class="num">1.</span><span class="txt">내가 처한 상황이 비참하다.</span>
-                            </div>
-                        </td>
-                                        <td>
-                            <input class="radio-custom" name="st_radio_1" type="radio" value="1">
-                        </td>
-                        <td>
-                            <input class="radio-custom" name="st_radio_1" type="radio" value="2">
-                        </td>
-                        <td>
-                            <input class="radio-custom" name="st_radio_1" type="radio" value="3">
-                        </td>
-                        <td>
-                            <input class="radio-custom" name="st_radio_1" type="radio" value="4">
-                        </td>
-                        
-                    </tr>
-                                <tr>
-                        <td>
-                            <div class="flex">
-                                <span class="num">2.</span><span class="txt">이유 없이 피곤하다.</span>
-                            </div>
-                        </td>
-                                        <td>
-                            <input class="radio-custom" name="st_radio_2" type="radio" value="1">
-                        </td>
-                        <td>
-                            <input class="radio-custom" name="st_radio_2" type="radio" value="2">
-                        </td>
-                        <td>
-                            <input class="radio-custom" name="st_radio_2" type="radio" value="3">
-                        </td>
-                        <td>
-                            <input class="radio-custom" name="st_radio_2" type="radio" value="4">
-                        </td>
-                        
-                    </tr>
-                                <tr>
-                        <td>
-                            <div class="flex">
-                                <span class="num">3.</span><span class="txt">체중이 감소했다.</span>
-                            </div>
-                        </td>
-                                        <td>
-                            <input class="radio-custom" name="st_radio_3" type="radio" value="1">
-                        </td>
-                        <td>
-                            <input class="radio-custom" name="st_radio_3" type="radio" value="2">
-                        </td>
-                        <td>
-                            <input class="radio-custom" name="st_radio_3" type="radio" value="3">
-                        </td>
-                        <td>
-                            <input class="radio-custom" name="st_radio_3" type="radio" value="4">
-                        </td>
-                        
-                    </tr>
+    <button onclick="exportPDF()">PDF로 다운로드</button>
 
-			</tbody></table>
-		</div>
-		<div class="btn_wrap">
-			<button class="result_btn">결과보기</button>
-			<!-- <button class="reset_btn">다시하기</button> -->
-			<a href="/apply"><button>상담예약</button></a>
-		</div>
-	</div>
-</div>
+    <script>
+        /**
+         * HTML 콘텐츠를 PDF로 내보내는 함수
+         */
+        function exportPDF() {
+            // PDF로 만들 요소 선택
+            const element = document.getElementById('content-to-export');
 
-<div class="popup_wrap">
-	<div class="popup_bg"></div>
-	<div class="popup_inner">
-		<div class="pop_tit">
-			<h4>자가진단 결과</h4>
-			<div class="pop_close">
-				<!-- <img src="/img/sub/pop_close.svg" alt=""> -->
-			</div>
-		</div>
-		<div class="pop_cont">
-			<div class="score">나의 점수 <strong id="my_score"></strong></div>
-			<div class="result">
-				<div class="title">검진결과</div>
-				<p id="my_res">
-					
-				</p>
-			</div>
-		</div>
-		<div class="btn_wrap">
-			<a href="/bbs/write.php?bo_table=apply">상담예약</a>
-		</div>
-	</div>
-</div>
+            // 2. PDF 변환 옵션 설정
+            const options = {
+                margin:       10,               // 여백 (mm)
+                filename:     'report.pdf',    // 파일명
+                image:        { type: 'jpeg', quality: 0.98 }, // 이미지 품질
+                html2canvas:  { scale: 2 },     // 해상도 조절 (숫자가 높을수록 고화질)
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' } // 용지 설정
+            };
 
-<script>
-	
-	$('.radio-custom').click(function(){
-		if($(this).prop("checked", true)){
-			$(this).parents('tr').addClass("on");
-		}
-	});
-
-	$('.result_btn').click(function() {
-        var num = '20';
-        var my_score = 0;
-        var my_res = '';
-        var st_res_1 = $('#st_res_1').val();
-        var st_res_2 = $('#st_res_2').val();
-        var st_res_3 = $('#st_res_3').val();
-        var st_res_4 = $('#st_res_4').val();
-        var st_res_5 = $('#st_res_5').val();
-        var st_res_1_txt = $('#st_res_1_txt').val();
-        var st_res_2_txt = $('#st_res_2_txt').val();
-        var st_res_3_txt = $('#st_res_3_txt').val();
-        var st_res_4_txt = $('#st_res_4_txt').val();
-        var st_res_5_txt = $('#st_res_5_txt').val();
-
-        for (var i=1; i<=num; i++) {
-            if (!$('input[name="st_radio_'+i+'"]').is(':checked')) {
-                alert(i+'번 문항을 선택해주세요.');
-                return;
-            } else {
-                my_score += Number($('input[name="st_radio_'+i+'"]:checked').val());
-            }
+            // 3. 라이브러리 실행 및 다운로드
+            // html2pdf().from(요소).set(옵션).save();
+            html2pdf().set(options).from(element).save();
         }
+    </script>
 
-
-
-        my_res = st_res_1_txt;
-        if (st_res_2 != '' && my_score >= st_res_2) {
-            my_res = st_res_2_txt;
-        }
-        if (st_res_3 != '' && my_score >= st_res_3) {
-            my_res = st_res_3_txt;
-        }
-        if (st_res_4 != '' && my_score >= st_res_4) {
-            my_res = st_res_4_txt;
-        }
-
-        console.log('my score: ' +  my_score, 'response:' + my_res );
-
-        // $('#my_score').html(my_score);
-        // $('#my_res').html(my_res);
-
-		// $('.popup_wrap').toggleClass('on');
-	});
-
-	$('.pop_close').click(function() {
-		$('.popup_wrap').removeClass('on');
-	});
-
-	$('.popup_bg').click(function() {
-		$('.popup_wrap').removeClass('on');
-	});
-
-    $('.reset_btn').click(function () {
-        location.reload();
-    });
-
-</script>
-
-
-
-</div>
-</div>
-</div>
 </body>
 </html>

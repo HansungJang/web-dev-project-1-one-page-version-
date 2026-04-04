@@ -6,8 +6,11 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link rel="stylesheet" href="style.css">
-</head>
+    
+    <header basic-components="components/header.html"></header>
 
+</head>
+<body>
 <div id="sub_content">
     <div class="sub_inner">
         <div class="sub_title_txt">
@@ -54,19 +57,24 @@
                     </div>
                     <p id="my_res"></p>
                     <div class="btn_group">
-                        <button type="button" class="result_btn" onclick="exportPDF()">결과 PDF로 저장하기</button>
-                        <a href="/apply" class="btn-solid">전문가 상담 예약하기</a>
-                        <button type="button" class="reset_btn_text" onclick="resetSurvey()">테스트 다시하기</button>
+                        <!-- <button type="button" class="result_btn" onclick="exportPDF()">결과 PDF로 저장하기</button> -->
+                        <a href="/apply" class="result_btn">전문가 상담 예약하기</a>
+                        <button type="button" class="result_btn_black" onclick="resetSurvey()">테스트 다시하기</button>
                     </div>
                 </div>
             </div>
 
-            <div class="action_wrap">
+            <div id="result-btn" class="action_wrap">
                 <button type="button" class="result_btn" onclick="calculateResult()">결과 확인하기</button>
             </div>
         </div>
     </div>
 </div>
+
+ <div basic-components="components/footer.html"></div>
+ <script  src="components/components.js" defer></script>
+ <script type="module" src="main.js" defer></script>
+
 
 <script>
 /**
@@ -79,76 +87,567 @@ const surveyTarget = {
 };
 
 
-const surveyMaster1 = [
-    { 
-        id: "adult_depress",
-        category: "우울증", 
-        target: "성인 (만 19세 이상)",
-        questions: ["내가 처한 상황이 비참하다.", "이유 없이 피곤하다.", "체중이 변화했다.", "집중력이 예전만 못하다.", "무기력함을 자주 느낀다."],
+const surveyStudent = [
+    {
+        id: "youth_adhd",
+        category: "ADHD",
+        target: "청소년 (만 13세~18세)",
+        notice: "본 검사지는 자가진단을 위한 임시검사지 이며, 전문적인 치료 및 증상을 확인하기 위해서는 전문가의 도움을 권장함. 본 결과는 진단이 아니며 개인의 상태에 따라 다르게 해석될 수 있습니다.",
+        
+        questions: [
+        "수업이나 대화를 들을 때 집중이 쉽게 끊어진다.",
+        "숙제나 과제를 하다가 다른 자극에 쉽게 주의가 빼앗긴다.",
+        "해야 할 일을 자주 잊어버리거나 미루는 편이다.",
+        "물건(학용품, 휴대폰 등)을 자주 잃어버린다.",
+        "세부사항을 놓쳐 실수를 자주 한다.",
+        "과제나 공부를 끝까지 마무리하기 어렵다.",
+        "정리정돈이나 시간 관리가 잘 되지 않는다.",
+        "가만히 있어야 할 때 몸을 계속 움직이게 된다.",
+        "차례를 기다리는 것이 어렵다.",
+        "다른 사람이 말하는 중간에 끼어드는 경우가 많다.",
+        "생각보다 먼저 행동하거나 충동적으로 결정하는 편이다.",
+        "조용히 해야 하는 상황에서도 쉽게 산만해진다.",
+        "지루하거나 오래 걸리는 일을 피하려는 경향이 있다.",
+        "집중해야 하는 상황에서 금방 피로감을 느낀다.",
+        "머릿속 생각이 자주 다른 곳으로 튄다.",
+        "규칙이나 지시를 끝까지 따르기 어렵다.",
+        "학교나 집에서 해야 할 일을 자주 잊는다.",
+        "감정이나 행동을 참기 어려운 경우가 있다.",
+        "친구나 가족과의 관계에서 충동적인 행동으로 문제가 생긴 적이 있다.",
+        "집중력이나 충동성 문제로 일상생활이 어렵다고 느낀다."
+        ],
+
         results: [
-            { min: 0, max: 4, text: "안정적인 상태입니다." },
-            { min: 5, max: 9, text: "경증의 우울감이 있습니다. 상담을 권장합니다." },
-            { min: 10, max: 20, text: "중증 우울상태입니다. 빠른 내원을 권장합니다." }
+        {
+            min: 0,
+            max: 39,
+            text: "현재 ADHD 가능성은 낮은 편입니다. 다만 일부 집중 어려움은 환경적 요인(수면, 스트레스 등)일 수 있으므로 생활습관 점검을 권장합니다."
+        },
+        {
+            min: 40,
+            max: 59,
+            text: "경미한 주의력 또는 충동성 문제가 의심됩니다. 증상이 반복되거나 학업·일상에 영향을 준다면 전문가 상담을 권장합니다."
+        },
+        {
+            min: 60,
+            max: 69,
+            text: "ADHD 관련 증상이 뚜렷하게 나타날 가능성이 있습니다. 정확한 평가를 위해 정신건강의학과 또는 전문 상담을 받아보시기 바랍니다."
+        },
+        {
+            min: 70,
+            max: 80,
+            text: "ADHD 증상이 상당 수준 의심됩니다. 자가진단 결과만으로 판단하지 말고, 빠른 시일 내 전문가의 정확한 진단과 도움을 받는 것이 필요합니다."
+        }
         ]
     },
-    { 
-        id: "adult_adhd",
-        category: "성인 ADHD", 
-        target: "성인 (만 19세 이상)",
-        questions: ["일의 마지막 세부사항을 마무리하기 힘들다.", "체계적인 순서 정하기가 어렵다.", "약속이나 일정을 자주 잊는다."],
+
+    {
+        id: "teen_test_anxiety",
+        category: "시험불안",
+        target: "청소년 (중·고등학생)",
+        description: "본 검사지는 자가진단을 위한 임시검사지 이며, 전문적인 치료 및 증상을 확인하기 위해서는 전문가의 도움을 권장함",
+        questions: [
+            "시험이 다가오면 이유 없이 불안하고 초조해진다.",
+            "시험 전날이나 시험 기간에 잠들기 어렵다.",
+            "시험지를 받으면 머릿속이 하얘지는 경험이 있다.",
+            "시험을 망치면 큰일이 날 것 같은 두려움을 느낀다.",
+            "시험 중 실수할까 봐 계속 긴장하게 된다.",
+            "시험 성적이 나의 가치라고 느껴 부담을 느낀다.",
+            "시험 기간 동안 짜증이 늘고 예민해진다.",
+            "시험을 생각하면 심장이 빨리 뛰거나 손에 땀이 난다.",
+            "시험 준비를 해도 실제 시험에서는 실력이 잘 나오지 않는다.",
+            "시험을 피하고 싶거나 도망치고 싶은 생각이 든다.",
+            "시험이 끝난 후에도 계속 후회와 걱정이 남는다.",
+            "시험 기간에는 집중력이 평소보다 많이 떨어진다.",
+            "시험과 관련된 생각이 계속 머릿속에서 떠나지 않는다.",
+            "시험 준비 중에도 쉽게 지치고 무기력해진다.",
+            "주변의 기대(부모, 교사 등)가 부담으로 느껴진다.",
+            "시험이 가까워질수록 신체적인 불편감(두통, 복통 등)이 생긴다.",
+            "시험 결과에 대해 지나치게 걱정하는 편이다.",
+            "시험 상황에서 자신감이 급격히 떨어진다.",
+            "시험 준비를 시작하기도 전에 압박감을 느낀다.",
+            "시험이 끝난 이후에도 다음 시험에 대한 불안이 이어진다."
+        ],
         results: [
-            { min: 0, max: 4, text: "정상 범위입니다." },
-            { min: 5, max: 12, text: "주의 깊은 관찰과 진단이 필요합니다." }
+            {
+                min: 0,
+                max: 39,
+                text: "현재 시험불안 수준은 비교적 안정적인 상태입니다. 다만 적절한 긴장은 도움이 될 수 있으므로 현재의 학습 및 생활 리듬을 유지하는 것이 중요합니다."
+            },
+            {
+                min: 40,
+                max: 59,
+                text: "경미한 시험불안이 나타나고 있습니다. 시험에 대한 부담과 걱정이 증가하는 단계로, 학습 전략 조정과 스트레스 관리가 필요하며 필요 시 상담을 고려해보는 것이 좋습니다."
+            },
+            {
+                min: 60,
+                max: 79,
+                text: "중등도의 시험불안 상태입니다. 집중력 저하와 신체적 긴장 증상이 동반될 수 있으며, 시험 상황에서 수행 능력에 영향을 줄 수 있습니다. 조기 상담 및 관리가 권장됩니다."
+            },
+            {
+                min: 80,
+                max: 100,
+                text: "높은 수준의 시험불안을 경험하고 있습니다. 시험 상황에서 심리적·신체적 증상이 뚜렷하게 나타날 수 있으며, 학업 및 일상생활에 영향을 줄 가능성이 큽니다. 전문가 상담 및 체계적인 개입이 필요합니다."
+            }
         ]
     },
-    { 
-        id: "student_stress",
-        category: "학업 스트레스", 
-        target: "청소년 (중/고등학생)",
-        questions: ["공부 때문에 잠을 설친다.", "시험 기간에 극도로 예민하다.", "학교 가는 것이 두렵다."],
+
+    {
+        id: "youth_internet_addiction",
+        category: "인터넷중독",
+        target: "청소년 (만 13~18세)",
+        instruction: "본 검사지는 자가진단을 위한 임시검사지 이며, 전문적인 치료 및 증상을 확인하기 위해서는 전문가의 도움을 권장함",
+        questions: [
+        "인터넷(게임, SNS, 유튜브 등) 사용 시간을 줄이려고 해도 잘 되지 않는다.",
+        "해야 할 일(공부, 숙제 등)보다 인터넷을 더 우선하게 된다.",
+        "인터넷을 하지 못하면 불안하거나 짜증이 난다.",
+        "인터넷 사용으로 인해 수면 시간이 줄어들었다.",
+        "가족이나 주변 사람들과 인터넷 사용 문제로 갈등이 있다.",
+        "인터넷을 하지 않을 때도 계속 생각이 난다.",
+        "인터넷 사용 시간에 대해 거짓말을 한 적이 있다.",
+        "인터넷을 하느라 식사나 개인 위생을 소홀히 한 적이 있다.",
+        "현실 친구보다 온라인 관계가 더 편하게 느껴진다.",
+        "인터넷을 통해 스트레스나 우울한 기분을 해소하려 한다.",
+        "인터넷 사용 후에도 만족감보다 허무함을 느끼는 경우가 많다.",
+        "인터넷 사용으로 학업 성적이 떨어진 적이 있다.",
+        "부모나 교사의 지적에도 인터넷 사용 습관을 바꾸기 어렵다.",
+        "인터넷 사용 시간을 스스로 조절하기 어렵다.",
+        "중요한 약속이나 활동보다 인터넷을 선택한 적이 있다.",
+        "인터넷을 하지 않으면 하루가 지루하게 느껴진다.",
+        "인터넷 사용 중단 시 집중력이 떨어지거나 안절부절 못한다.",
+        "인터넷 사용 시간이 점점 증가하고 있다.",
+        "인터넷으로 인해 취미나 운동 활동이 줄어들었다.",
+        "인터넷 사용으로 인해 일상생활에 지장이 있다고 느낀다."
+        ],
         results: [
-            { min: 0, max: 12, text: "적절히 관리되고 있습니다." }
+        {
+            min: 0,
+            max: 39,
+            text: "현재 인터넷 사용은 비교적 안정적인 상태입니다. 다만 올바른 사용 습관을 유지하는 것이 중요합니다."
+        },
+        {
+            min: 40,
+            max: 59,
+            text: "인터넷 사용에 다소 의존적인 경향이 보입니다. 사용 시간을 점검하고 조절하려는 노력이 필요하며, 필요 시 상담을 고려해 보시기 바랍니다."
+        },
+        {
+            min: 60,
+            max: 79,
+            text: "인터넷 중독 위험군에 해당할 수 있습니다. 일상생활에 영향을 미치고 있을 가능성이 있으므로 전문가 상담을 권장합니다."
+        },
+        {
+            min: 80,
+            max: 100,
+            text: "인터넷 중독 상태가 의심됩니다. 학업 및 대인관계에 심각한 영향을 줄 수 있으므로 신속한 전문기관 상담 및 개입이 필요합니다."
+        }
+        ]
+    },
+
+    {
+        id: "youth_psychosis",
+        category: "조기정신증",
+        target: "청소년 (만 13세 ~ 18세)",
+        questions: [
+        "다른 사람들이 나를 감시하거나 해치려 한다고 느낀다.",
+        "실제로 없는 소리(목소리 등)를 듣는 느낌이 있다.",
+        "주변 환경이 비현실적으로 느껴질 때가 있다.",
+        "생각이 정리되지 않고 혼란스럽다.",
+        "타인의 말이나 행동이 나와 관련된 특별한 의미를 가진다고 느낀다.",
+        "집중하기 어렵고 쉽게 산만해진다.",
+        "감정 표현이 줄어들거나 무감각해진 느낌이 있다.",
+        "친구나 가족과의 관계에서 거리감을 느낀다.",
+        "이상하거나 현실과 동떨어진 생각에 자주 빠진다.",
+        "말을 할 때 논리가 맞지 않는다는 느낌을 받는다.",
+        "주변 사람들이 나를 이상하게 본다고 느낀다.",
+        "평소와 다르게 행동하거나 말하게 된다.",
+        "사소한 일에도 과도하게 불안해진다.",
+        "현실과 상상(생각)의 구분이 어려울 때가 있다.",
+        "자신이 다른 사람과 다르게 느껴진다.",
+        "학교생활이나 공부에 집중하기 어렵다.",
+        "예전에 즐기던 활동에 흥미가 줄었다.",
+        "혼자 있는 시간이 지나치게 많아졌다.",
+        "감정 기복이 심해졌다고 느낀다.",
+        "수면 패턴이 불규칙해지거나 잠들기 어렵다."
+        ],
+        results: [
+        {
+            min: 0,
+            max: 39,
+            text: "현재 조기정신증 위험은 낮은 수준으로 보입니다. 다만 스트레스 관리와 생활습관 점검이 필요합니다.\n\n※ 본 검사지는 자가진단을 위한 임시검사지 이며, 전문적인 치료 및 증상을 확인하기 위해서는 전문가의 도움을 권장함"
+        },
+        {
+            min: 40,
+            max: 55,
+            text: "경미한 수준의 조기정신증 관련 징후가 의심됩니다. 증상이 반복되거나 지속된다면 상담을 권장합니다.\n\n※ 본 검사 결과는 참고용이며 정확한 진단이 아닙니다. 전문가 상담을 권장합니다."
+        },
+        {
+            min: 56,
+            max: 69,
+            text: "중등도의 조기정신증 위험이 관찰됩니다. 일상생활에 영향을 줄 수 있으므로 전문기관 상담이 필요합니다.\n\n※ 본 검사지는 자가진단이며 실제 상태와 차이가 있을 수 있습니다. 반드시 전문가 상담을 권장합니다."
+        },
+        {
+            min: 70,
+            max: 80,
+            text: "높은 수준의 조기정신증 위험 상태입니다. 현실 인식 및 사고에 어려움이 있을 수 있으므로 즉시 전문가의 평가 및 치료를 권장합니다.\n\n※ 본 검사는 참고용이며 정확한 진단을 위해 정신건강의학과 또는 상담기관의 도움을 받으시기 바랍니다."
+        }
+        ]
+    },
+    
+    { 
+        id: "youth_stress",
+        category: "스트레스", 
+        target: "청소년 (만 13세~18세)",
+        questions: [
+            "사소한 일에도 짜증이나 화가 자주 난다.",
+            "학교나 공부 생각만 하면 부담감이 크다.",
+            "잠들기 어렵거나 자주 깨는 등 수면에 문제가 있다.",
+            "이유 없이 피곤하거나 무기력함을 느낀다.",
+            "친구나 가족과의 관계에서 스트레스를 자주 느낀다.",
+            "집중력이 떨어지고 해야 할 일을 미루게 된다.",
+            "두통, 복통 등 신체적인 불편감을 자주 느낀다.",
+            "작은 실수에도 지나치게 걱정하거나 불안해진다.",
+            "평소 즐기던 활동에 흥미가 줄어들었다.",
+            "혼자 있고 싶거나 사람을 피하고 싶다는 생각이 든다.",
+            "감정 기복이 심하고 기분이 쉽게 변한다.",
+            "부정적인 생각이 계속 머릿속에 맴돈다.",
+            "시간이 부족하다는 압박감을 자주 느낀다.",
+            "시험이나 평가 상황에서 극심한 긴장을 느낀다.",
+            "자신에 대한 만족감이나 자신감이 낮아졌다.",
+            "식욕이 줄거나 반대로 과식하는 경향이 있다.",
+            "해야 할 일이 많을 때 쉽게 포기하고 싶어진다.",
+            "타인의 기대나 평가가 부담스럽게 느껴진다.",
+            "스트레스를 해소할 방법이 없다고 느낀다.",
+            "최근 스트레스로 인해 일상생활이 힘들다고 느낀다."
+        ],
+        results: [
+            { 
+                min: 0, 
+                max: 39, 
+                text: "현재 스트레스 수준은 비교적 안정적인 상태입니다. 다만 스트레스는 누구에게나 발생할 수 있으므로 꾸준한 관리가 필요합니다.\n\n※ 본 검사지는 자가진단을 위한 임시검사지 이며, 전문적인 치료 및 증상을 확인하기 위해서는 전문가의 도움을 권장합니다." 
+            },
+            { 
+                min: 40, 
+                max: 59, 
+                text: "중등도의 스트레스 상태로 보입니다. 일상에서 스트레스 관리가 필요하며, 지속될 경우 상담을 고려하는 것이 좋습니다.\n\n※ 본 검사지는 자가진단을 위한 임시검사지 이며, 정확한 진단을 위해 전문가 상담을 권장합니다." 
+            },
+            { 
+                min: 60, 
+                max: 80, 
+                text: "높은 수준의 스트레스 상태입니다. 학업, 관계, 감정 전반에 영향을 줄 수 있으므로 빠른 시일 내 전문가 상담을 권장합니다.\n\n※ 본 검사지는 자가진단을 위한 참고용이며, 실제 진단을 대체할 수 없습니다." 
+            }
         ]
     }
 ];
 
-const surveyMaster2 = [
-    { 
-        id: "adult_depress",
-        category: "햄버거", 
-        target: "성인 (만 19세 이상)",
-        questions: ["내가 처한 상황이 비참하다.", "이유 없이 피곤하다.", "체중이 변화했다.", "집중력이 예전만 못하다.", "무기력함을 자주 느낀다."],
-        results: [
-            { min: 0, max: 4, text: "안정적인 상태입니다." },
-            { min: 5, max: 9, text: "경증의 우울감이 있습니다. 상담을 권장합니다." },
-            { min: 10, max: 20, text: "중증 우울상태입니다. 빠른 내원을 권장합니다." }
-        ]
-    },
-    { 
+const surveyAdult = [
+
+    {
         id: "adult_adhd",
-        category: "피지", 
+        category: "성인 ADHD",
         target: "성인 (만 19세 이상)",
-        questions: ["일의 마지막 세부사항을 마무리하기 힘들다.", "체계적인 순서 정하기가 어렵다.", "약속이나 일정을 자주 잊는다."],
+        description: "본 검사지는 자가진단을 위한 임시검사지 이며, 전문적인 치료 및 증상을 확인하기 위해서는 전문가의 도움을 권장함",
+        questions: [
+        "일을 시작해도 끝까지 마무리하기 어렵다.",
+        "집중해야 할 때 쉽게 산만해진다.",
+        "사소한 실수나 누락이 자주 발생한다.",
+        "약속이나 해야 할 일을 자주 잊어버린다.",
+        "정리정돈이나 계획 세우기가 어렵다.",
+        "중요한 일을 미루는 경향이 있다.",
+        "시간 관리가 잘 되지 않아 지각이나 마감 지연이 잦다.",
+        "여러 일을 동시에 처리하려다 오히려 효율이 떨어진다.",
+        "대화 중 상대방 말을 끝까지 듣지 못하는 경우가 있다.",
+        "가만히 있어야 하는 상황에서 안절부절 못한다.",
+        "충동적으로 말하거나 행동하는 경우가 있다.",
+        "감정 기복이 크고 쉽게 짜증이 난다.",
+        "지루하거나 반복적인 일을 견디기 어렵다.",
+        "물건을 자주 잃어버린다.",
+        "해야 할 일의 우선순위를 정하기 어렵다.",
+        "한 가지 일에 과도하게 몰입하다 다른 일을 놓친다.",
+        "외부 자극(소리, 스마트폰 등)에 쉽게 주의가 분산된다.",
+        "일상적인 업무 수행에서 지속적인 집중이 어렵다.",
+        "계획을 세워도 실행으로 이어지지 않는 경우가 많다.",
+        "대인관계에서 반복적인 실수로 어려움을 겪는다."
+        ],
         results: [
-            { min: 0, max: 4, text: "정상 범위입니다." },
-            { min: 5, max: 12, text: "주의 깊은 관찰과 진단이 필요합니다." }
+        {
+            min: 0,
+            max: 39,
+            text: "현재 ADHD 경향은 낮은 수준입니다. 일상적인 집중력 문제 범위일 수 있습니다."
+        },
+        {
+            min: 40,
+            max: 59,
+            text: "경미한 ADHD 경향이 의심됩니다. 생활습관 개선 및 필요 시 상담을 권장합니다."
+        },
+        {
+            min: 60,
+            max: 79,
+            text: "중등도 ADHD 가능성이 있습니다. 일상 기능에 영향을 줄 수 있으므로 전문가 상담을 권장합니다."
+        },
+        {
+            min: 80,
+            max: 100,
+            text: "ADHD 고위험군으로 판단됩니다. 정확한 진단과 치료를 위해 전문의 상담이 필요합니다."
+        }
         ]
     },
-    { 
-        id: "student_stress",
-        category: "학업 스트레스", 
-        target: "청소년 (중/고등학생)",
-        questions: ["공부 때문에 잠을 설친다.", "시험 기간에 극도로 예민하다.", "학교 가는 것이 두렵다."],
+
+    {
+        id: "adult_depress",
+        category: "우울증",
+        target: "성인 (만 19세 이상)",
+        description: "본 검사지는 자가진단을 위한 임시검사지 이며, 전문적인 치료 및 증상을 확인하기 위해서는 전문가의 도움을 권장함",
+        questions: [
+        "최근 들어 기분이 우울하거나 가라앉는 느낌이 지속된다.",
+        "예전에는 즐거웠던 일에 흥미나 즐거움을 느끼지 못한다.",
+        "수면에 문제가 있다 (불면 또는 과다수면).",
+        "이유 없이 피곤하거나 에너지가 부족하다.",
+        "식욕이 감소하거나 과식하는 등 변화가 있다.",
+        "자신이 쓸모없거나 실패자처럼 느껴진다.",
+        "집중력이 떨어져 일이나 대화에 어려움을 느낀다.",
+        "행동이 느려지거나 초조하고 안절부절 못한다.",
+        "미래에 대한 희망이 없다고 느낀다.",
+        "일상적인 활동을 하는 것이 부담스럽다.",
+        "사람들과의 관계가 부담스럽거나 피하고 싶다.",
+        "사소한 일에도 쉽게 짜증이 나거나 화가 난다.",
+        "결정을 내리기 어려워진다.",
+        "자신을 비난하거나 자책하는 생각이 많다.",
+        "신체적인 이유 없이 통증이나 불편함을 느낀다.",
+        "아침에 일어나는 것이 힘들다.",
+        "삶의 의미나 가치에 대해 부정적으로 생각한다.",
+        "눈물이 많아지거나 감정 기복이 심하다.",
+        "일에 대한 의욕이 현저히 감소했다.",
+        "죽음이나 사라지고 싶다는 생각이 든 적이 있다."
+        ],
         results: [
-            { min: 0, max: 12, text: "적절히 관리되고 있습니다." }
+        {
+            min: 0,
+            max: 39,
+            text: "현재 비교적 안정적인 상태입니다. 다만 지속적인 스트레스 관리와 생활습관 개선을 유지하는 것이 중요합니다."
+        },
+        {
+            min: 40,
+            max: 59,
+            text: "경미한 우울 상태가 의심됩니다. 휴식과 자기관리와 함께 필요 시 전문가 상담을 고려하시기 바랍니다."
+        },
+        {
+            min: 60,
+            max: 79,
+            text: "중등도 우울 상태입니다. 일상생활에 영향을 줄 수 있으므로 전문 상담 및 평가를 권장합니다."
+        },
+        {
+            min: 80,
+            max: 100,
+            text: "중증 우울 상태로 판단됩니다. 가능한 한 빠르게 정신건강 전문가의 진료 및 치료를 받는 것이 필요합니다."
+        }
+        ]
+    },
+
+    {
+        id: "adult_anxiety",
+        category: "불안장애",
+        target: "성인 (만 19세 이상)",
+        guide: "본 검사지는 자가진단을 위한 임시검사지 이며, 전문적인 치료 및 증상을 확인하기 위해서는 전문가의 도움을 권장함",
+        questions: [
+        "별다른 이유 없이 불안하거나 초조함을 느낀다.",
+        "미래에 대한 걱정이 지나치게 많다.",
+        "사소한 일에도 과도하게 긴장한다.",
+        "마음이 편안해지는 시간이 거의 없다.",
+        "걱정을 멈추려고 해도 잘 되지 않는다.",
+        "집중하기 어렵거나 머리가 멍한 느낌이 든다.",
+        "잠들기 어렵거나 자주 깬다.",
+        "가슴 두근거림이나 호흡곤란을 경험한 적이 있다.",
+        "근육이 자주 긴장되거나 몸이 뻣뻣하다.",
+        "작은 실수에도 크게 걱정한다.",
+        "사람들과의 관계에서 불안을 느낀다.",
+        "불안 때문에 일상생활에 지장을 느낀다.",
+        "갑작스럽게 강한 불안이나 공포를 느낀 적이 있다.",
+        "불안한 생각이 반복적으로 떠오른다.",
+        "결정을 내리는 것이 어렵게 느껴진다.",
+        "안절부절 못하거나 가만히 있기 힘들다.",
+        "쉽게 피로감을 느낀다.",
+        "불안으로 인해 짜증이 증가했다.",
+        "위장 불편감이나 두통 등 신체 증상이 있다.",
+        "불안이 6개월 이상 지속된 적이 있다."
+        ],
+        results: [
+        {
+            min: 0,
+            max: 20,
+            text: "현재 전반적인 상태는 비교적 안정적인 수준입니다. 다만 스트레스 관리와 생활습관 개선을 통해 지속적인 관리가 필요합니다."
+        },
+        {
+            min: 21,
+            max: 40,
+            text: "경미한 불안 수준으로 볼 수 있습니다. 일상생활에서 이완훈련이나 스트레스 관리가 필요하며, 증상이 지속될 경우 전문가 상담을 권장합니다."
+        },
+        {
+            min: 41,
+            max: 60,
+            text: "중등도의 불안 상태입니다. 불안이 일상생활에 영향을 줄 수 있으므로, 심리상담 또는 전문기관의 도움을 받아보는 것이 필요합니다."
+        },
+        {
+            min: 61,
+            max: 80,
+            text: "상당히 높은 수준의 불안 상태입니다. 불안 증상이 지속되거나 악화될 가능성이 있으므로, 빠른 시일 내에 전문가 상담 및 평가를 권장합니다."
+        }
+        ]
+    },
+
+     
+    {
+        id: "adult_panic",
+        category: "공황장애",
+        target: "성인 (만 19세 이상)",
+        description: "본 검사지는 자가진단을 위한 임시검사지 이며, 전문적인 치료 및 증상을 확인하기 위해서는 전문가의 도움을 권장함",
+        questions: [
+        "갑작스럽게 극심한 불안이나 공포를 느낀 적이 있다.",
+        "심장이 빠르게 뛰거나 두근거리는 증상을 자주 경험한다.",
+        "숨이 가쁘거나 숨이 막히는 느낌을 받은 적이 있다.",
+        "어지럽거나 쓰러질 것 같은 느낌을 경험한다.",
+        "특별한 이유 없이 식은땀을 흘린다.",
+        "가슴 통증이나 압박감을 느낀 적이 있다.",
+        "내가 통제력을 잃거나 미쳐버릴 것 같은 두려움을 느낀다.",
+        "죽을 것 같은 공포를 느낀 적이 있다.",
+        "손발이 떨리거나 몸이 떨리는 증상이 있다.",
+        "현실감이 없거나 내가 나 같지 않은 느낌을 받는다.",
+        "공황 증상이 다시 나타날까 봐 지속적으로 걱정한다.",
+        "특정 장소나 상황을 피하려는 경향이 있다.",
+        "혼자 있는 상황에서 불안이 심해진다.",
+        "대중교통이나 사람이 많은 곳에서 불안을 느낀다.",
+        "공황 증상으로 인해 일상생활에 지장을 받고 있다.",
+        "최근 스트레스 이후 이러한 증상이 심해졌다.",
+        "이유 없이 불안이 증가하는 경우가 있다.",
+        "신체 이상이 없음에도 불안 증상이 지속된다.",
+        "공황 증상 이후 피로감이나 탈진을 느낀다.",
+        "비슷한 증상이 반복적으로 나타난다."
+        ],
+        results: [
+        {
+            min: 0,
+            max: 39,
+            text: "현재 공황 증상은 경미한 수준입니다. 다만 지속적인 관찰이 필요하며, 불안이 반복된다면 상담을 고려해보시기 바랍니다."
+        },
+        {
+            min: 40,
+            max: 59,
+            text: "공황 증상이 의심되는 상태입니다. 일상생활에 영향을 줄 수 있으므로 조기에 전문가 상담을 권장합니다."
+        },
+        {
+            min: 60,
+            max: 80,
+            text: "공황장애 가능성이 높은 상태입니다. 증상이 반복되거나 악화될 경우, 신속한 전문적인 진단과 치료가 필요합니다."
+        }
+        ]
+    },
+ 
+    {
+        id: "adult_stress",
+        category: "스트레스",
+        target: "성인 (만 19세 이상)",
+        guide: "본 검사지는 자가진단을 위한 임시검사지 이며, 전문적인 치료 및 증상을 확인하기 위해서는 전문가의 도움을 권장함",
+        questions: [
+        "최근 사소한 일에도 쉽게 짜증이 난다.",
+        "해야 할 일이 많아 항상 압박감을 느낀다.",
+        "충분히 쉬어도 피로가 쉽게 회복되지 않는다.",
+        "잠들기 어렵거나 자주 깨는 편이다.",
+        "집중력이 떨어져 업무나 학업 효율이 낮아졌다.",
+        "머리나 어깨 등 신체에 긴장이 자주 느껴진다.",
+        "예전보다 감정 기복이 심해졌다.",
+        "일상적인 일도 부담스럽게 느껴진다.",
+        "가슴이 답답하거나 숨이 막히는 느낌이 든다.",
+        "스트레스로 인해 식욕이 줄거나 증가했다.",
+        "작은 실수에도 과도하게 자책한다.",
+        "주변 사람들과의 관계에서 예민해졌다.",
+        "업무나 책임에서 벗어나고 싶은 생각이 든다.",
+        "미래에 대한 불안감이 자주 든다.",
+        "즐거웠던 일에도 흥미가 줄어들었다.",
+        "사소한 일에도 쉽게 피로감을 느낀다.",
+        "시간에 쫓기는 느낌이 자주 든다.",
+        "스트레스로 인해 두통이나 소화불량이 있다.",
+        "혼자 있고 싶다는 생각이 많아졌다.",
+        "현재 상태를 통제하기 어렵다고 느낀다."
+        ],
+        results: [
+        {
+            min: 0,
+            max: 39,
+            text: "현재 스트레스 수준은 비교적 안정적인 상태입니다. 다만 지속적인 관리와 휴식이 필요합니다."
+        },
+        {
+            min: 40,
+            max: 59,
+            text: "중등도의 스트레스 상태입니다. 일상에 영향을 줄 수 있으므로 생활습관 개선과 함께 상담을 고려해보는 것이 좋습니다."
+        },
+        {
+            min: 60,
+            max: 79,
+            text: "높은 스트레스 상태입니다. 신체적·정신적 부담이 큰 상태로, 전문가 상담을 권장합니다."
+        },
+        {
+            min: 80,
+            max: 100,
+            text: "매우 높은 스트레스 상태입니다. 일상 기능 저하 가능성이 크므로 빠른 시일 내 전문가의 도움을 받는 것이 필요합니다."
+        }
+        ]
+    },
+ 
+    {
+        id: "adult_early_psychosis",
+        category: "조기정신증",
+        target: "성인 (만 19세 이상)",
+        instruction: "본 검사지는 자가진단을 위한 임시검사지 이며, 전문적인 치료 및 증상을 확인하기 위해서는 전문가의 도움을 권장함",
+        questions: [
+        "다른 사람들이 나를 감시하거나 해치려 한다고 느낀다.",
+        "주변 사람들이 나에 대해 수군거리는 것처럼 느껴진다.",
+        "실제로 존재하지 않는 소리(환청)를 들은 적이 있다.",
+        "내 생각이 다른 사람에게 전달되고 있다고 느낀다.",
+        "누군가 내 생각을 조종하거나 빼앗는 느낌이 든다.",
+        "현실과 꿈의 경계가 흐려지는 느낌이 든다.",
+        "평소보다 감정 표현이 둔해졌다는 말을 듣는다.",
+        "사람들과의 관계를 피하거나 고립되는 경향이 있다.",
+        "집중력이 크게 떨어지고 생각이 정리되지 않는다.",
+        "이유 없이 극도의 불안이나 두려움을 느낀다.",
+        "사소한 일에도 과도하게 의미를 부여하게 된다.",
+        "평소와 다르게 말이 두서없거나 이해하기 어렵다는 말을 듣는다.",
+        "일상적인 활동(학업, 직장 등)에 대한 흥미가 급격히 감소했다.",
+        "내가 특별한 능력이나 사명을 가지고 있다고 믿는다.",
+        "주변 환경이 비현실적으로 느껴질 때가 있다.",
+        "타인의 행동이나 말이 나와 직접적으로 관련 있다고 느낀다.",
+        "감정 기복이 심해지고 조절이 어렵다.",
+        "혼잣말을 하거나 혼자 웃는 일이 늘었다.",
+        "수면 패턴이 크게 변했다 (불면 또는 과다수면).",
+        "일상생활 유지가 어렵다고 느낀다."
+        ],
+        results: [
+        {
+            min: 0,
+            max: 39,
+            text: "현재 뚜렷한 조기정신증 증상은 보이지 않습니다. 다만 지속적인 스트레스 관리와 정신건강 유지에 유의하시기 바랍니다."
+        },
+        {
+            min: 40,
+            max: 59,
+            text: "일부 조기정신증 관련 증상이 의심됩니다. 증상이 반복되거나 일상에 영향을 준다면 정신건강 전문가와의 상담을 권장합니다."
+        },
+        {
+            min: 60,
+            max: 79,
+            text: "조기정신증 가능성이 있는 상태입니다. 현재 상태가 지속된다면 빠른 시일 내에 전문적인 평가를 받아보시기 바랍니다."
+        },
+        {
+            min: 80,
+            max: 100,
+            text: "조기정신증 고위험 상태로 판단됩니다. 지체하지 말고 정신건강의학과 또는 전문 상담기관을 방문하여 정확한 진단과 치료를 받으시기 바랍니다."
+        }
         ]
     }
 ];
 
 // 상위 타겟과 데이터 셋을 매핑
 const targetDataMap = {
-    "adult": surveyMaster1,
-    "student": surveyMaster2
+    "adult": surveyAdult,
+    "student": surveyStudent
 };
 
 let currentTargetKey = "adult"; // 현재 선택된 타겟 (기본값)
@@ -218,7 +717,8 @@ function loadSurvey(idx, el) {
     $('#target-label').text(currentSurvey.target);
     $('#cat-description').text(`${currentSurvey.category} 진단 항목입니다. 각 문항을 읽고 체크해 주세요.`);
     $('#result-area').hide();
-    
+    $('#result-btn').fadeIn();
+
     const $tbody = $('#survey-tbody').empty();
     currentSurvey.questions.forEach((q, qIdx) => {
         const row = `
@@ -236,10 +736,10 @@ function loadSurvey(idx, el) {
 
 // 결과값 저장   
      function saveToStorage(idx, target, category, question, answer) {
-        const key = `selfcheck_answers_${idx}_${target}_${category}_${question}`;
-        console.log(`Saving to storage: ${key} = ${answer}`);
+        const key = `selfcheck_answers_${idx}`;
+        // console.log(`Saving to storage: ${key} = ${answer}`);
         const prev =   "";
-        sessionStorage.setItem(key, answer);
+        sessionStorage.setItem(key, [answer, target, category, question].join("|"));
     }
 
     function resetStorage() {
@@ -263,9 +763,9 @@ function calculateResult() {
         if(val === undefined) complete = false;
         else {
             score += parseInt(val);
-            console.log(currentSurvey.questions[idx], "선택값:", val, "누적 점수:", score);
-            console.log(currentSurvey.category);
-            console.log(currentSurvey.target);
+            // console.log(currentSurvey.questions[idx], "선택값:", val, "누적 점수:", score);
+            // console.log(currentSurvey.category);
+            // console.log(currentSurvey.target);
 
             saveToStorage( idx, currentSurvey.target, currentSurvey.category, currentSurvey.questions[idx], parseInt(val));
          }
@@ -286,7 +786,7 @@ function calculateResult() {
     $('#my_score').text(score);
     $('#my_res').html(resultTxt);
     $('#result-area').fadeIn();
-    
+    $('#result-btn').hide();
     // 결과 확인 후 하단으로 스크롤
     $('html, body').animate({ scrollTop: $('#result-area').offset().top - 100 }, 500);
 }
@@ -294,88 +794,148 @@ function calculateResult() {
 function resetSurvey() {
     $('input[type="radio"]').prop('checked', false);
     $('#result-area').hide();
+    $('#result-btn').fadeIn();
     window.scrollTo(0, 0);
 }
 
 function exportPDF() {
-    let surveyResults = []; 
+    let surveyResults = [];
     let target = "";
-    let category = "";    
+    let category = "";
 
-    for(let i = 0; i < sessionStorage.length; i++) {
+    // 1. 데이터 수집 및 파싱 로직 개선 (인덱스 수정 완료)
+    for (let i = 0; i < sessionStorage.length; i++) {
         const key = sessionStorage.key(i);
-        if(key.startsWith("selfcheck_answers_")) {
-                const data = sessionStorage.getItem(key);
+        if (key.startsWith("selfcheck_answers_")) {
+            const data = sessionStorage.getItem(key);
+            const parts = data.split("|");
 
-                const match = key.match(/"selfcheck_answers_(\d+)_(\d+)_(\d+)_(\d+)"/);
-                if (match) {
-                    const idx = parseInt(match[1]);
-                    target = parseInt(match[2]);
-                    category = parseInt(match[3]);
-                    const question = parseInt(match[4]);
+            if (parts.length >= 4) {
+                const idx = parseInt(key.replace("selfcheck_answers_", ""));
+                
+                // 원인 1 해결: 인덱스를 0, 1, 2, 3으로 올바르게 매핑
+                const answer_val = parseInt(parts[0]); 
+                target = parts[1];
+                category = parts[2];
+                const question = parts[3];
+                // console.log (answer_val, target, category, question);
 
-                    surveyResults.push({ idx, question, answer: data });
-                }            
+                surveyResults.push({ idx, answer: answer_val, question });
+            }
         }
     }
 
-    surveyResults.sort((a, b) => a.idx - b.idx || a.question - b.question);
-    let selfChckContent = `
-            <div style="padding: 30px; font-family: 'Noto Sans KR', sans-serif; line-height: 1.6;">
-                <div style="border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px;">
-                    <h1 style="margin: 0; color: #1a1a1a;">자가진단 결과 보고서</h1>
-                    <p style="margin: 5px 0 0 0; color: #666;">마음 , 인지행동심리상담센터</p>
-                </div>
-                
-                <p style="text-align: right; font-size: 0.9em;">발행일시: ${new Date().toLocaleString()}</p>
-                <p style="text-align: right; font-size: 0.9em;">자가진단 유형: ${target + ' : ' + category}</p>
+    // 데이터가 없는 경우 방어 코드
+    if (surveyResults.length === 0) {
+        alert("저장된 진단 결과가 없습니다. 먼저 결과를 확인해주세요.");
+        return;
+    }
 
-                <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+    // 인덱스 순서대로 정렬
+    surveyResults.sort((a, b) => a.idx - b.idx);
+   // console.log("정렬된 결과:", surveyResults);
+    // 2. PDF용 HTML 콘텐츠 생성
+    let selfChckContent = `
+        <div style="padding: 20px; font-family: 'Malgun Gothic', sans-serif;">
+            <div style="border-bottom: 2px solid #333; padding-bottom: 10px; margin-bottom: 20px;">
+                <h1 style="margin: 0; color: #1a1a1a; font-size: 24px;">자가진단 결과 보고서</h1>
+                <p style="margin: 5px 0 0 0; color: #666;">마음 인지행동심리상담센터</p>
+            </div>
+            
+            <div style="text-align: right; font-size: 12px; margin-bottom: 10px;">
+                <p>발행일시: ${new Date().toLocaleString()}</p>
+                <p>진단 유형: <strong>${target} - ${category}</strong></p>
+            </div>
+
+            <table style="width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px;">
+                <thead>
                     <tr style="background-color: #f8f9fa;">
-                        <th style="border: 1px solid #dee2e6; padding: 12px; width: 80%;">질문</th>
-                        <th style="border: 1px solid #dee2e6; padding: 12px; width: 20%;">선택답변</th>
+                        <th style="border: 1px solid #dee2e6; padding: 10px; text-align: left;">질문</th>
+                        <th style="border: 1px solid #dee2e6; padding: 10px; width: 80px; text-align: center;">선택답변</th>
                     </tr>
-    `; 
+                </thead>
+                <tbody>
+    `;
+   console.log(target, category);
+
+    const labels = ["전혀 아님", "가끔 그럼", "자주 그럼", "항상 그럼"];
+
     surveyResults.forEach(res => {
-        const questionText = currentSurvey.questions[res.question];
-        const answerText = ["전혀 아님", "가끔 그럼", "자주 그럼", "항상 그럼"][res.answer] || "알 수 없음";
+         const answerText = labels[res.answer] || "알 수 없음";
+         console.log(`질문: ${res.question}, 선택값: ${res.answer}, 텍스트: ${answerText}`);
         selfChckContent += `
             <tr>
-                <td style="border: 1px solid #dee2e6; padding: 12px;">${questionText}</td>
-                <td style="border: 1px solid #dee2e6; padding: 12px; text-align: center;">${answerText}</td>
+                <td style="border: 1px solid #dee2e6; padding: 10px;">${res.question}</td>
+                <td style="border: 1px solid #dee2e6; padding: 10px; text-align: center;">${answerText}</td>
             </tr>
         `;
     });
 
-    selfChckContent += 
-        ` </table>
-        
-            <div style="margin-top: 30px; padding: 20px; background-color: #e9ecef; border-radius: 8px;">
-                <h2 style="margin-top: 0; color: #1a1a1a;">총점: ${$('#my_score').text()}점</h2>
-                <p style="margin: 10px 0 0 0; color: #495057;">${$('#my_res').html()}</p>
-            </div> 
-            <div style="margin-top: 40px; padding: 20px; background-color: #f1f3f5; border-radius: 8px;">
-                <p style="margin: 0; font-size: 0.9em; color: #495057;">
-                    * 본 진단 결과는 참고용이며, 정확한 진단은 전문가와의 상담을 통해 확인하시기 바랍니다.
-                </p>
+    selfChckContent += `
+                </tbody>
+            </table>
+            
+            <div style="margin-top: 20px; padding: 15px; background-color: #f1f3f5; border-radius: 5px;">
+                <h3 style="margin: 0; color: #1a1a1a;">최종 점수: ${$('#my_score').text()}점</h3>
+                <p style="margin: 10px 0 0 0; font-size: 14px;">${$('#my_res').text()}</p>
+            </div>
+            
+            <div style="margin-top: 30px; font-size: 11px; color: #888; border-top: 1px solid #eee; padding-top: 10px;">
+                * 본 진단 결과는 참고용이며, 정확한 진단은 전문가와의 상담을 통해 확인하시기 바랍니다.
             </div>
         </div>
     `;
+   
+    console.log("my_score:", $('#my_score').text());
+    console.log("my_res:", $('#my_res').text()); 
 
-    const worker = html2pdf(); 
-            const opt = {
-                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] },
-                margin: 15,
-                filename: `SelfCheck_Report_${new Date().getTime()}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: false },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };        
-        worker.from(selfChckContent).set(opt).save();
 
-    alert("PDF 다운로드가 시작됩니다. 잠시만 기다려 주세요.");
+
+    // 3. PDF 생성 및 저장
+    // const worker = html2pdf(); 
+    // const opt = {
+    //     margin: 1,
+    //     filename: `SelfCheck_Report_${new Date().getTime()}.pdf`,
+    //     image: { type: 'jpeg', quality: 0.98 },
+    //     html2canvas: { scale: 2, useCORS: true, letterRendering: true },
+    //     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    // };
+
+    // // 원인 2 해결: DOM 요소가 아닌 HTML 문자열(selfChckContent)을 직접 전달
+    // worker.from(selfChckContent).set(opt).save();
+
+    // ... [상단 surveyResults 데이터 수집 및 selfChckContent 조립 코드는 동일하게 유지] ...
+
+    // --- 🚀 여기서부터 수정 ---
+    // 3. 임시 DOM 요소를 생성하여 HTML 문자열을 담습니다.
+    // 3. 임시 DOM 요소 생성
+    const tempElement = document.createElement('div');
+    tempElement.innerHTML = selfChckContent;
+    tempElement.style.position = 'absolute';
+    tempElement.style.left = '-9999px';
+    tempElement.style.top = '0';          // ✅ top: 0 으로 변경 (캡처 영역 안정화)
+    tempElement.style.width = '794px';    // ✅ mm 대신 px 명시 (html2canvas 기준)
+    document.body.appendChild(tempElement);
+
+    // 4. PDF 생성
+    const opt = {
+        margin: 1,
+        filename: `SelfCheck_Report_${new Date().getTime()}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: {
+            scale: 2,
+            useCORS: true,
+            windowWidth: 794   // ✅ A4 픽셀 너비 명시
+        },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+
+    // ✅ from() 순서 및 타입 명시
+    html2pdf().set(opt).from(tempElement, 'element').save().then(() => {
+        document.body.removeChild(tempElement);
+    });
 }
 
-
 </script>
+</body>
 </html>

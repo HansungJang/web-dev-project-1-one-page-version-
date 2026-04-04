@@ -433,11 +433,6 @@ body.edit-mode [contenteditable="true"] {
   .loc-grid { grid-template-columns: 1fr; }
   .map-box  { height: 280px; order: -1; } /* Map on top for mobile */
 }
-/* ══════════════════════════════════════════
-   BUTTONS 
-══════════════════════════════════════════ */
-.btn-solid { display: inline-block; background: var(--c-ink); color: #fff; padding: 14px 32px; border-radius: 2px; font-size: 13px; letter-spacing: 0.1em; transition: 0.3s; }
-.btn-solid:hover { background: var(--c-sage); transform: translateY(-2px); }
 
 /* ══════════════════════════════════════════
    FOOTER ENHANCED STYLE
@@ -1073,13 +1068,74 @@ input[type="radio"] {
 .unit { font-size: 16px; color: var(--c-sage); }
 #my_res { font-size: 20px; color: var(--c-ink); font-weight: 500; margin-bottom: 30px; text-align: center; }
 
+/* ══════════════════════════════════════════
+   BUTTONS 
+══════════════════════════════════════════ */
+.btn-solid { display: inline-block; background: var(--c-ink); color: #fff;
+   padding: 14px 32px; border-radius: 2px; font-size: 13px;
+    letter-spacing: 0.1em; transition: 0.3s; }
+.btn-solid:hover { background: var(--c-sage); transform: translateY(-2px); }
+
+
 /* 버튼 그룹 */
-.action_wrap { text-align: center; margin-top: 50px; }
-.result_btn {
-    background: var(--c-sage); color: #fff; padding: 18px 60px;
-    border-radius: 2px; font-size: 16px; border: none; transition: var(--t);
+/* Container for buttons */
+.action_wrap { 
+    display: flex;            /* Enables flexbox */
+    justify-content: center;   /* Centers buttons horizontally */
+    align-items: center;       /* Aligns buttons vertically */
+    gap: 15px;                /* Consistent space between buttons */
+    margin-top: 50px; 
+    margin-bottom: 20px;
+    flex-wrap: wrap;          /* Allows wrapping on small screens */
 }
-.result_btn:hover { background: var(--c-ink); transform: translateY(-3px); }
+
+/* Base button styles */
+.result_btn, .result_btn_black {
+    /* Layout */
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    
+    /* Consistency settings */
+    min-width: 160px;         /* Ensures a minimum consistent width */
+    height: 54px;             /* Fixed height for vertical consistency */
+    padding: 0 20px;          /* Small horizontal padding for text safety */
+    box-sizing: border-box;   /* Includes padding in the width/height calculation */
+    
+    /* Visuals */
+    border-radius: 2px; 
+    font-size: 12px; 
+    border: none; 
+    cursor: pointer;
+    transition: var(--t);
+    color: #fff;
+}
+
+/* Specific Colors */
+.result_btn {
+    background: var(--c-sage);
+}
+
+.result_btn_black {
+    background: var(--c-ink);
+}
+
+/* Hover States */
+.result_btn:hover { 
+    background: var(--c-ink); 
+    transform: translateY(-3px); 
+}
+
+.result_btn_black:hover { 
+    background: var(--c-sage); 
+    transform: translateY(-3px); 
+}
+
+#result-area {
+    text-align: center; 
+    margin-bottom: 20px;
+
+}
 
 .reset_btn_text {
     background: none; border: none; color: var(--c-muted);

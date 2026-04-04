@@ -391,10 +391,10 @@ function startDiagnosis() {
              const worker = html2pdf();
             const opt = {
                 pagebreak: { mode: ['avoid-all', 'css', 'legacy'] },
-                margin: 15,
+                margin: 5,
                 filename: `SelfCheck_Report_${new Date().getTime()}.pdf`,
                 image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true },
+                html2canvas: { scale: 4, useCORS: true },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };          
 
