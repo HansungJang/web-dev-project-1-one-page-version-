@@ -1215,6 +1215,7 @@ body.edit-mode .edit-badge { display: block; }
 
 .therapist-photo { position: relative; overflow: hidden; background: #eee; }
 .therapist-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.9s ease; }
+ 
 
 @media (max-width: 860px) {
   #therapist { grid-template-columns: 1fr; min-height: auto; }
