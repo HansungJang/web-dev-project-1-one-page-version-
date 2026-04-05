@@ -7,7 +7,7 @@
   import { getAuth, onAuthStateChanged, signOut, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
   import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
   // [추가] experts.html 파일, 이미지 & 양력 업로드 
-  import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-storage.js";
+  // import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-storage.js";
   import { collection, onSnapshot, addDoc, deleteDoc, query, orderBy, updateDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
   // 1. Firebase 설정 (제공해주신 정보 유지)
@@ -33,11 +33,12 @@
   const TEXT_IDS = ['e-hero-h', 'e-hero-b', 'e-fields-h', 'e-info-h', 'e-cred-h', 'e-con-b', 'e-info-detail', 'copy-wright', 'e-c1', 'e-c2', 'e-c3', 'e-c4', 'e-c5', 'e-f1-h', 'e-f1-b', 'e-f2-h', 'e-f2-b', 'e-f3-h', 'e-f3-b', 'e-f4-h', 'e-f4-b', 'e-f5-h', 'e-f5-b', 'e-f6-h', 'e-f6-b', 'e-loc', 'e-email', 'e-email-link', 'e-map-link', 'tel', 'Fax', 'e-res', 'e-con-h'];
 
   // experts.html 
-  const storage = getStorage(app);
+  // const storage = getStorage(app);
   const expertsCol = collection(db, 'experts');
+  const ASSET_BASE_PATH = 'assets/experts/';
+  const DEFAULT_EXPERT_IMG = 'assets/logo.png'; // 이미지 미설정 시 기본값
 
-
-  // [중요] 초기 데이터 로드 함수
+  // // [중요] 초기 데이터 로드 함수
   async function loadData() {
     const CACHE_KEY = 'site_content_cache';
     const TIME_KEY = 'site_content_time';
@@ -232,8 +233,8 @@ onAuthStateChanged(auth, (user) => {
           
           return `
             <div class="expert-card">
-              <div class="exp-img-wrapper" onclick="${isEdit ? `triggerUpload('${id}')` : ''}">
-                <img src="${data.img || 'assets/logo.png'}" id="img-${id}">
+              <div class="exp-img-wrapper" onclick="${isEdit ? `triggerAssetSelect('${id}')` : ''}">
+                   <img src="${resolveExpertImg(data.img)}">
                 ${isEdit ? '<div class="img-edit-overlay">변경</div>' : ''}
               </div>
               <div class="exp-info">
@@ -255,14 +256,27 @@ onAuthStateChanged(auth, (user) => {
 
 
  // 1. Storage Connection Check Function
-window.checkStorageConnection = async () => {
-  try {
-    console.log("Current Bucket:", firebaseConfig.storageBucket);
-    showToast("Storage 연결 확인 중... 콘솔을 확인하세요.");
-  } catch (e) {
-    console.error("Storage Error:", e);
-    alert("연결 오류: " + e.message);
-  }
+// window.checkStorageConnection = async () => {
+//   try {
+//     console.log("Current Bucket:", firebaseConfig.storageBucket);
+//     showToast("Storage 연결 확인 중... 콘솔을 확인하세요.");
+//   } catch (e) {
+//     console.error("Storage Error:", e);
+//     alert("연결 오류: " + e.message);
+//   }
+// };
+
+window.checkAssetsFolder = () => {
+  const msg =
+    `[Assets 폴더 안내]\n` +
+    `이미지 파일 위치: assets/experts/\n` +
+    `기본 이미지:      ${DEFAULT_EXPERT_IMG}\n\n` +
+    `이미지 추가 방법:\n` +
+    `  1. 이미지 파일을 assets/experts/ 폴더에 복사\n` +
+    `  2. 관리자 모드에서 전문가 카드 이미지 클릭\n` +
+    `  3. 파일명 입력 (예: kim.jpg)`;
+  alert(msg);
+  console.log(msg);
 };
 
 // 2. Real-time Expert Listener
@@ -279,21 +293,36 @@ function initExpertListener() {
       const data = docSnap.data();
       const id = docSnap.id;
       
+      const imgSrc = resolveExpertImg(data.img);
+
+
       return `
         <div class="expert-card">
-          <div class="exp-img-wrapper" onclick="${isEdit ? `triggerUpload('${id}')` : ''}">
-            <img src="${data.img || 'assets/logo.png'}" id="img-${id}">
+          <div class="exp-img-wrapper"
+            ${isEdit ? `onclick="triggerAssetSelect('${id}')" style="cursor:pointer;"` : ''}>
+            <img src="${imgSrc}" id="img-${id}" alt="${data.name || '전문가'}"
+              onerror="this.src='${DEFAULT_EXPERT_IMG}'">
+            ${isEdit ? '<div class="img-edit-overlay">파일명 변경</div>' : ''}
           </div>
           <div class="exp-info">
-            <div class="exp-name" ${isEdit ? `contenteditable="true" onblur="updateExp('${id}', 'name', this.innerText)"` : ''}>
+            <div class="exp-name"
+              ${isEdit ? `contenteditable="true" onblur="updateExp('${id}', 'name', this.innerText)"` : ''}>
               ${data.name}
             </div>
-            <div class="exp-bio" ${isEdit ? `contenteditable="true" onblur="updateExp('${id}', 'bio', this.innerText)"` : ''}>
+            <div class="exp-bio"
+              ${isEdit ? `contenteditable="true" onblur="updateExp('${id}', 'bio', this.innerText)"` : ''}>
               ${data.bio}
             </div>
-            ${isEdit ? `<button onclick="deleteExp('${id}')" style="color:red; font-size:11px; border:none; background:none; cursor:pointer; margin-top:10px;">[삭제]</button>` : ''}
+            ${isEdit ? `
+              <div class="exp-img-info" style="font-size:11px; color:#888; margin-top:4px;">
+                이미지: ${data.img || '미설정'}
+              </div>
+              <button onclick="deleteExp('${id}')"
+                style="color:red; font-size:11px; border:none; background:none; cursor:pointer; margin-top:10px;">
+                [삭제]
+              </button>
+            ` : ''}
           </div>
-          <input type="file" id="file-${id}" style="display:none" onchange="uploadPhoto('${id}', this)">
         </div>
       `;
     }).join('');
@@ -321,46 +350,77 @@ window.deleteExp = async (id) => {
 };
 
 // 4. Image Upload Logic
-window.triggerUpload = (id) => document.getElementById(`file-${id}`).click();
-
-// 4. Image Upload Logic
-window.uploadPhoto = async (id, input) => {
-  // [수정] 파일이 선택되지 않았을 경우 예외 처리
-  console.log("꾸러미 전체:", input.files);      // FileList {0: File, length: 1} -> 객체 형태
-  console.log("진짜 파일 하나:", input.files[0]); // File {name: "test.jpg", size: 1690000, ...} -> 실제 데이터
-
-  if (!input.files || input.files.length === 0) {
-    console.error("선택된 파일이 없습니다.");
+// window.triggerUpload = (id) => document.getElementById(`file-${id}`).click();
+window.triggerAssetSelect = async (id) => {
+  const currentDoc = await getDoc(doc(db, 'experts', id));
+  const currentImg = currentDoc.exists() ? (currentDoc.data().img || '') : '';
+ 
+  const filename = prompt(
+    `assets/experts/ 폴더에 있는 이미지 파일명을 입력하세요.\n` +
+    `이미지 파일은 개발 관리자가 직접 관리하고 있습니다. jangfamily1973@gmail.com 으로 연락주세요.` +
+    `예시: kim.jpg, park.png\n\n` +
+    `현재값: ${currentImg || '미설정'}`,
+    currentImg
+  );
+ 
+  if (filename === null) return; // 취소
+  if (filename.trim() === '') {
+    await updateDoc(doc(db, 'experts', id), { img: '' });
+    showToast("이미지가 제거되었습니다.");
     return;
   }
-
-  // [중요!] .files가 아니라 .files을 가져와야 실제 '파일 데이터'가 담깁니다.
-  const file = input.files[0]; 
-  
-  // 파일 확장자 유지 (선택 사항이지만 권장)
-  const extension = file.name.split('.').pop();
-  const storageRef = ref(storage, `experts/${id}_${Date.now()}.${extension}`);
-  
-  try {
-    showToast("이미지 업로드 중...");
-    
-    // 업로드 실행 (metadata를 추가하여 octet-stream 방지)
-    const metadata = { contentType: file.type };
-    const result = await uploadBytes(storageRef, file, metadata);
-    
-    // 다운로드 URL 생성
-    const url = await getDownloadURL(result.ref);
-    console.log("새 이미지 URL:", url);
-
-    // Firestore 업데이트
-    await updateDoc(doc(db, 'experts', id), { img: url });
-    
-    showToast("업로드 완료!");
-  } catch (e) {
-    console.error("Upload Error:", e);
-    alert("업로드 실패: " + e.message);
-  }
+ 
+  const cleanName = filename.trim().replace(/^assets\/experts\//, ''); // 경로 중복 방지
+  await updateDoc(doc(db, 'experts', id), { img: cleanName });
+  showToast(`이미지 경로 저장 완료: assets/experts/${cleanName}`);
 };
+
+// 4. Image Upload Logic
+// window.uploadPhoto = async (id, input) => {
+//   // [수정] 파일이 선택되지 않았을 경우 예외 처리
+//   console.log("꾸러미 전체:", input.files);      // FileList {0: File, length: 1} -> 객체 형태
+//   console.log("진짜 파일 하나:", input.files[0]); // File {name: "test.jpg", size: 1690000, ...} -> 실제 데이터
+
+//   if (!input.files || input.files.length === 0) {
+//     console.error("선택된 파일이 없습니다.");
+//     return;
+//   }
+
+//   // [중요!] .files가 아니라 .files을 가져와야 실제 '파일 데이터'가 담깁니다.
+//   const file = input.files[0]; 
+  
+//   // 파일 확장자 유지 (선택 사항이지만 권장)
+//   const extension = file.name.split('.').pop();
+//   const storageRef = ref(storage, `experts/${id}_${Date.now()}.${extension}`);
+  
+//   try {
+//     showToast("이미지 업로드 중...");
+    
+//     // 업로드 실행 (metadata를 추가하여 octet-stream 방지)
+//     const metadata = { contentType: file.type };
+//     const result = await uploadBytes(storageRef, file, metadata);
+    
+//     // 다운로드 URL 생성
+//     const url = await getDownloadURL(result.ref);
+//     console.log("새 이미지 URL:", url);
+
+//     // Firestore 업데이트
+//     await updateDoc(doc(db, 'experts', id), { img: url });
+    
+//     showToast("업로드 완료!");
+//   } catch (e) {
+//     console.error("Upload Error:", e);
+//     alert("업로드 실패: " + e.message);
+//   }
+// };
+
+// 
+function resolveExpertImg(imgValue) {
+  if (!imgValue) return DEFAULT_EXPERT_IMG;
+  if (imgValue.startsWith('http')) return imgValue; // 기존 Storage URL 호환
+  return ASSET_BASE_PATH + imgValue;                // 예: "assets/experts/kim.jpg"
+}
+
 
 // Call the listener when the page loads
 initExpertListener();
