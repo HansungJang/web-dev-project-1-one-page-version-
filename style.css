@@ -408,6 +408,7 @@ transition: transform 0.3s ease, opacity 0.3s ease;
     position: relative;
 }
 
+
 	/* 전문가 소개 */
 /* 전문가 소개 */
 .exp_list{display:flex; flex-wrap:wrap; gap: 40px 0; justify-content:space-between;}
@@ -1238,7 +1239,7 @@ body.edit-mode .edit-badge { display: block; }
    THERAPIST / HERO [센터소개]
 ══════════════════════════════════════════ */
 #therapist { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; }
-.therapist-content { display: flex; flex-direction: column; justify-content: center; padding: 130px 4vw 80px 8vw; position: relative; z-index: 2; }
+.therapist-content { display: flex; flex-direction: column; justify-content: center; padding: 130px 4vw 54px 8vw; position: relative; z-index: 2; }
 .therapist-eyebrow { font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--c-sage); font-weight: 500; margin-bottom: 24px; display: flex; align-items: center; gap: 10px; animation: fadeUp 0.9s ease 0.1s both; }
 .therapist-eyebrow::before { content:''; width:28px; height:1px; background:var(--c-sage); }
 .therapist-h1 { font-family: var(--f-display); font-size: clamp(40px, 4.8vw, 72px); font-weight: 700; line-height: 1.15; word-break: keep-all; margin-bottom: 24px; animation: fadeUp 0.9s ease 0.22s both; }
