@@ -283,6 +283,9 @@ transition: transform 0.3s ease, opacity 0.3s ease;
     margin-top: 20px;
     align-items: center;
 }
+
+.sr-card.center-intro {
+    margin-bottom: 12px;}
  
 
 /* ══════════════════════════════════════════
