@@ -6,7 +6,7 @@
   --c-ivory:   #fdfaf5;
   --c-cream:   #ede8dd;
   --c-sage:    #3d5c35;
-  --c-sage-lt: #5a7e50;
+  --c-sage-lt: #9dc093;
   --c-sage-xs: rgba(61,92,53,0.08);
   --c-earth:   #7a5c38;
   --c-ink:     #1a1a18;
@@ -155,7 +155,7 @@ nav.stuck {
 }
 
 .nav-logo {
-  height: 44px;
+  height: 64px;
   width : auto;
   object-fit: contain;
 }
