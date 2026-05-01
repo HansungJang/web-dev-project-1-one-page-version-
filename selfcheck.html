@@ -82,8 +82,8 @@
  */
 
 const surveyTarget = {
-    "adult" : "성인 (만 19세 이상)",
-    "student" : "청소년 (초 ~ 중/고등학생)"
+    "adult" : "성인",
+    "student" : "아동·청소년"
 };
 
 
@@ -91,7 +91,7 @@ const surveyStudent = [
     {
         id: "youth_adhd",
         category: "ADHD",
-        target: "청소년 (만 13세~18세)",
+        target: "아동·청소년",
         notice: "본 검사지는 자가진단을 위한 임시검사지 이며, 전문적인 치료 및 증상을 확인하기 위해서는 전문가의 도움을 권장함. 본 결과는 진단이 아니며 개인의 상태에 따라 다르게 해석될 수 있습니다.",
         
         questions: [
@@ -144,7 +144,7 @@ const surveyStudent = [
     {
         id: "teen_test_anxiety",
         category: "시험불안",
-        target: "청소년 (중·고등학생)",
+        target: "아동·청소년",
         description: "본 검사지는 자가진단을 위한 임시검사지 이며, 전문적인 치료 및 증상을 확인하기 위해서는 전문가의 도움을 권장함",
         questions: [
             "시험이 다가오면 이유 없이 불안하고 초조해진다.",
@@ -195,7 +195,7 @@ const surveyStudent = [
     {
         id: "youth_internet_addiction",
         category: "인터넷중독",
-        target: "청소년 (만 13~18세)",
+        target: "아동·청소년",
         instruction: "본 검사지는 자가진단을 위한 임시검사지 이며, 전문적인 치료 및 증상을 확인하기 위해서는 전문가의 도움을 권장함",
         questions: [
         "인터넷(게임, SNS, 유튜브 등) 사용 시간을 줄이려고 해도 잘 되지 않는다.",
@@ -246,7 +246,7 @@ const surveyStudent = [
     {
         id: "youth_psychosis",
         category: "조기정신증",
-        target: "청소년 (만 13세 ~ 18세)",
+        target: "아동·청소년",
         questions: [
         "다른 사람들이 나를 감시하거나 해치려 한다고 느낀다.",
         "실제로 없는 소리(목소리 등)를 듣는 느낌이 있다.",
@@ -296,7 +296,7 @@ const surveyStudent = [
     { 
         id: "youth_stress",
         category: "스트레스", 
-        target: "청소년 (만 13세~18세)",
+        target: "아동·청소년 ",
         questions: [
             "사소한 일에도 짜증이나 화가 자주 난다.",
             "학교나 공부 생각만 하면 부담감이 크다.",
@@ -344,7 +344,7 @@ const surveyAdult = [
     {
         id: "adult_adhd",
         category: "성인 ADHD",
-        target: "성인 (만 19세 이상)",
+        target: "성인",
         description: "본 검사지는 자가진단을 위한 임시검사지 이며, 전문적인 치료 및 증상을 확인하기 위해서는 전문가의 도움을 권장함",
         questions: [
         "일을 시작해도 끝까지 마무리하기 어렵다.",
@@ -395,7 +395,7 @@ const surveyAdult = [
     {
         id: "adult_depress",
         category: "우울증",
-        target: "성인 (만 19세 이상)",
+        target: "성인",
         description: "본 검사지는 자가진단을 위한 임시검사지 이며, 전문적인 치료 및 증상을 확인하기 위해서는 전문가의 도움을 권장함",
         questions: [
         "최근 들어 기분이 우울하거나 가라앉는 느낌이 지속된다.",
@@ -446,7 +446,7 @@ const surveyAdult = [
     {
         id: "adult_anxiety",
         category: "불안장애",
-        target: "성인 (만 19세 이상)",
+        target: "성인",
         guide: "본 검사지는 자가진단을 위한 임시검사지 이며, 전문적인 치료 및 증상을 확인하기 위해서는 전문가의 도움을 권장함",
         questions: [
         "별다른 이유 없이 불안하거나 초조함을 느낀다.",
@@ -498,7 +498,7 @@ const surveyAdult = [
     {
         id: "adult_panic",
         category: "공황장애",
-        target: "성인 (만 19세 이상)",
+        target: "성인",
         description: "본 검사지는 자가진단을 위한 임시검사지 이며, 전문적인 치료 및 증상을 확인하기 위해서는 전문가의 도움을 권장함",
         questions: [
         "갑작스럽게 극심한 불안이나 공포를 느낀 적이 있다.",
@@ -544,7 +544,7 @@ const surveyAdult = [
     {
         id: "adult_stress",
         category: "스트레스",
-        target: "성인 (만 19세 이상)",
+        target: "성인",
         guide: "본 검사지는 자가진단을 위한 임시검사지 이며, 전문적인 치료 및 증상을 확인하기 위해서는 전문가의 도움을 권장함",
         questions: [
         "최근 사소한 일에도 쉽게 짜증이 난다.",
@@ -595,7 +595,7 @@ const surveyAdult = [
     {
         id: "adult_early_psychosis",
         category: "조기정신증",
-        target: "성인 (만 19세 이상)",
+        target: "성인",
         instruction: "본 검사지는 자가진단을 위한 임시검사지 이며, 전문적인 치료 및 증상을 확인하기 위해서는 전문가의 도움을 권장함",
         questions: [
         "다른 사람들이 나를 감시하거나 해치려 한다고 느낀다.",
