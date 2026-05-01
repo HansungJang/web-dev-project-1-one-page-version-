@@ -305,8 +305,9 @@ transition: transform 0.3s ease, opacity 0.3s ease;
 
 /* 다이어그램 박스 및 이미지 설정 */
 .diagram-box-center {
-    width: 50%;            /* 부모 너비의 절반으로 설정 */
-    margin: 20px auto 0;   /* 위쪽 마진 20px, 좌우 자동(중앙), 아래 0 */
+    width: 70%;            /* 부모 너비의 절반으로 설정 */
+    margin: 12vw auto 0;   /* 위쪽 마진 20px, 좌우 자동(중앙), 아래 0 */
+    /* padding: 24px 0 8vw; */
     display: flex;
     justify-content: center;
 }
@@ -1278,7 +1279,8 @@ body.edit-mode .edit-badge { display: block; }
 .therapist-eyebrow { font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--c-sage); font-weight: 500; margin-bottom: 24px; display: flex; align-items: center; gap: 10px; animation: fadeUp 0.9s ease 0.1s both; }
 .therapist-eyebrow::before { content:''; width:28px; height:1px; background:var(--c-sage); }
 .therapist-h1 { font-family: var(--f-display); font-size: clamp(40px, 4.8vw, 72px); font-weight: 700; line-height: 1.15; word-break: keep-all; margin-bottom: 24px; animation: fadeUp 0.9s ease 0.22s both; }
-.therapist-h1 em { font-style: italic; color: var(--c-sage); font-weight: 400; }
+.therapist-h3 { font-family: nanum-gothic-regular; font-size: clamp(20px, 2.4vw, 36px); color:var(--c-sage); font-weight: 500; line-height: 1.15; word-break: keep-all; margin-bottom: 12px; animation: fadeUp 0.9s ease 0.22s both; }
+.therapist-h1 em { font-family: var(--f-display); font-style: normal; color: var(--c-sage); font-weight: 400; }
 .therapist-body { font-size: 17px; line-height: 1.85; color: var(--c-muted); font-weight: 300; max-width: 460px; margin-bottom: 32px; word-break: keep-all; animation: fadeUp 0.9s ease 0.34s both; }
 
 .cred-list { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 40px; animation: fadeUp 0.9s ease 0.42s both; }
@@ -1292,6 +1294,8 @@ body.edit-mode .edit-badge { display: block; }
   #therapist { grid-template-columns: 1fr; min-height: auto; }
   .therapist-content { padding: 120px 6vw 56px; }
   .therapist-photo { height: 60vw; }
+  #cards-reverse {order:4}
+  #contents-reverse {order:3}
 }
 
 
