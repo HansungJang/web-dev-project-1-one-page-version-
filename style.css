@@ -304,7 +304,7 @@ transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
 /* 다이어그램 박스 및 이미지 설정 */
-.diagram-box {
+.diagram-box-center {
     width: 50%;            /* 부모 너비의 절반으로 설정 */
     margin: 20px auto 0;   /* 위쪽 마진 20px, 좌우 자동(중앙), 아래 0 */
     display: flex;
