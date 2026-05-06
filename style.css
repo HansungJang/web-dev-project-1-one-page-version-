@@ -325,6 +325,12 @@ transition: transform 0.3s ease, opacity 0.3s ease;
    · JS translateX 제어 + CSS transition 슬라이드
    · .field-card 는 기존 specialist.html 스타일 재사용
 ══════════════════════════════════════════ */
+#fields.wrap{
+      max-width: 1340px;
+      margin: 24vw auto;
+      margin-bottom: 0;
+      padding: 0 6vw;
+}
 
 /* 뷰포트 창문: 트랙이 이 밖으로 나가면 보이지 않음 */
 .program-slider {
@@ -650,7 +656,7 @@ body.edit-mode [contenteditable="true"] {
 /* ══════════════════════════════════════════
    PROCESS / FIELDS (상담분야)
 ══════════════════════════════════════════ */
-#fields { padding-bottom: 130px; background: var(--c-ivory); }
+#fields { padding-bottom: 0px; background: var(--c-ivory); }
 .fields-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 52px; }
 .field-card { background: var(--c-bg); padding: 32px 28px; border-left: 3px solid var(--c-sage); transition: transform var(--t); }
 .field-card:hover { transform: translateY(-5px); }
@@ -733,6 +739,7 @@ footer {
   color: var(--c-muted);
   padding: 0 0 24px;
   font-family: var(--f-body);
+  max-height: 28vw; 
 }
 
 .foot-row {
@@ -1238,6 +1245,12 @@ body.edit-mode .edit-badge { display: block; }
   .form-row  { grid-template-columns: 1fr; }
 }
 
+#contact-form.wrap {    
+    max-width: 1340px;
+    margin: 12vw auto;
+    padding: 0 6vw;
+  }
+
 .contact {
   padding: 100px 0;
   background: var(--c-cream);
@@ -1313,8 +1326,14 @@ section#therapist{margin-top: 16vw;}
 ══════════════════════════════════════════ */
 /* 자가진단 전용 커스텀 스타일 */
 
+.test_wrap-wrap{
+    max-width: 1340px;
+    margin: 8vw auto;
+    padding: 0 6vw;
+}
+
 /* 상단 타이틀 정렬 */
-.sub_title_txt { text-align: center; padding: 100px 0 60px; }
+.sub_title_txt { text-align: center; padding: 180px 0 0px; }
 
 /* 탭 메뉴 디자인 */
 /* 탭 메뉴 디자인 */

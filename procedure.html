@@ -18,10 +18,17 @@
 
 
         .procedure-hero {
-            padding: 20px 20px 60px;
+            padding: 124px 60px;
             text-align: center;
             background-color: var(--c-bg);
+            max-height: 50vw;
         }
+
+        .procedure-hero.wrap1{
+            max-width: fit-content;
+            margin: 8vw auto;
+            padding: 0 6vw;
+         }
 
         .procedure-section {
             padding: 80px 0;
@@ -134,6 +141,18 @@
         @media (max-width: 768px) {
             .proc-title { font-size: 1.8rem; }
             .diagram-box { padding: 20px; }
+            .procedure-hero {
+                padding: 0px 8px 60px;
+                text-align: center;
+                background-color: var(--c-bg);
+                max-height: 44vw;
+                margin: 32vw auto;
+            }
+            .procedure-hero.wrap1{
+                max-width: fit-content;
+                margin: 0 auto;
+                padding: 0 6vw;
+            }
         }
 
         #pr-quick-btn {
@@ -147,7 +166,7 @@
 
     <main>
         <section class="procedure-hero">
-            <div class="wrap">
+            <div class="wrap1">
                 <span class="therapist-eyebrow">GUIDE</span>
                 <h1 class="therapist-h1">상담 <em>절차 안내</em></h1>
                 <p class="procedure-body">마음의 회복을 위한 첫걸음, 체계적이고 전문적인 과정을 통해 당신과 함께하겠습니다.</p>
