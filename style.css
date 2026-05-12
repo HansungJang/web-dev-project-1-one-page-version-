@@ -165,7 +165,7 @@ nav.stuck {
 }
 
 .nav-logo {
-  height: 64px;
+  height: 68px;
   width : auto;
   object-fit: contain;
 }
@@ -761,7 +761,7 @@ footer {
 }
 
 .foot-logo {
-  height: 48px;
+  height: 64px;
   width: auto;
   object-fit: contain;
 }
