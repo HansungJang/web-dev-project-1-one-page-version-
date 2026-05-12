@@ -430,7 +430,7 @@ transition: transform 0.3s ease, opacity 0.3s ease;
 /* 카드 그리드 컨테이너
    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr))
    → 뷰포트에 따라 카드 수 자동 조정 (MDN: grid-template-columns) */
-.experts-grid {
+.experts-grid { /**/
       grid-template-columns: 1fr;
       gap: 1px;    /* gap 색상 = 테두리처럼 표현 */
 }
@@ -450,7 +450,6 @@ transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
 
-	/* 전문가 소개 */
 /* 전문가 소개 */
 .exp_list{display:flex; flex-wrap:wrap; gap: 40px 0; justify-content:space-between; list-style-type: none;}
 .exp_list li{width:48.7%; min-height:520px; border-radius: 30px; border: 1px solid #D9D9D9; background: #FFF; padding:40px; position:relative;}
