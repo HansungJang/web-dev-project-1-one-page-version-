@@ -30,7 +30,10 @@
     })
   });
   const CONTENT_REF = doc(db, 'site', 'content');
-  const TEXT_IDS = ['e-hero-h', 'e-hero-b', 'e-fields-h', 'e-info-h', 'e-cred-h', 'e-con-b', 'e-info-detail', 'copy-wright', 'e-c1', 'e-c2', 'e-c3', 'e-c4', 'e-c5', 'e-f1-h', 'e-f1-b', 'e-f2-h', 'e-f2-b', 'e-f3-h', 'e-f3-b', 'e-f4-h', 'e-f4-b', 'e-f5-h', 'e-f5-b', 'e-f6-h', 'e-f6-b', 'e-loc', 'e-email', 'e-email-link', 'e-map-link', 'tel', 'Fax', 'e-res', 'e-con-h'];
+  const TEXT_IDS = ['h-program','e-hero-h', 'e-hero-b', 'e-fields-h', 'e-info-h', 'e-cred-h', 'e-con-b', 'e-info-detail', 'copy-wright', 'e-c1', 'e-c2', 'e-c3', 'e-c4', 'e-c5', 'e-f1-h', 'e-f1-b', 'e-f2-h', 'e-f2-b', 'e-f3-h', 'e-f3-b', 'e-f4-h', 'e-f4-b', 'e-f5-h', 'e-f5-b', 'e-f6-h', 'e-f6-b', 'e-loc', 'e-email', 'e-email-link', 'e-map-link', 'tel', 'Fax', 'e-res', 'e-con-h'];
+
+
+
 
   // experts.html 
   // const storage = getStorage(app);
@@ -151,7 +154,14 @@ onAuthStateChanged(auth, (user) => {
     if(adminBar) adminBar.classList.add('on');
     document.body.classList.add('edit-mode');
     adminElements.forEach(el => el.style.display = 'flex');
-    
+    show_statechange_home(); 
+    show_statechange_apply(); 
+    show_statechange_center();
+    show_statechange_procedure(); 
+    show_statechange_experts();
+    show_statechange_location();
+    show_statechange_specialties();
+
     if (mgrLink) {
         mgrLink.addEventListener('click', (e) => {
           e.preventDefault(); // 페이지 이동 막기
@@ -170,6 +180,68 @@ onAuthStateChanged(auth, (user) => {
   // Refresh the expert grid to enable/disable editing features
   renderExpertGrid(); 
 });
+
+  function state_isEditable(){
+    const admin_state = document.getElementById('admin-bar');
+    const adminBar = document.getElementById('admin-bar');
+    if(adminBar && adminBar.classList.contains('on')) {
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+  
+  function show_statechange_home(){
+     const card_list = ['sr-card-s1', 'sr-card-s2', 'sr-card-s3', 'sr-card-s4', 'sr-card-s5', 'sr-card-s6'];
+     const editable = state_isEditable();
+      card_list.forEach((card) => {
+        let card_el = document.getElementById(card);
+        if(card_el)card_el.setAttribute('contenteditable', editable.toString());
+      });
+  }
+
+  function show_statechange_apply(){
+     const apply_form = document.getElementById('contact');
+     const editable = state_isEditable();
+     if(apply_form)apply_form.setAttribute('contenteditable', editable.toString());   
+  }
+
+  function show_statechange_experts(){
+      const expert_section = document.getElementById('experts-section');
+      const editable = state_isEditable();
+      if(expert_section)expert_section.setAttribute('contenteditable', editable.toString());
+  }
+
+  function show_statechange_location(){
+    const location_section = document.getElementById('location');
+    const editable = state_isEditable();
+    if(location_section)location_section.setAttribute('contenteditable', editable.toString());
+  }
+
+  function show_statechange_specialties(){
+    const specialties_section = document.getElementById('fields');
+    const editable = state_isEditable();
+    if(specialties_section)specialties_section.setAttribute('contenteditable', editable.toString());
+  }
+
+  function show_statechange_center(){
+    const center_contents = ['center-contet', 'contents-reverse']; 
+    const editable = state_isEditable();
+      center_contents.forEach((content) => { 
+        let content_el = document.getElementById(content);
+        if(content_el)content_el.setAttribute('contenteditable', editable.toString());
+      });
+  }
+
+  function show_statechange_procedure(){
+      const procedure_contents = ['procedure-hero', 'procedure-section', 'procedure-section-alt'];
+      const editable = state_isEditable();
+      procedure_contents.forEach((content) => {
+        let content_el = document.getElementById(content);
+        if(content_el)content_el.setAttribute('contenteditable', editable.toString());
+       });
+  } 
 
     window.addEventListener('scroll', () => {
       document.getElementById('nav').classList.toggle('stuck', window.scrollY > 50);
@@ -208,7 +280,7 @@ onAuthStateChanged(auth, (user) => {
       try {
         await signInWithEmailAndPassword(auth, email, pw);
         showToast('✓ 로그인 되었습니다.', 'ok');
-        setTimeout(() => { window.location.href = 'index.html'; }, 1000);
+        setTimeout(() => { window.location.href = '../index.html'; }, 1000);
       } catch(e) {
         err.style.display = 'block';
         document.getElementById('m-pw').value = '';
