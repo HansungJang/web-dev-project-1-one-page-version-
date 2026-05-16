@@ -24,31 +24,31 @@
 <body>
 
 <!-- 메인 문의 폼 -->
-<section class="contact" id="contact" contenteditable="false">
+<section class="contact" >
   <div class="wrap" id="contact-form">
     <div class="con-grid">
 
       <!-- 왼쪽 정보 -->
       <div>
-        <p class="sec-tag sr">문의하기</p>
-        <h2 class="sec-h sr"><span id="e-co-form-h">첫 걸음을<br><em>내딛어 보세요</em></span></h2>
-        <p class="con-body sr" id="e-co-form-b">
+        <p class="sec-tag sr" id="contact-tag" contenteditable="false">문의하기</p>
+        <h2 class="sec-h sr" id="contact-subtitle1" contenteditable="false"><span>첫 걸음을<br><em>내딛어 보세요</em></span></h2>
+        <p class="con-body sr" id="contact-description1" contenteditable="false">
           아래 양식을 작성해 주시면 영업일 기준 1일 이내 답변드립니다. 이름과 이메일만으로도 접수 가능합니다.
         </p>
 
         <!-- 사전 체크리스트 -->
         <div style="margin-top: 12px;">
-          <p class="sec-tag sr" style="margin-bottom: 12px;">예약 전 확인 사항</p>
+          <p class="sec-tag sr" style="margin-bottom: 12px;" id="contact-subtitle2" contenteditable="false">예약 전 확인 사항</p>
           <ul class="policy-list sr">
-            <li class="policy-item">
+            <li class="policy-item" id="contact-subtitle2-value1" contenteditable="false">
               <span class="policy-dot"></span>
               <span id="e-co-c2">온라인 또는 대면 중 선택 가능</span>
             </li>
-            <li class="policy-item">
+            <li class="policy-item" id="contact-subtitle2-value2" contenteditable="false">
               <span class="policy-dot"></span>
               <span id="e-co-c3">48시간 전 취소 시 전액 환불</span>
             </li>
-            <li class="policy-item">
+            <li class="policy-item" id="contact-subtitle2-value3" contenteditable="false">
               <span class="policy-dot"></span>
               <span id="e-co-c4">상담 내용은 비밀이 보장됩니다</span>
             </li>
@@ -57,8 +57,8 @@
 
         <!-- 위기 안내 -->
         <div class="crisis-banner sr" style="margin-top: 32px;">
-          <h4>즉시 도움이 필요하신가요?</h4>
-          <p>
+          <h4 id="contact-subtitle3" contenteditable="false">즉시 도움이 필요하신가요?</h4>
+          <p id="contact-subtitle3-description" contenteditable="false">
             지금 당장 위험하다고 느껴지신다면 상담 예약보다 먼저 아래 기관에 연락하세요.<br>
             <strong>자살예방상담전화:</strong> <a href="tel:1393">1393</a> (24시간)<br>
             <strong>정신건강위기상담전화:</strong> <a href="tel:1577-0199">1577-0199</a> (24시간)<br>
@@ -69,7 +69,7 @@
 
       <!-- 오른쪽 폼 -->
       <div class="sr">
-        <div class="privacy-note" id="e-co-privacy">
+        <div class="privacy-note" id="contact-form-note1" contenteditable="false">
           🔒 아래 양식에 입력하신 정보는 예약 및 상담 목적으로만 사용되며, 제3자에게 제공되지 않습니다.
         </div>      
         <br>
@@ -117,8 +117,8 @@
             <textarea id="f-msg" placeholder="현재 어려움이나 상담에 기대하시는 것을 간단히 적어 주세요. 작성하지 않아도 괜찮습니다."></textarea>
           </div>
           <button class="btn-solid" style="width:100%;" onclick="submitForm(event)">예약 요청 보내기</button>
-          <p class="form-note" id="e-co-form-note">영업일 기준 1일 이내 이메일로 답변드립니다.</p>
-          <p class="form-note" id="e-co-form-note">신청서 작성 이후 안내 메세지에 따라 입금하시면 상담예약이 확정됩니다.</p>
+          <p class="form-note" id="contact-form-note2" contenteditable="false">영업일 기준 1일 이내 이메일로 답변드립니다.</p>
+          <p class="form-note" id="contact-form-note3" contenteditable="false">신청서 작성 이후 안내 메세지에 따라 입금하시면 상담예약이 확정됩니다.</p>
         </div>
       </div>
 

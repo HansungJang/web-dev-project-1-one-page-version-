@@ -193,7 +193,13 @@ onAuthStateChanged(auth, (user) => {
   }
   
   function show_statechange_home(){
-     const card_list = ['sr-card-s1', 'sr-card-s2', 'sr-card-s3', 'sr-card-s4', 'sr-card-s5', 'sr-card-s6'];
+     const card_list = ['home-session1-tag', 'home-session1-title', 'home-session1-sub',
+                        'home-session2-tag', 'home-session2-title', 'home-session2-sub',    
+                        'home-session3-tag', 'home-session3-title', 'home-session3-sub',  
+                        'home-session4-tag', 'home-session4-title', 'home-session4-sub',
+                        'home-session5-tag', 'home-session5-title', 'home-session5-sub',
+                        'home-session6-tag', 'home-session6-title', 'home-session6-sub'
+     ];
      const editable = state_isEditable();
       card_list.forEach((card) => {
         let card_el = document.getElementById(card);
@@ -202,31 +208,70 @@ onAuthStateChanged(auth, (user) => {
   }
 
   function show_statechange_apply(){
-     const apply_form = document.getElementById('contact');
+     const apply_form = ['contact-tag', 'contact-subtitle1', 'contact-description1',
+                        'contact-subtitle2', 'contact-subtitle2-value1', 'contact-subtitle2-value2', 'contact-subtitle2-value3',
+                        'contact-subtitle3', 'contact-subtitle3-description',
+                        'contact-form-note1', 'contact-form-note2', 'contact-form-note3'
+     ];
      const editable = state_isEditable();
-     if(apply_form)apply_form.setAttribute('contenteditable', editable.toString());   
+     apply_form.forEach((form) => {
+       let form_el = document.getElementById(form);
+       if(form_el)form_el.setAttribute('contenteditable', editable.toString());
+     });
   }
 
   function show_statechange_experts(){
-      const expert_section = document.getElementById('experts-section');
+      const expert_sections = ['experts-tag', 'experts-tittle', 
+        'experts-card-greeting', 'experts-card-qualification',
+        'experts-card-target', 'experts-card-fields',
+        'experts-card-career', 'experts-card-education'
+      ];
       const editable = state_isEditable();
-      if(expert_section)expert_section.setAttribute('contenteditable', editable.toString());
+      expert_sections.forEach((section) => {
+        let section_el = document.getElementById(section);
+        if(section_el)section_el.setAttribute('contenteditable', editable.toString());
+      });
   }
 
   function show_statechange_location(){
-    const location_section = document.getElementById('location');
+    const location_section = ['location-tag', 'location-title', 'location-subtitle1', 'location-subtitle2',
+      'location-card-name-title', 'location-card-name-body',
+      'location-card-address-title', 'location-card-address-body',
+      'location-card-phone-title', 'location-card-phone-body',
+      'location-card-email-title', 'location-card-email-body',
+      'location-card-subway-title', 'location-card-subway-body1', 'location-card-subway-body2',
+      'location-card-bus-title', 'location-card-bus-body'
+    ];
     const editable = state_isEditable();
-    if(location_section)location_section.setAttribute('contenteditable', editable.toString());
+    location_section.forEach((section) => {
+      let section_el = document.getElementById(section);
+      if(section_el)section_el.setAttribute('contenteditable', editable.toString());
+    });
   }
 
   function show_statechange_specialties(){
-    const specialties_section = document.getElementById('fields');
+    const specialties_section = ['fields-tag', 'fields-title',
+      'fields-card1-title', 'fields-card1-description',
+      'fields-card2-title', 'fields-card2-description',
+      'fields-card3-title', 'fields-card3-description',
+      'fields-card4-title', 'fields-card4-description',
+      'fields-card5-title', 'fields-card5-description',
+      'fields-card6-title', 'fields-card6-description'
+    ];
     const editable = state_isEditable();
-    if(specialties_section)specialties_section.setAttribute('contenteditable', editable.toString());
+    specialties_section.forEach((section) => {
+      let section_el = document.getElementById(section);
+      if(section_el)section_el.setAttribute('contenteditable', editable.toString());
+    });
   }
 
   function show_statechange_center(){
-    const center_contents = ['center-contet', 'contents-reverse']; 
+    const center_contents = [ 'center-tag',
+                              'center-tittle1', 'center-body1',
+                              'center-tittle2_1', 'center-body2_1',
+                              'center-tittle2_2', 'center-body2_2',
+                              'center-tittle2_3', 'center-body2_3',
+                              'center-tittle2_4', 'center-body2_4']; 
     const editable = state_isEditable();
       center_contents.forEach((content) => { 
         let content_el = document.getElementById(content);
@@ -235,7 +280,19 @@ onAuthStateChanged(auth, (user) => {
   }
 
   function show_statechange_procedure(){
-      const procedure_contents = ['procedure-hero', 'procedure-section', 'procedure-section-alt'];
+      const procedure_contents = [
+        'procedure-tag', 'procedure-title', 'procedure-subtitle',
+        'procedure-section1-title',  
+        'procedure-section1-body1-title', 'procedure-section1-body1-description',
+        'procedure-section1-body2-title', 'procedure-section1-body2-description',
+        'procedure-section1-body3-title', 'procedure-section1-body3-description',
+        'procedure-section1-body4-title', 'procedure-section1-body4-description',
+        'procedure-section2-title', 'procedure-section2-subtitle',
+        'procedure-section2-body1-title', 'procedure-section2-body1-description',
+        'procedure-section2-body2-title', 'procedure-section2-body2-description',
+        'procedure-section2-body3-title', 'procedure-section2-body3-description',
+        'procedure-section2-body4-title', 'procedure-section2-body4-description'
+      ];
       const editable = state_isEditable();
       procedure_contents.forEach((content) => {
         let content_el = document.getElementById(content);
