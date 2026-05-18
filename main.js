@@ -138,6 +138,7 @@ window.logout = async () => {
   }
 };
 
+
 // 실행 흐름 부분 수정
 window.addEventListener('DOMContentLoaded', () => {
   // loadData(); (for test)
@@ -175,16 +176,25 @@ onAuthStateChanged(auth, (user) => {
     adminElements.forEach(el => el.style.display = 'none');
   }
 
-
-    
   // Refresh the expert grid to enable/disable editing features
   renderExpertGrid(); 
 });
 
+   function save_Editable_Contents(editor, storageKey){
+      if(!editor) return;
+      editor.addEventListener('input', ()=>{
+          const content = editor.innerText;
+          sessionStorage.setItem(storageKey, content);
+          console.log(`저장된 ${storageKey}:`, content);
+      });
+   }
+
+
+
   function state_isEditable(){
     const admin_state = document.getElementById('admin-bar');
     const adminBar = document.getElementById('admin-bar');
-    if(adminBar && adminBar.classList.contains('on')) {
+    if(adminBar.classList.contains('on')) {
       return true;
     }
     else{
@@ -204,7 +214,9 @@ onAuthStateChanged(auth, (user) => {
       card_list.forEach((card) => {
         let card_el = document.getElementById(card);
         if(card_el)card_el.setAttribute('contenteditable', editable.toString());
+        save_Editable_Contents(card_el, card);
       });
+       
   }
 
   function show_statechange_apply(){
@@ -217,6 +229,7 @@ onAuthStateChanged(auth, (user) => {
      apply_form.forEach((form) => {
        let form_el = document.getElementById(form);
        if(form_el)form_el.setAttribute('contenteditable', editable.toString());
+       save_Editable_Contents(form_el, form);
      });
   }
 
@@ -230,6 +243,7 @@ onAuthStateChanged(auth, (user) => {
       expert_sections.forEach((section) => {
         let section_el = document.getElementById(section);
         if(section_el)section_el.setAttribute('contenteditable', editable.toString());
+        save_Editable_Contents(section_el, section);
       });
   }
 
@@ -246,6 +260,7 @@ onAuthStateChanged(auth, (user) => {
     location_section.forEach((section) => {
       let section_el = document.getElementById(section);
       if(section_el)section_el.setAttribute('contenteditable', editable.toString());
+      save_Editable_Contents(section_el, section);
     });
   }
 
@@ -262,6 +277,7 @@ onAuthStateChanged(auth, (user) => {
     specialties_section.forEach((section) => {
       let section_el = document.getElementById(section);
       if(section_el)section_el.setAttribute('contenteditable', editable.toString());
+      save_Editable_Contents(section_el, section);
     });
   }
 
@@ -276,6 +292,7 @@ onAuthStateChanged(auth, (user) => {
       center_contents.forEach((content) => { 
         let content_el = document.getElementById(content);
         if(content_el)content_el.setAttribute('contenteditable', editable.toString());
+        save_Editable_Contents(content_el, content);
       });
   }
 
@@ -297,7 +314,8 @@ onAuthStateChanged(auth, (user) => {
       procedure_contents.forEach((content) => {
         let content_el = document.getElementById(content);
         if(content_el)content_el.setAttribute('contenteditable', editable.toString());
-       });
+        save_Editable_Contents(content_el, content);
+      });
   } 
 
     window.addEventListener('scroll', () => {
