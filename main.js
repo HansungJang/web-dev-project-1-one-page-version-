@@ -97,8 +97,197 @@ async function applyDataToUI(data) {
   // Ensure the expert listener is active when data is applied
   initExpertListener();
 }
-  // [중요] 관리자 저장 함수 (전역 window 객체에 등록)
+
+// [중요] 관리자 저장 함수 (전역 window 객체에 등록)
 // main.js
+
+// [TO DO]
+// 1. 페이지별로 이미 DB에 저장된 항목 있는지 조사 
+window.getHomeContent = async () => {
+  try {
+    const snap = await getDoc(doc(db, 'contents', 'index'));
+    return snap.data();
+  } catch (e) {
+    console.error("Error fetching home content:", e);
+    return null;
+  }
+};
+
+window.getCenterContent = async () => {
+  try {
+    const snap = await getDoc(doc(db, 'contents', 'center'));
+    return snap.data();
+  } catch (e) {
+    console.error("Error fetching center content:", e);
+    return null;
+  }
+};
+
+window.getProcedureContent = async () => {  
+  try {
+    const snap = await getDoc(doc(db, 'contents', 'procedure'));
+    return snap.data();
+  } catch (e) {
+    console.error("Error fetching procedure content:", e);
+    return null;
+  }
+};
+
+window.getApplyContent = async () => {  
+  try {
+    const snap = await getDoc(doc(db, 'contents', 'apply'));
+    return snap.data();
+  } catch (e) {
+    console.error("Error fetching apply content:", e);
+    return null;
+  }
+};
+
+window.getExpertsContent = async () => {
+  try {
+    const snap = await getDoc(doc(db, 'contents', 'experts'));
+    return snap.data();
+  } catch (e) {
+    console.error("Error fetching experts content:", e);
+    return null;
+  }
+};
+
+window.getLocationContent = async () => {
+  try {
+    const snap = await getDoc(doc(db, 'contents', 'location'));
+    return snap.data();
+  } catch (e) {
+    console.error("Error fetching location content:", e);
+    return null;
+  }
+};
+
+window.getSpecialtiesContent = async () => {
+  try {
+    const snap = await getDoc(doc(db, 'contents', 'specialties'));
+    return snap.data();
+  } catch (e) {
+    console.error("Error fetching specialties content:", e);
+    return null;
+  }
+};
+
+// 2. 페이지별로 setDoc을 이용한 문서 형식 저장 
+window.saveHome = async() =>{
+  // -> if db에 저장된 데이터 있으면, 상속받는 형태 (sessionstorage > db > element text)
+  original_content = await getHomeContent();
+  // -> original_content if null -> getElementText , if not  -> original_content["id"]
+  db.collection("contetns").doc("index").set({
+    "home-session1": {
+      "home-session1-tag": sessionStorage.getItem("home-session1-tag") || (original_content["home-session1"] ? original_content["home-session1"]["home-session1-tag"] : document.getElementById("home-session1-tag").innerText), 
+      "home-session1-title": sessionStorage.getItem("home-session1-title") || (original_content["home-session1"] ? original_content["home-session1"]["home-session1-title"] : document.getElementById("home-session1-title").innerText), 
+      "home-session1-sub": sessionStorage.getItem("home-session1-sub") || (original_content["home-session1"] ? original_content["home-session1"]["home-session1-sub"] : document.getElementById("home-session1-sub").innerText)
+    }, 
+    "home-session2": {
+      "home-session2-tag": sessionStorage.getItem("home-session2-tag") || (original_content["home-session2"] ? original_content["home-session2"]["home-session2-tag"] : document.getElementById("home-session2-tag").innerText), 
+      "home-session2-title": sessionStorage.getItem("home-session2-title") || (original_content["home-session2"] ? original_content["home-session2"]["home-session2-title"] : document.getElementById("home-session2-title").innerText), 
+      "home-session2-sub": sessionStorage.getItem("home-session2-sub") || (original_content["home-session2"] ? original_content["home-session2"]["home-session2-sub"] : document.getElementById("home-session2-sub").innerText)
+    }, 
+    "home-session3": {
+      "home-session3-tag": sessionStorage.getItem("home-session3-tag") || (original_content["home-session3"] ? original_content["home-session3"]["home-session3-tag"] : document.getElementById("home-session3-tag").innerText), 
+      "home-session3-title": sessionStorage.getItem("home-session3-title") || (original_content["home-session3"] ? original_content["home-session3"]["home-session3-title"] : document.getElementById("home-session3-title").innerText), 
+      "home-session3-sub": sessionStorage.getItem("home-session3-sub") || (original_content["home-session3"] ? original_content["home-session3"]["home-session3-sub"] : document.getElementById("home-session3-sub").innerText)
+    },  
+    "home-session4": {
+      "home-session4-tag": sessionStorage.getItem("home-session4-tag") || (original_content["home-session4"] ? original_content["home-session4"]["home-session4-tag"] : document.getElementById("home-session4-tag").innerText), 
+      "home-session4-title": sessionStorage.getItem("home-session4-title") || (original_content["home-session4"] ? original_content["home-session4"]["home-session4-title"] : document.getElementById("home-session4-title").innerText), 
+      "home-session4-sub": sessionStorage.getItem("home-session4-sub") || (original_content["home-session4"] ? original_content["home-session4"]["home-session4-sub"] : document.getElementById("home-session4-sub").innerText)
+    }, 
+    "home-session5": {
+      "home-session5-tag": sessionStorage.getItem("home-session5-tag") || (original_content["home-session5"] ? original_content["home-session5"]["home-session5-tag"] : document.getElementById("home-session5-tag").innerText), 
+      "home-session5-title": sessionStorage.getItem("home-session5-title") || (original_content["home-session5"] ? original_content["home-session5"]["home-session5-title"] : document.getElementById("home-session5-title").innerText), 
+      "home-session5-sub": sessionStorage.getItem("home-session5-sub") || (original_content["home-session5"] ? original_content["home-session5"]["home-session5-sub"] : document.getElementById("home-session5-sub").innerText)
+    },                
+  });
+}
+
+ window.saveCenter = async() =>{
+  original_content = await getCenterContent();
+  db.collection("contetns").doc("center").set({
+    "center-tag": sessionStorage.getItem("center-tag") || (original_content["center-tag"] ? original_content["center-tag"] : document.getElementById("center-tag").innerText),
+    "center-title1": sessionStorage.getItem("center-title1") || (original_content["center-session1"] ? original_content["center-session1"]["center-title1"] : document.getElementById("center-title1").innerText),
+    "center-body1": sessionStorage.getItem("center-body1") || (original_content["center-session1"] ? original_content["center-session1"]["center-body1"] : document.getElementById("center-body1").innerText),
+    "center-title2_1": sessionStorage.getItem("center-title2_1") || (original_content["center-session2"] ? original_content["center-session2"]["center-title2_1"] : document.getElementById("center-title2_1").innerText),
+    "center-body2_1": sessionStorage.getItem("center-body2_1") || (original_content["center-session2"] ? original_content["center-session2"]["center-body2_1"] : document.getElementById("center-body2_1").innerText),
+    "center-title2_2": sessionStorage.getItem("center-title2_2") || (original_content["center-session2"] ? original_content["center-session2"]["center-title2_2"] : document.getElementById("center-title2_2").innerText),
+    "center-body2_2": sessionStorage.getItem("center-body2_2") || (original_content["center-session2"] ? original_content["center-session2"]["center-body2_2"] : document.getElementById("center-body2_2").innerText),
+    "center-title2_3": sessionStorage.getItem("center-title2_3") || (original_content["center-session2"] ? original_content["center-session2"]["center-title2_3"] : document.getElementById("center-title2_3").innerText),
+    "center-body2_3": sessionStorage.getItem("center-body2_3") || (original_content["center-session2"] ? original_content["center-session2"]["center-body2_3"] : document.getElementById("center-body2_3").innerText),
+    "center-title2_4": sessionStorage.getItem("center-title2_4") || (original_content["center-session2"] ? original_content["center-session2"]["center-title2_4"] : document.getElementById("center-title2_4").innerText),
+    "center-body2_4": sessionStorage.getItem("center-body2_4") || (original_content["center-session2"] ? original_content["center-session2"]["center-body2_4"] : document.getElementById("center-body2_4").innerText),
+  });
+ }
+
+ window.saveProcedure = async() =>{
+  original_content = await getProcedureContent();
+  db.collection("contetns").doc("procedure").set({
+    "procedure-tag": sessionStorage.getItem("procedure-tag") || ((original_content["procedure-main"] ? original_content["procedure-main"]["procedure-tag"] : document.getElementById("procedure-tag").innerText)),
+    "procedure-title": sessionStorage.getItem("procedure-title") || ((original_content["procedure-main"] ? original_content["procedure-main"]["procedure-title"] : document.getElementById("procedure-title").innerText)),
+    "procedure-subtitle": sessionStorage.getItem("procedure-subtitle") || ((original_content["procedure-main"] ? original_content["procedure-main"]["procedure-subtitle"] : document.getElementById("procedure-subtitle").innerText)),
+    "procedure-section1-title" : sessionStorage.getItem("procedure-section1-title") || ((original_content["procedure-section1"] ? original_content["procedure-section1"]["procedure-section1-title"] : document.getElementById("procedure-section1-title").innerText)),
+    "procedure-section1-body1-title" : sessionStorage.getItem("procedure-section1-body1-title") || ((original_content["procedure-section1"] ? original_content["procedure-section1"]["procedure-section1-body1-title"] : document.getElementById("procedure-section1-body1-title").innerText)),
+    "procedure-section1-body1-description" : sessionStorage.getItem("procedure-section1-body1-description") || ((original_content["procedure-section1"] ? original_content["procedure-section1"]["procedure-section1-body1-description"] : document.getElementById("procedure-section1-body1-description").innerText)),
+
+     "procedure-section1-body2-title" : sessionStorage.getItem("procedure-section1-body2-title") || ((original_content["procedure-section1"] ? original_content["procedure-section1"]["procedure-section1-body2-title"] : document.getElementById("procedure-section1-body2-title").innerText)),
+    "procedure-section1-body2-description" : sessionStorage.getItem("procedure-section1-body2-description") || ((original_content["procedure-section1"] ? original_content["procedure-section1"]["procedure-section1-body2-description"] : document.getElementById("procedure-section1-body2-description").innerText)),
+    
+     "procedure-section1-body3-title" : sessionStorage.getItem("procedure-section1-body3-title") || ((original_content["procedure-section1"] ? original_content["procedure-section1"]["procedure-section1-body3-title"] : document.getElementById("procedure-section1-body3-title").innerText)),
+    "procedure-section1-body3-description" : sessionStorage.getItem("procedure-section1-body3-description") || ((original_content["procedure-section1"] ? original_content["procedure-section1"]["procedure-section1-body3-description"] : document.getElementById("procedure-section1-body3-description").innerText)),
+
+    "procedure-section1-body4-title" : sessionStorage.getItem("procedure-section1-body4-title") || ((original_content["procedure-section1"] ? original_content["procedure-section1"]["procedure-section1-body4-title"] : document.getElementById("procedure-section1-body4-title").innerText)),
+    "procedure-section1-body4-description" : sessionStorage.getItem("procedure-section1-body4-description") || ((original_content["procedure-section1"] ? original_content["procedure-section1"]["procedure-section1-body4-description"] : document.getElementById("procedure-section1-body4-description").innerText)),
+
+    "procedure-section2-title" : sessionStorage.getItem("procedure-section2-title") || ((original_content["procedure-section2"] ? original_content["procedure-section2"]["procedure-section2-title"] : document.getElementById("procedure-section2-title").innerText)),
+    "procedure-section2-body1-title" : sessionStorage.getItem("procedure-section2-body1-title") || ((original_content["procedure-section2"] ? original_content["procedure-section2"]["procedure-section2-body1-title"] : document.getElementById("procedure-section2-body1-title").innerText)),
+    "procedure-section2-body1-description" : sessionStorage.getItem("procedure-section2-body1-description") || ((original_content["procedure-section2"] ? original_content["procedure-section2"]["procedure-section2-body1-description"] : document.getElementById("procedure-section2-body1-description").innerText)),
+
+     "procedure-section2-body2-title" : sessionStorage.getItem("procedure-section2-body2-title") || ((original_content["procedure-section2"] ? original_content["procedure-section2"]["procedure-section2-body2-title"] : document.getElementById("procedure-section2-body2-title").innerText)),
+    "procedure-section2-body2-description" : sessionStorage.getItem("procedure-section2-body2-description") || ((original_content["procedure-section2"] ? original_content["procedure-section2"]["procedure-section2-body2-description"] : document.getElementById("procedure-section2-body2-description").innerText)),
+    
+     "procedure-section2-body3-title" : sessionStorage.getItem("procedure-section2-body3-title") || ((original_content["procedure-section2"] ? original_content["procedure-section2"]["procedure-section2-body3-title"] : document.getElementById("procedure-section2-body3-title").innerText)),
+    "procedure-section2-body3-description" : sessionStorage.getItem("procedure-section2-body3-description") || ((original_content["procedure-section2"] ? original_content["procedure-section2"]["procedure-section2-body3-description"] : document.getElementById("procedure-section2-body3-description").innerText)),
+
+    "procedure-section2-body4-title" : sessionStorage.getItem("procedure-section2-body4-title") || ((original_content["procedure-section2"] ? original_content["procedure-section2"]["procedure-section2-body4-title"] : document.getElementById("procedure-section2-body4-title").innerText)),
+    "procedure-section2-body4-description" : sessionStorage.getItem("procedure-section2-body4-description") || ((original_content["procedure-section2"] ? original_content["procedure-section2"]["procedure-section2-body4-description"] : document.getElementById("procedure-section2-body4-description").innerText))
+  }); 
+}
+
+  window.saveApplyContent = async() =>{
+  original_content = await getApplyContent();
+  db.collection("contetns").doc("apply").set({
+    "contact-tag": sessionStorage.getItem("contact-tag") || (original_content["contact-tag"] ? original_content["contact-tag"] : document.getElementById("contact-tag").innerText),
+    "contact-subtitle1": sessionStorage.getItem("contact-subtitle1") || (original_content["contact-session1"] ? original_content["contact-session1"]["contact-subtitle1"] : document.getElementById("contact-subtitle1").innerText),
+    "contact-description1": sessionStorage.getItem("contact-description1") || (original_content["contact-session1"] ? original_content["contact-session1"]["contact-description1"] : document.getElementById("contact-description1").innerText),
+
+    "contact-subtitle2": sessionStorage.getItem("contact-subtitle2") || (original_content["contact-session2"] ? original_content["contact-session2"]["contact-subtitle2"] : document.getElementById("contact-subtitle2").innerText),
+    "contact-subtitle2-value1": sessionStorage.getItem("contact-subtitle2-value1") || (original_content["contact-session2"] ? original_content["contact-session2"]["contact-subtitle2-value1"] : document.getElementById("contact-subtitle2-value1").innerText),
+    "contact-subtitle2-value2": sessionStorage.getItem("contact-subtitle2-value2") || (original_content["contact-session2"] ? original_content["contact-session2"]["contact-subtitle2-value2"] : document.getElementById("contact-subtitle2-value2").innerText),
+    "contact-subtitle2-value1": sessionStorage.getItem("contact-subtitle2-value3") || (original_content["contact-session2"] ? original_content["contact-session2"]["contact-subtitle2-value3"] : document.getElementById("contact-subtitle2-value3").innerText),
+
+    "contact-subtitle3": sessionStorage.getItem("contact-subtitle3") || (original_content["contact-session3"] ? original_content["contact-session3"]["contact-subtitle3"] : document.getElementById("contact-subtitle3").innerText),
+    "contact-subtitle3-description": sessionStorage.getItem("contact-subtitle3-description") || (original_content["contact-session3"] ? original_content["contact-session3"]["contact-subtitle3-description"] : document.getElementById("contact-subtitle3-description").innerText),
+
+    "contact-form-note1": sessionStorage.getItem("contact-form-note1") || (original_content["contact-form"] ? original_content["contact-form"]["contact-form-note1"] : document.getElementById("contact-form-note1").innerText),
+    "contact-form-note2": sessionStorage.getItem("contact-form-note2") || (original_content["contact-form"] ? original_content["contact-form"]["contact-form-note2"] : document.getElementById("contact-form-note2").innerText),
+    "contact-form-note3": sessionStorage.getItem("contact-form-note3") || (original_content["contact-form"] ? original_content["contact-form"]["contact-form-note3"] : document.getElementById("contact-form-note3").innerText),
+  });
+}
+
+window.saveExpertsContent = async() =>{}
+
+window.saveSpecialtiesContent = async() =>{}
+
+window.saveLocationContent = async() =>{}
+
+    // 3. set / upate logic 구현 
+// 4. UI 반영 수정 
+
 
 window.saveAll = async () => {
   const adminBar = document.getElementById('admin-bar');
@@ -122,7 +311,9 @@ window.saveAll = async () => {
   }
 };
 
-  // 관리자 로그아웃
+
+
+// 관리자 로그아웃
 // index.html 내 window.logout 수정
 // main.js
 
