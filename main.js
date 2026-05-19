@@ -279,13 +279,62 @@ window.saveHome = async() =>{
   });
 }
 
-window.saveExpertsContent = async() =>{}
+window.saveExpertsContent = async() =>{
+  original_content = await getExpertsContent();
+  db.collection("contetns").doc("experts").set({
+    "experts-tag": sessionStorage.getItem("experts-tag") || (original_content["experts-tag"] ? original_content["experts-tag"] : document.getElementById("experts-tag").innerText),
+    "experts-tittle": sessionStorage.getItem("experts-tittle") || (original_content["experts-tittle"] ? original_content["experts-tittle"] : document.getElementById("experts-tittle").innerText),
+    "experts-card-greeting": sessionStorage.getItem("experts-card-greeting") || (original_content["experts-card-greeting"] ? original_content["experts-card-greeting"] : document.getElementById("experts-card-greeting").innerText),
+    "experts-card-qualification": sessionStorage.getItem("experts-card-qualification") || (original_content["experts-card-qualification"] ? original_content["experts-card-qualification"] : document.getElementById("experts-card-qualification").innerText),
+    "experts-card-target": sessionStorage.getItem("experts-card-target") || (original_content["experts-card-target"] ? original_content["experts-card-target"] : document.getElementById("experts-card-target").innerText),
+    "experts-card-fields": sessionStorage.getItem("experts-card-fields") || (original_content["experts-card-fields"] ? original_content["experts-card-fields"] : document.getElementById("experts-card-fields").innerText),
+    "experts-card-career": sessionStorage.getItem("experts-card-career") || (original_content["experts-card-career"] ? original_content["experts-card-career"] : document.getElementById("experts-card-career").innerText),
+    "experts-card-education": sessionStorage.getItem("experts-card-education") || (original_content["experts-card-education"] ? original_content["experts-card-education"] : document.getElementById("experts-card-education").innerText),
+});
+}
 
-window.saveSpecialtiesContent = async() =>{}
+window.saveSpecialtiesContent = async() =>{
+  original_content = await getSpecialtiesContent();
+  db.collection("contetns").doc("specialties").set({
+    "fields-tag": sessionStorage.getItem("fields-tag") || (original_content["fields-main"] ? original_content["fields-main"]["fields-tag"] : document.getElementById("fields-tag").innerText),
+    "fields-title": sessionStorage.getItem("fields-title") || (original_content["fields-main"] ? original_content["fields-main"]["fields-title"] : document.getElementById("fields-title").innerText),    
+    "fields-card1-title": sessionStorage.getItem("fields-card1-title") || (original_content["fields-session1"] ? original_content["fields-session1"]["fields-card1-title"] : document.getElementById("fields-card1-title").innerText),
+    "fields-card1-description": sessionStorage.getItem("fields-card1-description") || (original_content["fields-session1"] ? original_content["fields-session1"]["fields-card1-description"] : document.getElementById("fields-card1-description").innerText),
+    "fields-card2-title": sessionStorage.getItem("fields-card2-title") || (original_content["fields-session2"] ? original_content["fields-session2"]["fields-card2-title"] : document.getElementById("fields-card2-title").innerText),
+    "fields-card2-description": sessionStorage.getItem("fields-card2-description") || (original_content["fields-session2"] ? original_content["fields-session2"]["fields-card2-description"] : document.getElementById("fields-card2-description").innerText),
+    "fields-card3-title": sessionStorage.getItem("fields-card3-title") || (original_content["fields-session3"] ? original_content["fields-session3"]["fields-card3-title"] : document.getElementById("fields-card3-title").innerText),
+    "fields-card3-description": sessionStorage.getItem("fields-card3-description") || (original_content["fields-session3"] ? original_content["fields-session3"]["fields-card3-description"] : document.getElementById("fields-card3-description").innerText),
+    "fields-card4-title": sessionStorage.getItem("fields-card4-title") || (original_content["fields-session4"] ? original_content["fields-session4"]["fields-card4-title"] : document.getElementById("fields-card4-title").innerText),
+    "fields-card4-description": sessionStorage.getItem("fields-card4-description") || (original_content["fields-session4"] ? original_content["fields-session4"]["fields-card4-description"] : document.getElementById("fields-card4-description").innerText),
+    "fields-card5-title": sessionStorage.getItem("fields-card5-title") || (original_content["fields-session5"] ? original_content["fields-session5"]["fields-card5-title"] : document.getElementById("fields-card5-title").innerText),
+    "fields-card5-description": sessionStorage.getItem("fields-card5-description") || (original_content["fields-session5"] ? original_content["fields-session5"]["fields-card5-description"] : document.getElementById("fields-card5-description").innerText),
+    "fields-card6-title": sessionStorage.getItem("fields-card6-title") || (original_content["fields-session6"] ? original_content["fields-session6"]["fields-card6-title"] : document.getElementById("fields-card6-title").innerText),
+    "fields-card6-description": sessionStorage.getItem("fields-card6-description") || (original_content["fields-session6"] ? original_content["fields-session6"]["fields-card6-description"] : document.getElementById("fields-card6-description").innerText)
+  });
+}
 
-window.saveLocationContent = async() =>{}
+window.saveLocationContent = async() =>{
+  original_content = await getLocationContent();
+  db.collection("contetns").doc("location").set({
+    "location-tag": sessionStorage.getItem("location-tag") || (original_content["location-main"] ? original_content["location-main"]["location-tag"] : document.getElementById("location-tag").innerText),
+    "location-title": sessionStorage.getItem("location-title") || (original_content["location-main"] ? original_content["location-main"]["location-title"] : document.getElementById("location-title").innerText),
+    "location-subtitle1": sessionStorage.getItem("location-subtitle1") || (original_content["location-main"] ? original_content["location-main"]["location-subtitle1"] : document.getElementById("location-subtitle1").innerText),
+    "location-card-name-title": sessionStorage.getItem("location-card-name-title") || (original_content["location-session1"] ? original_content["location-session1"]["location-card-name-title"] : document.getElementById("location-card-name-title").innerText),
+    "location-card-name-body": sessionStorage.getItem("location-card-name-body") || (original_content["location-session1"] ? original_content["location-session1"]["location-card-name-body"] : document.getElementById("location-card-name-body").innerText),
+    "location-card-address-title": sessionStorage.getItem("location-card-address-title") || (original_content["location-session2"] ? original_content["location-session2"]["location-card-address-title"] : document.getElementById("location-card-address-title").innerText),
+    "location-card-address-body": sessionStorage.getItem("location-card-address-body") || (original_content["location-session2"] ? original_content["location-session2"]["location-card-address-body"] : document.getElementById("location-card-address-body").innerText),
+    "location-card-phone-title": sessionStorage.getItem("location-card-phone-title") || (original_content["location-session3"] ? original_content["location-session3"]["location-card-phone-title"] : document.getElementById("location-card-phone-title").innerText),
+    "location-card-phone-body": sessionStorage.getItem("location-card-phone-body") || (original_content["location-session3"] ? original_content["location-session3"]["location-card-phone-body"] : document.getElementById("location-card-phone-body").innerText),
+    "location-card-email-title": sessionStorage.getItem("location-card-email-title") || (original_content["location-session4"] ? original_content["location-session4"]["location-card-email-title"] : document.getElementById("location-card-email-title").innerText),
+    "location-card-email-body": sessionStorage.getItem("location-card-email-body") || (original_content["location-session4"] ? original_content["location-session4"]["location-card-email-body"] : document.getElementById("location-card-email-body").innerText),
+    "location-card-subway-title": sessionStorage.getItem("location-card-subway-title") || (original_content["location-session5"] ? original_content["location-session5"]["location-card-subway-title"] : document.getElementById("location-card-subway-title").innerText),
+    "location-card-subway-body": sessionStorage.getItem("location-card-subway-body") || (original_content["location-session5"] ? original_content["location-session5"]["location-card-subway-body"] : document.getElementById("location-card-subway-body").innerText),
+    "location-card-bus-title": sessionStorage.getItem("location-card-bus-title") || (original_content["location-session6"] ? original_content["location-session6"]["location-card-bus-title"] : document.getElementById("location-card-bus-title").innerText),
+    "location-card-bus-body": sessionStorage.getItem("location-card-bus-body") || (original_content["location-session6"] ? original_content["location-session6"]["location-card-bus-body"] : document.getElementById("location-card-bus-body").innerText)
+  });
+}
 
-    // 3. set / upate logic 구현 
+// 3. set / upate logic 구현 
 // 4. UI 반영 수정 
 
 
