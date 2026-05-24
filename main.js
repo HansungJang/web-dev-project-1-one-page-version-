@@ -96,7 +96,7 @@ async function applyDataToUI(data) {
     const el = document.getElementById(key);
     if (el) {
       if (el.tagName === 'IMG') el.src = data[key];
-      else el.innerText = data[key];
+      else el?.innerText = data[key];
     }
   }
 
@@ -198,57 +198,57 @@ window.saveHome = async () => {
       "home-session1": {
         "home-session1-tag": sessionStorage.getItem("home-session1-tag") || 
                              original_content["home-session1"]?.["home-session1-tag"] || 
-                             document.getElementById("home-session1-tag").innerText, 
+                             document.getElementById("home-session1-tag")?.innerText, 
         "home-session1-title": sessionStorage.getItem("home-session1-title") || 
                                original_content["home-session1"]?.["home-session1-title"] || 
-                               document.getElementById("home-session1-title").innerText, 
+                               document.getElementById("home-session1-title")?.innerText, 
         "home-session1-sub": sessionStorage.getItem("home-session1-sub") || 
                              original_content["home-session1"]?.["home-session1-sub"] || 
-                             document.getElementById("home-session1-sub").innerText
+                             document.getElementById("home-session1-sub")?.innerText
       }, 
       "home-session2": {
         "home-session2-tag": sessionStorage.getItem("home-session2-tag") || 
                              original_content["home-session2"]?.["home-session2-tag"] || 
-                             document.getElementById("home-session2-tag").innerText, 
+                             document.getElementById("home-session2-tag")?.innerText, 
         "home-session2-title": sessionStorage.getItem("home-session2-title") || 
                                original_content["home-session2"]?.["home-session2-title"] || 
-                               document.getElementById("home-session2-title").innerText, 
+                               document.getElementById("home-session2-title")?.innerText, 
         "home-session2-sub": sessionStorage.getItem("home-session2-sub") || 
                              original_content["home-session2"]?.["home-session2-sub"] || 
-                             document.getElementById("home-session2-sub").innerText
+                             document.getElementById("home-session2-sub")?.innerText
       }, 
       "home-session3": {
         "home-session3-tag": sessionStorage.getItem("home-session3-tag") || 
                              original_content["home-session3"]?.["home-session3-tag"] || 
-                             document.getElementById("home-session3-tag").innerText, 
+                             document.getElementById("home-session3-tag")?.innerText, 
         "home-session3-title": sessionStorage.getItem("home-session3-title") || 
                                original_content["home-session3"]?.["home-session3-title"] || 
-                               document.getElementById("home-session3-title").innerText, 
+                               document.getElementById("home-session3-title")?.innerText, 
         "home-session3-sub": sessionStorage.getItem("home-session3-sub") || 
                              original_content["home-session3"]?.["home-session3-sub"] || 
-                             document.getElementById("home-session3-sub").innerText
+                             document.getElementById("home-session3-sub")?.innerText
       },  
       "home-session4": {
         "home-session4-tag": sessionStorage.getItem("home-session4-tag") || 
                              original_content["home-session4"]?.["home-session4-tag"] || 
-                             document.getElementById("home-session4-tag").innerText, 
+                             document.getElementById("home-session4-tag")?.innerText, 
         "home-session4-title": sessionStorage.getItem("home-session4-title") || 
                                original_content["home-session4"]?.["home-session4-title"] || 
-                               document.getElementById("home-session4-title").innerText, 
+                               document.getElementById("home-session4-title")?.innerText, 
         "home-session4-sub": sessionStorage.getItem("home-session4-sub") || 
                              original_content["home-session4"]?.["home-session4-sub"] || 
-                             document.getElementById("home-session4-sub").innerText
+                             document.getElementById("home-session4-sub")?.innerText
       }, 
       "home-session5": {
         "home-session5-tag": sessionStorage.getItem("home-session5-tag") || 
                              original_content["home-session5"]?.["home-session5-tag"] || 
-                             document.getElementById("home-session5-tag").innerText, 
+                             document.getElementById("home-session5-tag")?.innerText, 
         "home-session5-title": sessionStorage.getItem("home-session5-title") || 
                                original_content["home-session5"]?.["home-session5-title"] || 
-                               document.getElementById("home-session5-title").innerText, 
+                               document.getElementById("home-session5-title")?.innerText, 
         "home-session5-sub": sessionStorage.getItem("home-session5-sub") || 
                              original_content["home-session5"]?.["home-session5-sub"] || 
-                             document.getElementById("home-session5-sub").innerText
+                             document.getElementById("home-session5-sub")?.innerText
       }               
     });
   } catch (error) {
@@ -274,42 +274,42 @@ window.saveCenter = async () => {
     await setDoc(centerDocRef, {
       "center-tag": (sessionStorage.getItem("center-tag") || 
                     original_content["center-tag"] || 
-                    document.getElementById("center-tag").innerText || ""),
+                    document.getElementById("center-tag")?.innerText || ""),
 
       "center-session1": {
         "center-title1": sessionStorage.getItem("center-title1") || 
                          original_content["center-session1"]?.["center-title1"] || 
-                         document.getElementById("center-title1").innerText,
+                         document.getElementById("center-title1")?.innerText,
         "center-body1": sessionStorage.getItem("center-body1") || 
                         original_content["center-session1"]?.["center-body1"] || 
-                        document.getElementById("center-body1").innerText
+                        document.getElementById("center-body1")?.innerText
       },
 
       "center-session2": {
         "center-title2_1": sessionStorage.getItem("center-title2_1") || 
                            original_content["center-session2"]?.["center-title2_1"] || 
-                           document.getElementById("center-title2_1").innerText,
+                           document.getElementById("center-title2_1")?.innerText,
         "center-body2_1": sessionStorage.getItem("center-body2_1") || 
                           original_content["center-session2"]?.["center-body2_1"] || 
-                          document.getElementById("center-body2_1").innerText,
+                          document.getElementById("center-body2_1")?.innerText,
         "center-title2_2": sessionStorage.getItem("center-title2_2") || 
                            original_content["center-session2"]?.["center-title2_2"] || 
-                           document.getElementById("center-title2_2").innerText,
+                           document.getElementById("center-title2_2")?.innerText,
         "center-body2_2": sessionStorage.getItem("center-body2_2") || 
                           original_content["center-session2"]?.["center-body2_2"] || 
-                          document.getElementById("center-body2_2").innerText,
+                          document.getElementById("center-body2_2")?.innerText,
         "center-title2_3": sessionStorage.getItem("center-title2_3") || 
                            original_content["center-session2"]?.["center-title2_3"] || 
-                           document.getElementById("center-title2_3").innerText,
+                           document.getElementById("center-title2_3")?.innerText,
         "center-body2_3": sessionStorage.getItem("center-body2_3") || 
                           original_content["center-session2"]?.["center-body2_3"] || 
-                          document.getElementById("center-body2_3").innerText,
+                          document.getElementById("center-body2_3")?.innerText,
         "center-title2_4": sessionStorage.getItem("center-title2_4") || 
                            original_content["center-session2"]?.["center-title2_4"] || 
-                           document.getElementById("center-title2_4").innerText,
+                           document.getElementById("center-title2_4")?.innerText,
         "center-body2_4": sessionStorage.getItem("center-body2_4") || 
                            original_content["center-session2"]?.["center-body2_4"] || 
-                           document.getElementById("center-body2_4").innerText
+                           document.getElementById("center-body2_4")?.innerText
       }
     });
 
@@ -338,81 +338,81 @@ window.saveProcedure = async () => {
       "procedure-main": {
         "procedure-tag": sessionStorage.getItem("procedure-tag") || 
                          original_content["procedure-main"]?.["procedure-tag"] || 
-                         document.getElementById("procedure-tag").innerText,
+                         document.getElementById("procedure-tag")?.innerText,
         "procedure-title": sessionStorage.getItem("procedure-title") || 
                            original_content["procedure-main"]?.["procedure-title"] || 
-                           document.getElementById("procedure-title").innerText,
+                           document.getElementById("procedure-title")?.innerText,
         "procedure-subtitle": sessionStorage.getItem("procedure-subtitle") || 
                               original_content["procedure-main"]?.["procedure-subtitle"] || 
-                              document.getElementById("procedure-subtitle").innerText
+                              document.getElementById("procedure-subtitle")?.innerText
       },
 
       "procedure-section1": {
         "procedure-section1-title": sessionStorage.getItem("procedure-section1-title") || 
                                     original_content["procedure-section1"]?.["procedure-section1-title"] || 
-                                    document.getElementById("procedure-section1-title").innerText,
+                                    document.getElementById("procedure-section1-title")?.innerText,
         
         "procedure-section1-body1-title": sessionStorage.getItem("procedure-section1-body1-title") || 
                                          original_content["procedure-section1"]?.["procedure-section1-body1-title"] || 
-                                         document.getElementById("procedure-section1-body1-title").innerText,
+                                         document.getElementById("procedure-section1-body1-title")?.innerText,
         "procedure-section1-body1-description": sessionStorage.getItem("procedure-section1-body1-description") || 
                                                original_content["procedure-section1"]?.["procedure-section1-body1-description"] || 
-                                               document.getElementById("procedure-section1-body1-description").innerText,
+                                               document.getElementById("procedure-section1-body1-description")?.innerText,
 
         "procedure-section1-body2-title": sessionStorage.getItem("procedure-section1-body2-title") || 
                                          original_content["procedure-section1"]?.["procedure-section1-body2-title"] || 
-                                         document.getElementById("procedure-section1-body2-title").innerText,
+                                         document.getElementById("procedure-section1-body2-title")?.innerText,
         "procedure-section1-body2-description": sessionStorage.getItem("procedure-section1-body2-description") || 
                                                original_content["procedure-section1"]?.["procedure-section1-body2-description"] || 
-                                               document.getElementById("procedure-section1-body2-description").innerText,
+                                               document.getElementById("procedure-section1-body2-description")?.innerText,
 
         "procedure-section1-body3-title": sessionStorage.getItem("procedure-section1-body3-title") || 
                                          original_content["procedure-section1"]?.["procedure-section1-body3-title"] || 
-                                         document.getElementById("procedure-section1-body3-title").innerText,
+                                         document.getElementById("procedure-section1-body3-title")?.innerText,
         "procedure-section1-body3-description": sessionStorage.getItem("procedure-section1-body3-description") || 
                                                original_content["procedure-section1"]?.["procedure-section1-body3-description"] || 
-                                               document.getElementById("procedure-section1-body3-description").innerText,
+                                               document.getElementById("procedure-section1-body3-description")?.innerText,
 
         "procedure-section1-body4-title": sessionStorage.getItem("procedure-section1-body4-title") || 
                                          original_content["procedure-section1"]?.["procedure-section1-body4-title"] || 
-                                         document.getElementById("procedure-section1-body4-title").innerText,
+                                         document.getElementById("procedure-section1-body4-title")?.innerText,
         "procedure-section1-body4-description": sessionStorage.getItem("procedure-section1-body4-description") || 
                                                original_content["procedure-section1"]?.["procedure-section1-body4-description"] || 
-                                               document.getElementById("procedure-section1-body4-description").innerText
+                                               document.getElementById("procedure-section1-body4-description")?.innerText
       },
 
       "procedure-section2": {
         "procedure-section2-title": sessionStorage.getItem("procedure-section2-title") || 
                                     original_content["procedure-section2"]?.["procedure-section2-title"] || 
-                                    document.getElementById("procedure-section2-title").innerText,
+                                    document.getElementById("procedure-section2-title")?.innerText,
         
         "procedure-section2-body1-title": sessionStorage.getItem("procedure-section2-body1-title") || 
                                          original_content["procedure-section2"]?.["procedure-section2-body1-title"] || 
-                                         document.getElementById("procedure-section2-body1-title").innerText,
+                                         document.getElementById("procedure-section2-body1-title")?.innerText,
         "procedure-section2-body1-description": sessionStorage.getItem("procedure-section2-body1-description") || 
                                                original_content["procedure-section2"]?.["procedure-section2-body1-description"] || 
-                                               document.getElementById("procedure-section2-body1-description").innerText,
+                                               document.getElementById("procedure-section2-body1-description")?.innerText,
 
         "procedure-section2-body2-title": sessionStorage.getItem("procedure-section2-body2-title") || 
                                          original_content["procedure-section2"]?.["procedure-section2-body2-title"] || 
-                                         document.getElementById("procedure-section2-body2-title").innerText,
+                                         document.getElementById("procedure-section2-body2-title")?.innerText,
         "procedure-section2-body2-description": sessionStorage.getItem("procedure-section2-body2-description") || 
                                                original_content["procedure-section2"]?.["procedure-section2-body2-description"] || 
-                                               document.getElementById("procedure-section2-body2-description").innerText,
+                                               document.getElementById("procedure-section2-body2-description")?.innerText,
 
         "procedure-section2-body3-title": sessionStorage.getItem("procedure-section2-body3-title") || 
                                          original_content["procedure-section2"]?.["procedure-section2-body3-title"] || 
-                                         document.getElementById("procedure-section2-body3-title").innerText,
+                                         document.getElementById("procedure-section2-body3-title")?.innerText,
         "procedure-section2-body3-description": sessionStorage.getItem("procedure-section2-body3-description") || 
                                                original_content["procedure-section2"]?.["procedure-section2-body3-description"] || 
-                                               document.getElementById("procedure-section2-body3-description").innerText,
+                                               document.getElementById("procedure-section2-body3-description")?.innerText,
 
         "procedure-section2-body4-title": sessionStorage.getItem("procedure-section2-body4-title") || 
                                          original_content["procedure-section2"]?.["procedure-section2-body4-title"] || 
-                                         document.getElementById("procedure-section2-body4-title").innerText,
+                                         document.getElementById("procedure-section2-body4-title")?.innerText,
         "procedure-section2-body4-description": sessionStorage.getItem("procedure-section2-body4-description") || 
                                                original_content["procedure-section2"]?.["procedure-section2-body4-description"] || 
-                                               document.getElementById("procedure-section2-body4-description").innerText
+                                               document.getElementById("procedure-section2-body4-description")?.innerText
       }
     });
 
@@ -440,52 +440,52 @@ window.saveApplyContent = async () => {
     await setDoc(applyDocRef, {
       "contact-tag": sessionStorage.getItem("contact-tag") || 
                     original_content["contact-tag"] || 
-                    document.getElementById("contact-tag").innerText,
+                    document.getElementById("contact-tag")?.innerText,
 
       "contact-session1": {
         "contact-subtitle1": sessionStorage.getItem("contact-subtitle1") || 
                              original_content["contact-session1"]?.["contact-subtitle1"] || 
-                             document.getElementById("contact-subtitle1").innerText,
+                             document.getElementById("contact-subtitle1")?.innerText,
         "contact-description1": sessionStorage.getItem("contact-description1") || 
                                original_content["contact-session1"]?.["contact-description1"] || 
-                               document.getElementById("contact-description1").innerText
+                               document.getElementById("contact-description1")?.innerText
       },
 
       "contact-session2": {
         "contact-subtitle2": sessionStorage.getItem("contact-subtitle2") || 
                              original_content["contact-session2"]?.["contact-subtitle2"] || 
-                             document.getElementById("contact-subtitle2").innerText,
+                             document.getElementById("contact-subtitle2")?.innerText,
         "contact-subtitle2-value1": sessionStorage.getItem("contact-subtitle2-value1") || 
                                     original_content["contact-session2"]?.["contact-subtitle2-value1"] || 
-                                    document.getElementById("contact-subtitle2-value1").innerText,
+                                    document.getElementById("contact-subtitle2-value1")?.innerText,
         "contact-subtitle2-value2": sessionStorage.getItem("contact-subtitle2-value2") || 
                                     original_content["contact-session2"]?.["contact-subtitle2-value2"] || 
-                                    document.getElementById("contact-subtitle2-value2").innerText,
+                                    document.getElementById("contact-subtitle2-value2")?.innerText,
         // 💡 Fixed Bug: The key below was originally overwritten as "contact-subtitle2-value1"
         "contact-subtitle2-value3": sessionStorage.getItem("contact-subtitle2-value3") || 
                                     original_content["contact-session2"]?.["contact-subtitle2-value3"] || 
-                                    document.getElementById("contact-subtitle2-value3").innerText
+                                    document.getElementById("contact-subtitle2-value3")?.innerText
       },
 
       "contact-session3": {
         "contact-subtitle3": sessionStorage.getItem("contact-subtitle3") || 
                              original_content["contact-session3"]?.["contact-subtitle3"] || 
-                             document.getElementById("contact-subtitle3").innerText,
+                             document.getElementById("contact-subtitle3")?.innerText,
         "contact-subtitle3-description": sessionStorage.getItem("contact-subtitle3-description") || 
                                          original_content["contact-session3"]?.["contact-subtitle3-description"] || 
-                                         document.getElementById("contact-subtitle3-description").innerText
+                                         document.getElementById("contact-subtitle3-description")?.innerText
       },
 
       "contact-form": {
         "contact-form-note1": sessionStorage.getItem("contact-form-note1") || 
                               original_content["contact-form"]?.["contact-form-note1"] || 
-                              document.getElementById("contact-form-note1").innerText,
+                              document.getElementById("contact-form-note1")?.innerText,
         "contact-form-note2": sessionStorage.getItem("contact-form-note2") || 
                               original_content["contact-form"]?.["contact-form-note2"] || 
-                              document.getElementById("contact-form-note2").innerText,
+                              document.getElementById("contact-form-note2")?.innerText,
         "contact-form-note3": sessionStorage.getItem("contact-form-note3") || 
                               original_content["contact-form"]?.["contact-form-note3"] || 
-                              document.getElementById("contact-form-note3").innerText
+                              document.getElementById("contact-form-note3")?.innerText
       }
     });
 
@@ -513,35 +513,35 @@ window.saveExpertsContent = async () => {
     await setDoc(expertsDocRef, {
       "experts-tag": sessionStorage.getItem("experts-tag") || 
                      original_content["experts-tag"] || 
-                     document.getElementById("experts-tag").innerText,
+                     document.getElementById("experts-tag")?.innerText,
 
       "experts-tittle": sessionStorage.getItem("experts-tittle") || 
                         original_content["experts-tittle"] || 
-                        document.getElementById("experts-tittle").innerText,
+                        document.getElementById("experts-tittle")?.innerText,
 
       "experts-card-greeting": sessionStorage.getItem("experts-card-greeting") || 
                                original_content["experts-card-greeting"] || 
-                               document.getElementById("experts-card-greeting").innerText,
+                               document.getElementById("experts-card-greeting")?.innerText,
 
       "experts-card-qualification": sessionStorage.getItem("experts-card-qualification") || 
                                     original_content["experts-card-qualification"] || 
-                                    document.getElementById("experts-card-qualification").innerText,
+                                    document.getElementById("experts-card-qualification")?.innerText,
 
       "experts-card-target": sessionStorage.getItem("experts-card-target") || 
                              original_content["experts-card-target"] || 
-                             document.getElementById("experts-card-target").innerText,
+                             document.getElementById("experts-card-target")?.innerText,
 
       "experts-card-fields": sessionStorage.getItem("experts-card-fields") || 
                              original_content["experts-card-fields"] || 
-                             document.getElementById("experts-card-fields").innerText,
+                             document.getElementById("experts-card-fields")?.innerText,
 
       "experts-card-career": sessionStorage.getItem("experts-card-career") || 
                              original_content["experts-card-career"] || 
-                             document.getElementById("experts-card-career").innerText,
+                             document.getElementById("experts-card-career")?.innerText,
 
       "experts-card-education": sessionStorage.getItem("experts-card-education") || 
                                original_content["experts-card-education"] || 
-                               document.getElementById("experts-card-education").innerText
+                               document.getElementById("experts-card-education")?.innerText
     });
 
     console.log("Experts content saved successfully.");
@@ -569,67 +569,67 @@ window.saveLocationContent = async () => {
       "location-main": {
         "location-tag": sessionStorage.getItem("location-tag") || 
                         original_content["location-main"]?.["location-tag"] || 
-                        document.getElementById("location-tag").innerText,
+                        document.getElementById("location-tag")?.innerText,
         "location-title": sessionStorage.getItem("location-title") || 
                           original_content["location-main"]?.["location-title"] || 
-                          document.getElementById("location-title").innerText,
+                          document.getElementById("location-title")?.innerText,
         "location-subtitle1": sessionStorage.getItem("location-subtitle1") || 
                              original_content["location-main"]?.["location-subtitle1"] || 
-                             document.getElementById("location-subtitle1").innerText
+                             document.getElementById("location-subtitle1")?.innerText
       },
 
       "location-session1": {
         "location-card-name-title": sessionStorage.getItem("location-card-name-title") || 
                                     original_content["location-session1"]?.["location-card-name-title"] || 
-                                    document.getElementById("location-card-name-title").innerText,
+                                    document.getElementById("location-card-name-title")?.innerText,
         "location-card-name-body": sessionStorage.getItem("location-card-name-body") || 
                                    original_content["location-session1"]?.["location-card-name-body"] || 
-                                   document.getElementById("location-card-name-body").innerText
+                                   document.getElementById("location-card-name-body")?.innerText
       },
 
       "location-session2": {
         "location-card-address-title": sessionStorage.getItem("location-card-address-title") || 
                                        original_content["location-session2"]?.["location-card-address-title"] || 
-                                       document.getElementById("location-card-address-title").innerText,
+                                       document.getElementById("location-card-address-title")?.innerText,
         "location-card-address-body": sessionStorage.getItem("location-card-address-body") || 
                                       original_content["location-session2"]?.["location-card-address-body"] || 
-                                      document.getElementById("location-card-address-body").innerText
+                                      document.getElementById("location-card-address-body")?.innerText
       },
 
       "location-session3": {
         "location-card-phone-title": sessionStorage.getItem("location-card-phone-title") || 
                                      original_content["location-session3"]?.["location-card-phone-title"] || 
-                                     document.getElementById("location-card-phone-title").innerText,
+                                     document.getElementById("location-card-phone-title")?.innerText,
         "location-card-phone-body": sessionStorage.getItem("location-card-phone-body") || 
                                     original_content["location-session3"]?.["location-card-phone-body"] || 
-                                    document.getElementById("location-card-phone-body").innerText
+                                    document.getElementById("location-card-phone-body")?.innerText
       },
 
       "location-session4": {
         "location-card-email-title": sessionStorage.getItem("location-card-email-title") || 
                                      original_content["location-session4"]?.["location-card-email-title"] || 
-                                     document.getElementById("location-card-email-title").innerText,
+                                     document.getElementById("location-card-email-title")?.innerText,
         "location-card-email-body": sessionStorage.getItem("location-card-email-body") || 
                                     original_content["location-session4"]?.["location-card-email-body"] || 
-                                    document.getElementById("location-card-email-body").innerText
+                                    document.getElementById("location-card-email-body")?.innerText
       },
 
       "location-session5": {
         "location-card-subway-title": sessionStorage.getItem("location-card-subway-title") || 
                                       original_content["location-session5"]?.["location-card-subway-title"] || 
-                                      document.getElementById("location-card-subway-title").innerText,
+                                      document.getElementById("location-card-subway-title")?.innerText,
         "location-card-subway-body": sessionStorage.getItem("location-card-subway-body") || 
                                      original_content["location-session5"]?.["location-card-subway-body"] || 
-                                     document.getElementById("location-card-subway-body").innerText
+                                     document.getElementById("location-card-subway-body")?.innerText
       },
 
       "location-session6": {
         "location-card-bus-title": sessionStorage.getItem("location-card-bus-title") || 
                                    original_content["location-session6"]?.["location-card-bus-title"] || 
-                                   document.getElementById("location-card-bus-title").innerText,
+                                   document.getElementById("location-card-bus-title")?.innerText,
         "location-card-bus-body": sessionStorage.getItem("location-card-bus-body") || 
                                   original_content["location-session6"]?.["location-card-bus-body"] || 
-                                  document.getElementById("location-card-bus-body").innerText
+                                  document.getElementById("location-card-bus-body")?.innerText
       }
     });
 
@@ -658,64 +658,64 @@ window.saveSpecialtiesContent = async () => {
       "fields-main": {
         "fields-tag": sessionStorage.getItem("fields-tag") || 
                       original_content["fields-main"]?.["fields-tag"] || 
-                      document.getElementById("fields-tag").innerText,
+                      document.getElementById("fields-tag")?.innerText,
         "fields-title": sessionStorage.getItem("fields-title") || 
                         original_content["fields-main"]?.["fields-title"] || 
-                        document.getElementById("fields-title").innerText
+                        document.getElementById("fields-title")?.innerText
       },
 
       "fields-session1": {
         "fields-card1-title": sessionStorage.getItem("fields-card1-title") || 
                               original_content["fields-session1"]?.["fields-card1-title"] || 
-                              document.getElementById("fields-card1-title").innerText,
+                              document.getElementById("fields-card1-title")?.innerText,
         "fields-card1-description": sessionStorage.getItem("fields-card1-description") || 
                                     original_content["fields-session1"]?.["fields-card1-description"] || 
-                                    document.getElementById("fields-card1-description").innerText
+                                    document.getElementById("fields-card1-description")?.innerText
       },
 
       "fields-session2": {
         "fields-card2-title": sessionStorage.getItem("fields-card2-title") || 
                               original_content["fields-session2"]?.["fields-card2-title"] || 
-                              document.getElementById("fields-card2-title").innerText,
+                              document.getElementById("fields-card2-title")?.innerText,
         "fields-card2-description": sessionStorage.getItem("fields-card2-description") || 
                                     original_content["fields-session2"]?.["fields-card2-description"] || 
-                                    document.getElementById("fields-card2-description").innerText
+                                    document.getElementById("fields-card2-description")?.innerText
       },
 
       "fields-session3": {
         "fields-card3-title": sessionStorage.getItem("fields-card3-title") || 
                               original_content["fields-session3"]?.["fields-card3-title"] || 
-                              document.getElementById("fields-card3-title").innerText,
+                              document.getElementById("fields-card3-title")?.innerText,
         "fields-card3-description": sessionStorage.getItem("fields-card3-description") || 
                                     original_content["fields-session3"]?.["fields-card3-description"] || 
-                                    document.getElementById("fields-card3-description").innerText
+                                    document.getElementById("fields-card3-description")?.innerText
       },
 
       "fields-session4": {
         "fields-card4-title": sessionStorage.getItem("fields-card4-title") || 
                               original_content["fields-session4"]?.["fields-card4-title"] || 
-                              document.getElementById("fields-card4-title").innerText,
+                              document.getElementById("fields-card4-title")?.innerText,
         "fields-card4-description": sessionStorage.getItem("fields-card4-description") || 
                                     original_content["fields-session4"]?.["fields-card4-description"] || 
-                                    document.getElementById("fields-card4-description").innerText
+                                    document.getElementById("fields-card4-description")?.innerText
       },
 
       "fields-session5": {
         "fields-card5-title": sessionStorage.getItem("fields-card5-title") || 
                               original_content["fields-session5"]?.["fields-card5-title"] || 
-                              document.getElementById("fields-card5-title").innerText,
+                              document.getElementById("fields-card5-title")?.innerText,
         "fields-card5-description": sessionStorage.getItem("fields-card5-description") || 
                                     original_content["fields-session5"]?.["fields-card5-description"] || 
-                                    document.getElementById("fields-card5-description").innerText
+                                    document.getElementById("fields-card5-description")?.innerText
       },
 
       "fields-session6": {
         "fields-card6-title": sessionStorage.getItem("fields-card6-title") || 
                               original_content["fields-session6"]?.["fields-card6-title"] || 
-                              document.getElementById("fields-card6-title").innerText,
+                              document.getElementById("fields-card6-title")?.innerText,
         "fields-card6-description": sessionStorage.getItem("fields-card6-description") || 
                                     original_content["fields-session6"]?.["fields-card6-description"] || 
-                                    document.getElementById("fields-card6-description").innerText
+                                    document.getElementById("fields-card6-description")?.innerText
       }
     });
 
@@ -729,6 +729,12 @@ window.saveSpecialtiesContent = async () => {
 
 
 // 3. set / upate logic 구현 
+// [수정 로직]
+// 1) active / non-active 판별  | 페이지별로 active한 상황에서만 ID를 찾을 수 있음; 
+// 2) active 상황: save 기존 함수 활용 / non-active 상황 : skip 
+// 3) 수정한 페이지에서 저장 버튼 클릭하도록 유도; (alert 알림, 저장 클릭 없이 이동할 경우 수정 데이터 손실 경고) 
+
+
 // 4. UI 반영 수정 
 
 
@@ -737,13 +743,13 @@ window.saveAll = async () => {
   if (!adminBar || !adminBar.classList.contains('on')) return;
 
   try {
-    await saveHome();
+    // await saveHome();
     await saveCenter();
-    await saveProcedure();
-    await saveApplyContent();
-    await saveExpertsContent();
-    await saveLocationContent();
-    await saveSpecialtiesContent();
+    // await saveProcedure();
+    // await saveApplyContent();
+    // await saveExpertsContent();
+    // await saveLocationContent();
+    // await saveSpecialtiesContent();
 
     const newData = {};
     // Collect all editable fields except those inside the expert grid
@@ -751,7 +757,7 @@ window.saveAll = async () => {
       if (el.closest('#expert-dynamic-grid')) return; // Skip experts (they auto-save)
       
       if (el.tagName === 'IMG') newData[el.id] = el.src;
-      else newData[el.id] = el.innerText;
+      else newData[el.id] = el?.innerText;
     });
 
     await setDoc(doc(db, 'site', 'content'), newData);
@@ -826,7 +832,7 @@ onAuthStateChanged(auth, (user) => {
    function save_Editable_Contents(editor, storageKey){
       if(!editor) return;
       editor.addEventListener('input', ()=>{
-          const content = editor.innerText;
+          const content = editor?.innerText;
           sessionStorage.setItem(storageKey, content);
           console.log(`저장된 ${storageKey}:`, content);
       });
@@ -1028,10 +1034,10 @@ onAuthStateChanged(auth, (user) => {
                 ${isEdit ? '<div class="img-edit-overlay">변경</div>' : ''}
               </div>
               <div class="exp-info">
-                <div class="exp-name" ${isEdit ? `contenteditable="true" onblur="updateExp('${id}', 'name', this.innerText)"` : ''}>
+                <div class="exp-name" ${isEdit ? `contenteditable="true" onblur="updateExp('${id}', 'name', this?.innerText)"` : ''}>
                   ${data.name}
                 </div>
-                <div class="exp-bio" ${isEdit ? `contenteditable="true" onblur="updateExp('${id}', 'bio', this.innerText)"` : ''}>
+                <div class="exp-bio" ${isEdit ? `contenteditable="true" onblur="updateExp('${id}', 'bio', this?.innerText)"` : ''}>
                   ${data.bio}
                 </div>
                 ${isEdit ? `<button onclick="deleteExp('${id}')" class="delete-btn">삭제</button>` : ''}
@@ -1096,11 +1102,11 @@ function initExpertListener() {
           </div>
           <div class="exp-info">
             <div class="exp-name"
-              ${isEdit ? `contenteditable="true" onblur="updateExp('${id}', 'name', this.innerText)"` : ''}>
+              ${isEdit ? `contenteditable="true" onblur="updateExp('${id}', 'name', this?.innerText)"` : ''}>
               ${data.name}
             </div>
             <div class="exp-bio"
-              ${isEdit ? `contenteditable="true" onblur="updateExp('${id}', 'bio', this.innerText)"` : ''}>
+              ${isEdit ? `contenteditable="true" onblur="updateExp('${id}', 'bio', this?.innerText)"` : ''}>
               ${data.bio}
             </div>
             ${isEdit ? `
