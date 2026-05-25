@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Sans+KR:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
 <link rel="stylesheet"  href="../style.css">
+
 <style>
 .mgr-wrap {
   min-height: 100vh;
@@ -62,19 +63,18 @@
     </div>
     <div class="fg">
       <label for="m-pw">비밀번호</label>
-      <input type="password" id="m-pw" placeholder="비밀번호" autocomplete="current-password"
-        onkeydown="if(event.key==='Enter') doLogin()">
+      <input type="password" id="m-pw" placeholder="비밀번호" autocomplete="current-password">
     </div>
     <p class="mgr-err" id="m-err">아이디 또는 비밀번호가 올바르지 않습니다.</p>
 
-    <button class="btn-solid" style="width:100%; margin-top:8px;" onclick="doLogin()">로그인</button>
+    <button class="btn-solid" style="width:100%; margin-top:8px;" id="btn-login">로그인</button>
     <a href="../index.html" class="mgr-back">← 사이트로 돌아가기</a>
   </div>
 </div>
 
 <div id="toast"></div>
+<script type="module" src="../main.js" defer></script>
 
 <!-- HEAD에 추가 -->
-<script type="module" src="../main.js" defer></script>
 </body>
 </html>

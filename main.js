@@ -96,7 +96,7 @@ async function applyDataToUI(data) {
     const el = document.getElementById(key);
     if (el) {
       if (el.tagName === 'IMG') el.src = data[key];
-      else el?.innerText = data[key];
+      else el.innerText = data[key];
     }
   }
 
@@ -198,57 +198,57 @@ window.saveHome = async () => {
       "home-session1": {
         "home-session1-tag": sessionStorage.getItem("home-session1-tag") || 
                              original_content["home-session1"]?.["home-session1-tag"] || 
-                             document.getElementById("home-session1-tag")?.innerText, 
+                             document.getElementById("home-session1-tag")?.innerText || "", 
         "home-session1-title": sessionStorage.getItem("home-session1-title") || 
                                original_content["home-session1"]?.["home-session1-title"] || 
-                               document.getElementById("home-session1-title")?.innerText, 
+                               document.getElementById("home-session1-title")?.innerText || "", 
         "home-session1-sub": sessionStorage.getItem("home-session1-sub") || 
                              original_content["home-session1"]?.["home-session1-sub"] || 
-                             document.getElementById("home-session1-sub")?.innerText
+                             document.getElementById("home-session1-sub")?.innerText || ""
       }, 
       "home-session2": {
         "home-session2-tag": sessionStorage.getItem("home-session2-tag") || 
                              original_content["home-session2"]?.["home-session2-tag"] || 
-                             document.getElementById("home-session2-tag")?.innerText, 
+                             document.getElementById("home-session2-tag")?.innerText || "", 
         "home-session2-title": sessionStorage.getItem("home-session2-title") || 
                                original_content["home-session2"]?.["home-session2-title"] || 
-                               document.getElementById("home-session2-title")?.innerText, 
+                               document.getElementById("home-session2-title")?.innerText || "", 
         "home-session2-sub": sessionStorage.getItem("home-session2-sub") || 
                              original_content["home-session2"]?.["home-session2-sub"] || 
-                             document.getElementById("home-session2-sub")?.innerText
+                             document.getElementById("home-session2-sub")?.innerText || ""
       }, 
       "home-session3": {
         "home-session3-tag": sessionStorage.getItem("home-session3-tag") || 
                              original_content["home-session3"]?.["home-session3-tag"] || 
-                             document.getElementById("home-session3-tag")?.innerText, 
+                             document.getElementById("home-session3-tag")?.innerText || "", 
         "home-session3-title": sessionStorage.getItem("home-session3-title") || 
                                original_content["home-session3"]?.["home-session3-title"] || 
-                               document.getElementById("home-session3-title")?.innerText, 
+                               document.getElementById("home-session3-title")?.innerText || "", 
         "home-session3-sub": sessionStorage.getItem("home-session3-sub") || 
                              original_content["home-session3"]?.["home-session3-sub"] || 
-                             document.getElementById("home-session3-sub")?.innerText
+                             document.getElementById("home-session3-sub")?.innerText || ""
       },  
       "home-session4": {
         "home-session4-tag": sessionStorage.getItem("home-session4-tag") || 
                              original_content["home-session4"]?.["home-session4-tag"] || 
-                             document.getElementById("home-session4-tag")?.innerText, 
+                             document.getElementById("home-session4-tag")?.innerText || "", 
         "home-session4-title": sessionStorage.getItem("home-session4-title") || 
                                original_content["home-session4"]?.["home-session4-title"] || 
-                               document.getElementById("home-session4-title")?.innerText, 
+                               document.getElementById("home-session4-title")?.innerText || "", 
         "home-session4-sub": sessionStorage.getItem("home-session4-sub") || 
                              original_content["home-session4"]?.["home-session4-sub"] || 
-                             document.getElementById("home-session4-sub")?.innerText
+                             document.getElementById("home-session4-sub")?.innerText || ""
       }, 
       "home-session5": {
         "home-session5-tag": sessionStorage.getItem("home-session5-tag") || 
                              original_content["home-session5"]?.["home-session5-tag"] || 
-                             document.getElementById("home-session5-tag")?.innerText, 
+                             document.getElementById("home-session5-tag")?.innerText || "", 
         "home-session5-title": sessionStorage.getItem("home-session5-title") || 
                                original_content["home-session5"]?.["home-session5-title"] || 
-                               document.getElementById("home-session5-title")?.innerText, 
+                               document.getElementById("home-session5-title")?.innerText || "", 
         "home-session5-sub": sessionStorage.getItem("home-session5-sub") || 
                              original_content["home-session5"]?.["home-session5-sub"] || 
-                             document.getElementById("home-session5-sub")?.innerText
+                             document.getElementById("home-session5-sub")?.innerText || ""
       }               
     });
   } catch (error) {
@@ -515,9 +515,9 @@ window.saveExpertsContent = async () => {
                      original_content["experts-tag"] || 
                      document.getElementById("experts-tag")?.innerText,
 
-      "experts-tittle": sessionStorage.getItem("experts-tittle") || 
-                        original_content["experts-tittle"] || 
-                        document.getElementById("experts-tittle")?.innerText,
+      "experts-title": sessionStorage.getItem("experts-title") || 
+                        original_content["experts-title"] || 
+                        document.getElementById("experts-title")?.innerText,
 
       "experts-card-greeting": sessionStorage.getItem("experts-card-greeting") || 
                                original_content["experts-card-greeting"] || 
@@ -734,6 +734,60 @@ window.saveSpecialtiesContent = async () => {
 // 2) active 상황: save 기존 함수 활용 / non-active 상황 : skip 
 // 3) 수정한 페이지에서 저장 버튼 클릭하도록 유도; (alert 알림, 저장 클릭 없이 이동할 경우 수정 데이터 손실 경고) 
 
+// IDEA ; switch 함수 활용
+window.checkCurrentPage = function() {
+  const url = window.location.href;
+  if (url.includes("index.html")) return "home";
+  else if (url.includes("apply.html")) return "apply";
+  else if (url.includes("center_into.html")) return "center";
+  else if (url.includes("procedure.html")) return "procedure";
+  else if (url.includes("experts.html")) return "experts";
+  else if (url.includes("location.html")) return "location";
+  else if (url.includes("specialties.html")) return "specialties";
+  else return null;
+};
+
+window.setUnsavedChanges = function() {
+  const savedbtn = document.getElementById('savedbtn');
+  sessionStorage.setItem("unsavedChanges", "true");
+}
+
+window.listenSaveButton = function() {
+  const savedbtn = document.getElementById('savedbtn');
+  if (savedbtn) {
+    savedbtn.addEventListener('click', () => {
+      sessionStorage.setItem("unsavedChanges", "false");
+    });
+  }
+};
+
+window.alertUnsavedChanges = function() {
+  if (sessionStorage.getItem("unsavedChanges") === "true") {
+    return confirm("저장버튼을 누르지 않으면 변경 사항은 저장되지 않습니다. 페이지를 이동하시겠습니까?");
+  }
+  else {
+    return alert("정상적으로 저장되었습니다.");
+  }
+}; 
+
+window.activePageSaveHandler = async function() {
+  let currentPage = window.checkCurrentPage();
+  window.setUnsavedChanges(); 
+
+  switch (currentPage) {
+    case "home": await saveHome(); break;
+    case "apply": await saveApplyContent(); break;
+    case "center": await saveCenter(); break;
+    case "procedure": await saveProcedure(); break;
+    case "experts": await saveExpertsContent(); break;
+    case "location": await saveLocationContent(); break;
+    case "specialties": await saveSpecialtiesContent(); break;
+  }
+
+  window.listenSaveButton();
+  window.alertUnsavedChanges(); 
+  
+};
 
 // 4. UI 반영 수정 
 
@@ -743,24 +797,18 @@ window.saveAll = async () => {
   if (!adminBar || !adminBar.classList.contains('on')) return;
 
   try {
-    // await saveHome();
-    await saveCenter();
-    // await saveProcedure();
-    // await saveApplyContent();
-    // await saveExpertsContent();
-    // await saveLocationContent();
-    // await saveSpecialtiesContent();
+    await activePageSaveHandler(); 
 
-    const newData = {};
-    // Collect all editable fields except those inside the expert grid
-    document.querySelectorAll('[id^="e-"], [id^="img-"]').forEach(el => {
-      if (el.closest('#expert-dynamic-grid')) return; // Skip experts (they auto-save)
+    // const newData = {};
+    // // Collect all editable fields except those inside the expert grid
+    // document.querySelectorAll('[id^="e-"], [id^="img-"]').forEach(el => {
+    //   if (el.closest('#expert-dynamic-grid')) return; // Skip experts (they auto-save)
       
-      if (el.tagName === 'IMG') newData[el.id] = el.src;
-      else newData[el.id] = el?.innerText;
-    });
+    //   if (el.tagName === 'IMG') newData[el.id] = el.src;
+    //   else newData[el.id] = el?.innerText;
+    // });
 
-    await setDoc(doc(db, 'site', 'content'), newData);
+    // await setDoc(doc(db, 'site', 'content'), newData);
 
     showToast("사이트 설정이 저장되었습니다. (전문가 정보는 실시간 저장됨)");
   } catch (e) {
@@ -883,7 +931,7 @@ onAuthStateChanged(auth, (user) => {
   }
 
   function show_statechange_experts(){
-      const expert_sections = ['experts-tag', 'experts-tittle', 
+      const expert_sections = ['experts-tag', 'experts-title', 
         'experts-card-greeting', 'experts-card-qualification',
         'experts-card-target', 'experts-card-fields',
         'experts-card-career', 'experts-card-education'
@@ -932,11 +980,11 @@ onAuthStateChanged(auth, (user) => {
 
   function show_statechange_center(){
     const center_contents = [ 'center-tag',
-                              'center-tittle1', 'center-body1',
-                              'center-tittle2_1', 'center-body2_1',
-                              'center-tittle2_2', 'center-body2_2',
-                              'center-tittle2_3', 'center-body2_3',
-                              'center-tittle2_4', 'center-body2_4']; 
+                              'center-title1', 'center-body1',
+                              'center-title2_1', 'center-body2_1',
+                              'center-title2_2', 'center-body2_2',
+                              'center-title2_3', 'center-body2_3',
+                              'center-title2_4', 'center-body2_4']; 
     const editable = state_isEditable();
       center_contents.forEach((content) => { 
         let content_el = document.getElementById(content);
@@ -991,27 +1039,48 @@ onAuthStateChanged(auth, (user) => {
     document.querySelectorAll('.sr').forEach(el => io.observe(el));
   }
 
-    window.doLogin = async function() {
-      const emailEl = document.getElementById('m-id');
-      const pwEl = document.getElementById('m-pw');
-      const errEl = document.getElementById('m-err');
-  
-      if (!emailEl || !pwEl) return;
-  
-      const email = emailEl.value.trim();
-      const pw = pwEl.value;
-  
-      try {
-        await signInWithEmailAndPassword(auth, email, pw);
-        showToast('✓ 로그인 되었습니다.', 'ok');
-        setTimeout(() => { window.location.href = '../index.html'; }, 1000);
-      } catch(e) {
-        err.style.display = 'block';
-        document.getElementById('m-pw').value = '';
-        console.error("로그인 에러:", e);
-      }
-    };
+ 
+  // 1. 로그인 핵심 로직 함수 정의
+  async function doLogin() {
+    const emailEl = document.getElementById('m-id');
+    const pwEl = document.getElementById('m-pw');
+    const errEl = document.getElementById('m-err'); // 정상적으로 가져옴
 
+    if (!emailEl || !pwEl || !errEl) return;
+
+    const email = emailEl.value.trim();
+    const pw = pwEl.value;
+
+    try {
+      await signInWithEmailAndPassword(auth, email, pw);
+      showToast('✓ 로그인 되었습니다.', 'ok');
+      setTimeout(() => { window.location.href = '../index.html'; }, 1000);
+    } catch(e) {
+      errEl.style.display = 'block'; // 기존 'err.style'에서 'errEl.style'로 수정 (오타 방지)
+      pwEl.value = '';
+      console.error("로그인 에러:", e);
+    }
+  }
+
+  // 2. HTML 문서가 완전히 로드된 후 이벤트 리스너 연결
+  document.addEventListener('DOMContentLoaded', () => {
+    const loginBtn = document.getElementById('btn-login');
+    const pwInput = document.getElementById('m-pw');
+
+    // 로그인 버튼 클릭 시 실행
+    if (loginBtn) {
+      loginBtn.addEventListener('click', doLogin);
+    }
+
+    // 비밀번호 창에서 엔터키 입력 시 실행
+    if (pwInput) {
+      pwInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+          doLogin();
+        }
+      });
+    }
+  });
     // experts.html 
     // I've separated this so it can be called whenever auth state changes
     async function renderExpertGrid() {
