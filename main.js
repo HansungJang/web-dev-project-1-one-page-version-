@@ -737,13 +737,14 @@ window.saveSpecialtiesContent = async () => {
 // IDEA ; switch 함수 활용
 window.checkCurrentPage = function() {
   const url = window.location.href;
-  if (url.includes("index.html")) return "home";
-  else if (url.includes("apply.html")) return "apply";
-  else if (url.includes("center_into.html")) return "center";
-  else if (url.includes("procedure.html")) return "procedure";
-  else if (url.includes("experts.html")) return "experts";
-  else if (url.includes("location.html")) return "location";
-  else if (url.includes("specialties.html")) return "specialties";
+  console.log("현재 URL:", url); // Debugging log to verify URL structure
+  if (url.includes("index")) return "home";
+  else if (url.includes("apply")) return "apply";
+  else if (url.includes("center_into")) return "center";
+  else if (url.includes("procedure")) return "procedure";
+  else if (url.includes("experts")) return "experts";
+  else if (url.includes("location")) return "location";
+  else if (url.includes("specialties")) return "specialties";
   else return null;
 };
 
@@ -757,6 +758,7 @@ window.listenSaveButton = function() {
   if (savedbtn) {
     savedbtn.addEventListener('click', () => {
       sessionStorage.setItem("unsavedChanges", "false");
+      alert("저장되었습니다."); // 저장 알림
     });
   }
 };
@@ -765,59 +767,149 @@ window.alertUnsavedChanges = function() {
   if (sessionStorage.getItem("unsavedChanges") === "true") {
     return confirm("저장버튼을 누르지 않으면 변경 사항은 저장되지 않습니다. 페이지를 이동하시겠습니까?");
   }
-  else {
-    return alert("정상적으로 저장되었습니다.");
-  }
+  return true; // No unsaved changes, allow navigation
 }; 
 
+// window.activePageSaveHandler = async function() 
+// { // DOMContent Loaded 이후에 실행되어야 함 (저장 버튼 클릭 시점)
+//   let currentPage = window.checkCurrentPage();
+//   switch (currentPage) {
+//     case "home": await saveHome(); break;
+//     case "apply": await saveApplyContent(); break;
+//     case "center": await saveCenter(); break;
+//     case "procedure": await saveProcedure(); break;
+//     case "experts": await saveExpertsContent(); break;
+//     case "location": await saveLocationContent(); break;
+//     case "specialties": await saveSpecialtiesContent(); break;
+//   }
+
+// };
+
+
+// // 4. UI 반영 수정 
+
+
+// window.saveAll = async () => {
+//   const adminBar = document.getElementById('admin-bar');
+//   if (!adminBar || !adminBar.classList.contains('on')) return;
+
+//   try {
+//     // window.setUnsavedChanges(); 
+//     // // window.listenSaveButton(); // userEffect처럼 저장 버튼 클릭 리스너 등록 (저장 후 unsavedChanges 플래그 초기화)
+//     // await activePageSaveHandler(); 
+//     // window.alertUnsavedChanges();   
+ 
+//     // const newData = {};
+//     // // Collect all editable fields except those inside the expert grid
+//     // document.querySelectorAll('[id^="e-"], [id^="img-"]').forEach(el => {
+//     //   if (el.closest('#expert-dynamic-grid')) return; // Skip experts (they auto-save)
+      
+//     //   if (el.tagName === 'IMG') newData[el.id] = el.src;
+//     //   else newData[el.id] = el?.innerText;
+//     // });
+
+//     // await setDoc(doc(db, 'site', 'content'), newData);
+
+//     showToast("사이트 설정이 저장되었습니다. (전문가 정보는 실시간 저장됨)");
+//   } catch (e) {
+//     console.error("Save Error:", e);
+//     showToast("저장 중 오류가 발생했습니다.", "err");
+//   }
+// };
+
+// 1. 기존의 페이지별 체크 및 저장 핸들러
+// window.activePageSaveHandler = async function() {
+//   let currentPage = window.checkCurrentPage();
+//   switch (currentPage) {
+//     case "home": await saveHome(); break;
+//     case "apply": await saveApplyContent(); break;
+//     case "center": await saveCenter(); break;
+//     case "procedure": await saveProcedure(); break;
+//     case "experts": await saveExpertsContent(); break;
+//     case "location": await saveLocationContent(); break;
+//     case "specialties": await saveSpecialtiesContent(); break;
+//   }
+// };
+
+// 1. 현재 활성화된 페이지의 저장 함수만 안전하게 호출하는 핸들러
 window.activePageSaveHandler = async function() {
   let currentPage = window.checkCurrentPage();
-  window.setUnsavedChanges(); 
-
-  switch (currentPage) {
-    case "home": await saveHome(); break;
-    case "apply": await saveApplyContent(); break;
-    case "center": await saveCenter(); break;
-    case "procedure": await saveProcedure(); break;
-    case "experts": await saveExpertsContent(); break;
-    case "location": await saveLocationContent(); break;
-    case "specialties": await saveSpecialtiesContent(); break;
-  }
-
-  window.listenSaveButton();
-  window.alertUnsavedChanges(); 
+  console.log("현재 감지된 페이지:", currentPage);
   
-};
-
-// 4. UI 반영 수정 
-
-
-window.saveAll = async () => {
-  const adminBar = document.getElementById('admin-bar');
-  if (!adminBar || !adminBar.classList.contains('on')) return;
+  if (!currentPage) {
+    console.warn("현재 페이지를 감지할 수 없어 저장을 스킵합니다.");
+    return false;
+  }
 
   try {
-    await activePageSaveHandler(); 
+    switch (currentPage) {
+      case "home": await saveHome(); break;
+      case "apply": await saveApplyContent(); break;
+      case "center": await saveCenter(); break;
+      case "procedure": await saveProcedure(); break;
+      case "experts": await saveExpertsContent(); break;
+      case "location": await saveLocationContent(); break;
+      case "specialties": await saveSpecialtiesContent(); break;
+      default: return false;
+    }
+    return true; // 성공적으로 매핑되어 저장이 완료됨
+  } catch (error) {
+    console.error(`${currentPage} 저장 중 치명적 에러 발생:`, error);
+    throw error; // 상위 saveAll로 에러 전달
+  }
+};
 
-    // const newData = {};
-    // // Collect all editable fields except those inside the expert grid
-    // document.querySelectorAll('[id^="e-"], [id^="img-"]').forEach(el => {
-    //   if (el.closest('#expert-dynamic-grid')) return; // Skip experts (they auto-save)
-      
-    //   if (el.tagName === 'IMG') newData[el.id] = el.src;
-    //   else newData[el.id] = el?.innerText;
-    // });
+// 2. 통합 저장 함수 수정
 
-    // await setDoc(doc(db, 'site', 'content'), newData);
+// window.saveAll = async function() {
+//   console.log("저장 프로세스 시작...");
+  
+//   // DOM이 이미 로드된 상태에서 안전하게 현재 페이지를 체크하고 저장 진행
+//   await window.activePageSaveHandler();
+  
+//   console.log("저장 프로세스 완료!");
+// };
 
-    showToast("사이트 설정이 저장되었습니다. (전문가 정보는 실시간 저장됨)");
+
+window.saveAll = async function() {
+  const adminBar = document.getElementById('admin-bar');
+  // 관리자 모드가 꺼져 있다면 실행 방지
+  if (!adminBar || !adminBar.classList.contains('on')) {
+    showToast("관리자 권한이 없거나 편집 모드가 아닙니다.", "err");
+    return;
+  }
+
+  try {
+    console.log("저장 프로세스 시작...");
+    showToast("데이터를 저장 중입니다...");
+    
+    // 현재 활성 페이지 저장 로직 호출
+    const success = await window.activePageSaveHandler();
+    
+    if (success) {
+      showToast("✓ 현재 페이지 설정이 성공적으로 저장되었습니다.", "ok");
+      console.log("저장 프로세스 완료!");
+      // 저장 성공 후 변경사항 플래그 초기화
+      sessionStorage.setItem("unsavedChanges", "false");
+    } else {
+      showToast("저장할 페이지를 찾지 못했습니다.", "err");
+    }
   } catch (e) {
-    console.error("Save Error:", e);
-    showToast("저장 중 오류가 발생했습니다.", "err");
+    console.error("Save All 전역 에러:", e);
+    showToast("저장 중 오류가 발생했습니다. 콘솔을 확인하세요.", "err");
   }
 };
 
 
+
+
+// 3. DOM이 로드되면 HTML 저장 버튼에 saveAll 함수를 연결
+document.addEventListener('DOMContentLoaded', () => {
+  const saveBtn = document.getElementById('my-save-button'); // 실제 버튼 ID
+  if (saveBtn) {
+    saveBtn.addEventListener('click', window.saveAll);
+  }
+});
 
 // 관리자 로그아웃
 // index.html 내 window.logout 수정
