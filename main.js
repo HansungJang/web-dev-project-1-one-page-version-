@@ -618,9 +618,12 @@ window.saveLocationContent = async () => {
         "location-card-subway-title": sessionStorage.getItem("location-card-subway-title") || 
                                       original_content["location-session5"]?.["location-card-subway-title"] || 
                                       document.getElementById("location-card-subway-title")?.innerText,
-        "location-card-subway-body": sessionStorage.getItem("location-card-subway-body") || 
-                                     original_content["location-session5"]?.["location-card-subway-body"] || 
-                                     document.getElementById("location-card-subway-body")?.innerText
+        "location-card-subway-body1": sessionStorage.getItem("location-card-subway-body1") || 
+                                      original_content["location-session5"]?.["location-card-subway-body1"] || 
+                                      document.getElementById("location-card-subway-body1")?.innerText, 
+        "location-card-subway-body2": sessionStorage.getItem("location-card-subway-body2") || 
+                                      original_content["location-session5"]?.["location-card-subway-body2"] || 
+                                      document.getElementById("location-card-subway-body2")?.innerText,                                 
       },
 
       "location-session6": {
@@ -738,6 +741,11 @@ window.saveSpecialtiesContent = async () => {
 window.checkCurrentPage = function() {
   const url = window.location.href;
   console.log("현재 URL:", url); // Debugging log to verify URL structure
+  
+  // URL에서 파일명만 정확하게 추출 (예: /pages/center_into.html -> center_into)
+  const pageName = url.split("/").pop().replace(".html", "").trim();
+  console.log("추출된 페이지 이름:", pageName); // Debugging log to verify page name extraction
+
   if (url.includes("index")) return "home";
   else if (url.includes("apply")) return "apply";
   else if (url.includes("center_into")) return "center";
@@ -745,6 +753,7 @@ window.checkCurrentPage = function() {
   else if (url.includes("experts")) return "experts";
   else if (url.includes("location")) return "location";
   else if (url.includes("specialties")) return "specialties";
+  else if(pageName === "") return "home"; // URL이 루트이거나 파일명이 없는 경우 홈으로 간주
   else return null;
 };
 
@@ -834,6 +843,7 @@ window.alertUnsavedChanges = function() {
 // 1. 현재 활성화된 페이지의 저장 함수만 안전하게 호출하는 핸들러
 window.activePageSaveHandler = async function() {
   let currentPage = window.checkCurrentPage();
+
   console.log("현재 감지된 페이지:", currentPage);
   
   if (!currentPage) {
