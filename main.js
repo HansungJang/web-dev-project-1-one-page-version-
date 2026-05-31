@@ -104,6 +104,71 @@ async function applyDataToUI(data) {
   initExpertListener();
 }
 
+// 전체 페이지 Update UI
+// [추가] Firestore 데이터를 불러와 현재 활성화된 페이지 UI에 뿌려주는 핵심 함수
+window.updateUI = async function() {
+  const currentPage = window.checkCurrentPage();
+  console.log(`[updateUI] 현재 페이지(${currentPage})의 데이터를 Firestore에서 불러옵니다.`);
+
+  if (!currentPage) {
+    console.warn("[updateUI] 활성화된 페이지를 감지할 수 없어 UI 업데이트를 스킵합니다.");
+    return;
+  }
+
+  try {
+    let data = null;
+
+    // 1. 현재 페이지에 맞는 비동기 getter 함수 호출
+    switch (currentPage) {
+      case "home":        data = await window.getHomeContent(); break;
+      case "apply":       data = await window.getApplyContent(); break;
+      case "center":      data = await window.getCenterContent(); break;
+      case "procedure":   data = await window.getProcedureContent(); break;
+      case "experts":     data = await window.getExpertsContent(); break;
+      case "location":    data = await window.getLocationContent(); break;
+      case "specialties": data = await window.getSpecialtiesContent(); break;
+    }
+
+    if (!data) {
+      console.log(`[updateUI] ${currentPage} 페이지에 대한 저장된 데이터가 DB에 없습니다.`);
+      return;
+    }
+
+    // 2. 읽어온 객체 데이터를 순회하며 UI 매핑 시작
+    // Firestore 구조가 단층(Flat) 구조이든, 중첩(Nested) 구조이든 모두 대응하도록 재귀 함수 처리
+    mapDataToElements(data);
+
+    console.log(`[updateUI] ${currentPage} 페이지 UI 업데이트 완료.`);
+  } catch (error) {
+    console.error("[updateUI] 실행 중 오류 발생:", error);
+  }
+};
+
+// 헬퍼 함수: 객체의 depth에 상관없이 ID를 찾아 텍스트/이미지를 주입하는 재귀 로직
+function mapDataToElements(obj) {
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      const value = obj[key];
+
+      // 만약 값이 또 다른 서브 객체(중첩 구조)라면 한 번 더 파고듭니다. (예: home-session1 내부 데이터들)
+      if (typeof value === 'object' && value !== null) {
+        mapDataToElements(value);
+      } else {
+        // 값이 문자열/숫자일 때 HTML에서 해당 ID를 가진 엘리먼트 검색
+        const el = document.getElementById(key);
+        if (el) {
+          if (el.tagName === 'IMG') {
+            el.src = value || '';
+          } else {
+            el.innerText = value || '';
+          }
+        }
+      }
+    }
+  }
+}
+
+
 // [중요] 관리자 저장 함수 (전역 window 객체에 등록)
 // main.js
 
@@ -941,6 +1006,7 @@ window.logout = async () => {
 // 실행 흐름 부분 수정
 window.addEventListener('DOMContentLoaded', () => {
   // loadData(); (for test)
+  window.updateUI(); 
   initScrollReveal();
 
   // 인증 상태 감시
