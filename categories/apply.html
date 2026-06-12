@@ -131,6 +131,8 @@
 <div id="toast"></div>
 
 <script>
+ const makeWebhookURL = 'https://hook.us2.make.com/rfffdktk7dhx7wdnvljvf8n2nh69nsqe'; 
+
  function submitForm(event) {
     event.preventDefault(); // 폼 새로고침 방지
 
@@ -160,6 +162,18 @@
         .then(res => res.json())
         .then(data => alert("성공적으로 전송되었습니다."))
         .catch(err => alert("전송 실패"));
+
+    // 4. Make.com Webhook 전송
+    fetch(makeWebhookURL, {
+            method: 'POST',
+            mode: 'cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(templateParams)
+        })
+        .then(res =>{if(res.ok){ return res.text();} 
+              throw new Error('네트워크 응답이 올바르지 않음.');})
+        .then(data => {console.log("Make 응답데이터:", data); alert("Make.com Webhook 전송 성공");})
+        .catch(err => {console.error("Make.com Webhook 전송 실패:", err); alert("Make.com Webhook 전송 실패");});
 }
 </script>>
 </body>
