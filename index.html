@@ -7,7 +7,82 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        /* 메인 페이지 전용 추가 스타일 */
+        /* 부모 컨테이너: absolute 정렬용이 아닌, 흐름을 정렬하는 용도 */
+.hero-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    position: relative; /* 메인 배경용 기준점은 유지 */
+}
+
+/* 배경 이미지: 화면 너비에 맞춰 100% 유연하게 변형 */
+.hero-main-bg {
+    width: 100%;
+    height: 36vw;
+    object-fit: cover;
+    opacity: 0.4;
+    z-index: -1;
+    display: block;
+}
+
+/* 📍 최선의 퀵메뉴 설정: 음수 마진 활용 */
+.quick-menu {
+    /* absolute를 제거하고 문서 흐름에 편입시킵니다. */
+    position: relative; 
+    
+    /* 자신의 높이 절반 혹은 일정 크기만큼 위로 강제 인장시킵니다.
+       이러면 이미지 높이가 늘어나든 줄어들든 무조건 이미지 하단에 고정됩니다.
+    */
+    margin-top: -60px; 
+    
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--c-white);
+    color: var(--c-sage);
+    box-shadow: var(--shadow-md);
+    width: 90%;
+    max-width: 1000px;
+    z-index: 10;
+}
+
+.quick-item {
+    padding: 30px 10px;
+    background: var(--c-ivory);
+    transition: var(--t);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+}
+
+.quick-item:hover {
+    background: var(--c-sage);
+    color: var(--c-white);
+}
+
+
+/* 📱 모바일 영역: 완벽한 대응 */
+@media (max-width: 800px) {
+    .quick-menu { 
+        grid-template-columns: repeat(2, 1fr); 
+        width: 85%;
+        /* 모바일에서는 2줄이 되므로 위로 올리는 공백을 조금 더 확보 */
+        margin-top: -20px; 
+    }
+    
+    .main-section { 
+        /* 퀵메뉴가 아래 섹션을 침범하지 않고 밀어내므로 
+           상단 패딩을 하드코딩으로 크게 잡을 필요가 없어집니다.
+        */
+        padding-top: 60px; 
+    }
+}
+
+
+        /* 메인 페이지 전용 추가 스타일
         .hero {
             position: relative;
             height: 84vh;
@@ -41,7 +116,7 @@
             opacity: 0.9;
         }
 
-        /* Floating Quick Menu */
+        Floating Quick Menu 
         .quick-menu {
             position: absolute;
             bottom: 300px;
@@ -79,7 +154,7 @@
             letter-spacing: 0.05em;
         }
 
-        /* Section Spacing */
+        Section Spacing 
         .main-section {
             padding: 120px 0 60px;
         }
@@ -90,12 +165,12 @@
             gap: 100px;
         }
 
-        @media (max-width: 760px) {
+        @media (max-width: 800px) {
             .hero-main-bg { height: 74vw; margin-top: 18vw; }
             .quick-menu { grid-template-columns: repeat(2, 1fr); bottom: 448px; width:80%;}
             .main-section { padding-top: 160px;}
             #sr-card-s1 { margin-top: 180px; }
-        }
+        } */
     </style>
 
 <header basic-components="components/header.html"></header>

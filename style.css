@@ -165,7 +165,7 @@ nav.stuck {
 }
 
 .nav-logo {
-  height: 68px;
+  height: 72px;
   width : auto;
   object-fit: contain;
 }
@@ -253,7 +253,7 @@ transition: transform 0.3s ease, opacity 0.3s ease;
    SHARED UTILITIES
 ══════════════════════════════════════════ */
 .wrap { max-width: 1340px; margin: 30vw auto; padding: 0 6vw;  }
-.wrap.main-section{ max-width: 1340px; margin-top: 34vw; margin-bottom: 0; padding: 0 6vw;  }
+.wrap.main-section{ max-width: 1340px; margin-top: 4vw; margin-bottom: 4vw; padding: 0 6vw;  }
 .sec-tag {
   display: inline-flex; align-items: center; gap: 10px;
   font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
@@ -403,8 +403,8 @@ transition: transform 0.3s ease, opacity 0.3s ease;
     .program-track .field-card { flex: 0 0 240px; }
     .sr-card.s1 {margin-top: 100px;}
     .wrap.main-section{ max-width: 1340px;
-    margin-top: 48vw;
-    margin-bottom: 0;
+    margin-top: 8vw;
+    margin-bottom: 4vw;
     padding: 0 6vw;}
 }
 
