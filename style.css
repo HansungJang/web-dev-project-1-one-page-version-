@@ -437,12 +437,17 @@ transition: transform 0.3s ease, opacity 0.3s ease;
 
 /* 개별 전문가 카드 */
 .expert-card {
+    display: grid;  
+    grid-template-columns: 3fr 7fr; /* 사진과 텍스트 영역 2열 */
+    align-items: center;
     background: var(--c-ivory);
     overflow: hidden;
-    transition: box-shadow var(--t);
-    display: flex;
-    flex-direction: column;
+    padding: 30px;
+    border-radius: 8px;
+    gap: 8px; 
+    box-shadow: var(--shadow-sm);
 }
+
 .expert-card:hover {
     box-shadow: var(--shadow-md);
     z-index: 1;
@@ -485,15 +490,14 @@ transition: transform 0.3s ease, opacity 0.3s ease;
    aspect-ratio: 3/4 → 세로형 인물 사진 비율 고정 (MDN: aspect-ratio)
    overflow: hidden + img transform → hover 줌 */
 .expert-photo {
-    aspect-ratio: 4 / 3;
-    overflow: hidden;
-    background: var(--c-cream);       /* 이미지 로딩 전 플레이스홀더 */
+  width: 100%;
 }
 .expert-photo img {
     width: 100%;
-    height: 100%;
+    height: auto;
     object-fit: cover;
-    transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1); /* --t 와 동일 easing */
+    border-radius: 6px; /* 이미지 모서리를 부드럽게 */
+    display: block;
 }
 .expert-card:hover .expert-photo img {
     transform: scale(1.04);           /* GPU 가속 스케일 줌 */
@@ -501,11 +505,10 @@ transition: transform 0.3s ease, opacity 0.3s ease;
 
 /* 텍스트 정보 영역 */
 .expert-info {
-    padding: 28px 24px 32px;
+    width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    flex: 1;
+    gap: 12px; /* 내부 요소들(이름, 소개글, 태그) 사이의 간격 */
 }
 
 .expert-role {
@@ -569,11 +572,12 @@ transition: transform 0.3s ease, opacity 0.3s ease;
 @media (max-width: 760px) {
     .experts-grid {
         grid-template-columns: 1fr;
-        gap: 1px;
+        gap: 12px;
     }
     .expert-photo {
-        aspect-ratio: 4 / 3;          /* 모바일에서 가로형 비율로 전환 */
-    }
+      max-width: 200px;
+      margin: 0 auto; 
+     }
 }
 
 .exp-img-wrapper {
