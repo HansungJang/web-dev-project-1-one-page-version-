@@ -1,35 +1,7 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
- <header basic-components="../components/header.html">
-</header>
-
-<body>
-  
-<div class="hero">
-  <img src="../assets/location_bg.png" alt="Hero Background" class="hero-bg">
-</div>
-
-<section id="location" style="flex:1;">
-  <div class="wrap">
-        <p class="sec-tag sr" id="location-tag" contenteditable="false">Information</p>
-        <h2 class="sec-h sr" id="location-title" contenteditable="false">오시는 <em>방법</em></h2>
-        <p class="loc-body sr" id="location-subtitle1" contenteditable="false">편안한 마음으로 문의해 주세요.</p>
-      
-         <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3175.1999876070445!2d127.03027329999999!3d37.2666845!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x357b43cfa7c9dacf%3A0x1a0d9bccab5e7398!2z66eI7J2MLOyduOyngO2WieuPmeyLrOumrOyDgeuLtOyEvO2EsA!5e0!3m2!1sen!2skr!4v1774881180230!5m2!1sko!2skr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="map-box"></iframe>
-         <div></div>
-        
-    <p class="loc-body sr" id="location-subtitle2" contenteditable="false">약도 </p>
-
-    <div class="loc-grid">
-      <div class="map-box sr">
-        <a href="https://map.naver.com/" target="_blank" id="e-map-link">
-          <img src="../assets/location.jpg" alt="지도 보기" id="img-map" style="width:100%; height:100%; object-fit:cover;">
-          <div class="map-overlay" id="location-map-describe" contenteditable="false">클릭하시면 지도로 연결됩니다</div>
-        </a>
-      </div>
-
-       <div>
+class LocationInfo extends HTMLElement {
+    connectedCallback() {
+        this.innerHTML = `
+<div>
         <ul class="loc-list">
           <li class="loc-item sr">
             <div class="loc-ico">🔍</div>
@@ -76,15 +48,12 @@
           </li>
         </ul>
       </div>
-    </div>
-  </div>
-</section>
+        `;
+    }
+}
 
- <div basic-components="../components/footer.html"></div>
+customElements.define('location-info', LocationInfo); 
+ 
 
-<div id="toast"></div>
-<script type="module" src="../main.js" defer></script>
-<script  src="../components/components.js" defer></script>
-
-</body>
-</html>
+ 
+ 

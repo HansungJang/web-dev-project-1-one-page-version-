@@ -63,6 +63,11 @@
     color: var(--c-white);
 }
 
+.contactInfo {
+    box-sizing: border-box;
+    padding-top: 8px;
+}
+
 
 /* 📱 모바일 영역: 완벽한 대응 */
 @media (max-width: 800px) {
@@ -176,7 +181,7 @@
 
                 </div><!-- /.program-slider -->
 
-                <a href="specialties.html" class="btn-solid" style="margin-top:36px;">프로그램 자세히 보기</a>
+                <a href="categories/specialties.html" class="btn-solid" style="margin-top:36px;">프로그램 자세히 보기</a>
             </section>
 
             <!-- 변경 후 -->
@@ -216,17 +221,17 @@
                 <div class="sec-tag" id="home-session3-tag" contenteditable="false">Self Check</div>
                 <h2 class="sec-h" id="home-session3-title" contenteditable="false">내 마음의 <em>현재 온도</em>는?</h2>
                 <p class="sec-sub" id="home-session3-sub" contenteditable="false">간단한 자가진단을 통해 현재 나의 심리 상태를 점검해보세요.</p>
-                <div class="diagram-box">
-                    <img src="assets/self_check.png" alt="자가진단" class="diagram-img">
+                <div class="diagram-box" onclick="location.href='categories/selfcheck.html'">
+                    <img src="assets/self_check.png" alt="자가진단" class="diagram-img"> 
                 </div>
-                <a href="selfcheck.html" class="btn-solid" style="margin-top:20px;">자가진단 시작하기</a>
+                <a href="categories/selfcheck.html" class="btn-solid" style="margin-top:20px;">자가진단 시작하기</a>
             </section>
 
             <section class="sr-card s4">
                 <div class="sec-tag" id="home-session4-tag" contenteditable="false">About Me</div>
                 <h2 class="sec-h" id="home-session4-title" contenteditable="false">나를 찾아가는 <em>여정</em></h2>
                 <p class="sec-sub" id="home-session4-sub" contenteditable="false">심리검사와 상담을 통해 몰랐던 나의 내면을 깊이 있게 이해합니다.</p>
-                <div class="diagram-box">
+                <div class="diagram-box" onclick="location.href='categories/aboutme.html'">
                     <img src="assets/about_me.png" alt="나를 찾아서" class="diagram-img">
                 </div>
                 <a href="categories/aboutme.html" class="btn-solid" style="margin-top:20px;">초진기록지 작성해보기</a>
@@ -247,10 +252,69 @@
             <section class="sr-card s6" id="sr-card-s6" contenteditable="false">
                 <div class="sec-tag" id="home-session6-tag" contenteditable="false">Location</div>
                 <h2 class="sec-h" id="home-session6-title" contenteditable="false">찾아오시는 <em>길</em></h2>
+
                 <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3175.1999876070445!2d127.03027329999999!3d37.2666845!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x357b43cfa7c9dacf%3A0x1a0d9bccab5e7398!2z66eI7J2MLOyduOyngO2WieuPmeyLrOumrOyDgeuLtOyEvO2EsA!5e0!3m2!1sen!2skr!4v1774881180230!5m2!1sko!2skr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="map-box"></iframe>
                 <div></div>
                 <p class="sec-sub" id="home-session6-sub" contenteditable="false">언제든 편하게 들를 수 있는 아늑한 공간에서 기다리고 있습니다.</p>
                 <a href="categories/location.html" class="btn-solid" style="margin-top:20px;">지도 확인하기</a>
+                <div></div>
+                <h4 class="sec-h" id="home-session7-title" contenteditable="false" >약도</h4>
+                <div></div>
+                <div class="map-box sr">
+                    <a href="https://map.naver.com/" target="_blank" id="e-map-link">
+                    <img src="../assets/location.jpg" alt="지도 보기" id="img-map" style="width:100%; height:100%; object-fit:cover;">
+                    <div class="map-overlay" id="location-map-describe" contenteditable="false">클릭하시면 지도로 연결됩니다</div>
+                    </a>
+                </div>
+
+                <div class = 'contactInfo'>
+                    <ul class="loc-list">
+                    <li class="loc-item sr">
+                        <div class="loc-ico">🔍</div>
+                        <div class="loc-meta">
+                        <span class="loc-lbl" id="location-card-name-title" contenteditable="false">사업체명</span>
+                        <span class="loc-val" id="location-card-name-body" contenteditable="false">마음,인지행동심리상담센터</span>
+                        </div>
+                    </li>
+                    <li class="loc-item sr">
+                        <div class="loc-ico">📍</div>
+                        <div class="loc-meta">
+                        <span class="loc-lbl" id="location-card-address-title" contenteditable="false">주소</span>
+                        <span class="loc-val" id="location-card-address-body" contenteditable="false">경기도 수원시 팔달구 경수대로466번길 58(인계동) [아이오피스 내부에 있습니다]</span>
+                        </div>
+                    </li>
+                    <li class="loc-item sr d3">
+                        <div class="loc-ico">📞</div>
+                        <div class="loc-meta">
+                        <span class="loc-lbl" id="location-card-phone-title" contenteditable="false">전화번호</span>
+                        <span class="loc-val" id="location-card-phone-body" contenteditable="false">010-7577-6940</span>
+                        </div>
+                    </li>
+                    <li class="loc-item sr d4">
+                        <div class="loc-ico">✉️</div>
+                        <div class="loc-meta">
+                        <span class="loc-lbl" id="location-card-email-title" contenteditable="false">이메일</span>
+                        <span class="loc-val" id="location-card-email-body" contenteditable="false">jihye0708@hotmail.com</span>
+                        </div>
+                    </li>
+                    <li class="loc-item sr d5">
+                        <div class="loc-ico">🚃</div>
+                        <div class="loc-meta">
+                        <span class="loc-lbl" id="location-card-subway-title" contenteditable="false">지하철 이용시</span>
+                        <span class="loc-val" id="location-card-subway-body1" contenteditable="false">수인분당선 (수원시청역 6번 출구)</span>
+                        <span class="loc-val" id="location-card-subway-body2" contenteditable="false">홈플러스와 수원시청 사잇 길로 쭉 내려오시면, 도보 5-7분 거리에 있습니다.</span>              
+                        </div>
+                    </li>
+                    <li class="loc-item sr d6">
+                        <div class="loc-ico">🚌</div>
+                        <div class="loc-meta">
+                        <span class="loc-lbl" id="location-card-bus-title" contenteditable="false">버스 이용시</span>
+                        <span class="loc-val" id="location-card-bus-body" contenteditable="false">KBS 수원센터에서 하차 하시면, 도보 2분 거리에 있습니다.</span>
+                        </div>
+                    </li>
+                    </ul>
+                </div>
+
             </section>
 
         </div>
