@@ -458,10 +458,7 @@ transition: transform 0.3s ease, opacity 0.3s ease;
 /* 전문가 소개 */
 .exp_list{display:flex; flex-wrap:wrap; gap: 40px 0; justify-content:space-between; list-style-type: none;}
 .exp_list li{width:48.7%; min-height:520px; border-radius: 30px; border: 1px solid #D9D9D9; background: #FFF; padding:40px; position:relative;}
-/* .exp_list li:before{content:''; display:block; width:290px; height:290px; background:url("/assets/logo-rm-bg.png") no-repeat center / 100%; position:absolute; bottom: 60px; left:50%; transform:translateX(-50%);} */
 .exp_list li:hover{border: 1px solid #538baa;}
-/* .exp_list li.first{width:100%; min-height:auto !important; border: 2px solid #6DB12F !important;} */
-/* .exp_list li.first:before{width: 124px; height: 124px; background:url("/assets/logo-rm-bg.png") no-repeat center / 100%; bottom:40px; right:40px; left:initial; transform:translateX(0);} */
 .exp_list li .name{font-size: 30px; font-weight: 800; padding-bottom:25px; border-bottom:1px solid #E7E7E7;}
 .exp_list li .bt_wrap{margin-top:25px;}
 .exp_list li .bt_wrap .list{display:flex; align-items:flex-start; gap:20px; font-size: 22px;}
@@ -472,16 +469,16 @@ transition: transform 0.3s ease, opacity 0.3s ease;
 .exp_list li .bt_wrap .list .right p + p{margin-top:7px;}
 
 
-
+/*전문가 소개 글 내부 layout*/
 	.exp_list{gap: 4.82vw 0;}
 	.exp_list li{width:100%; min-height:auto; border-radius: 3.52vw; padding:4.82vw;}
 	.exp_list li:before{width:34.51vw; height:34.51vw; bottom: 44%; transform:translate(-50%, 50%);}
 	.exp_list li.first:before{width: 14.71vw; height: 14.71vw; bottom:4.82vw; right:4.82vw;}
-	.exp_list li .name{font-size: 4.52vw; padding-bottom:3.99vw;}
-	.exp_list li .bt_wrap{margin-top:3.99vw;}
-	.exp_list li .bt_wrap .list{gap:1.84vw; font-size: 3.44vw; flex-direction:column;}
-	.exp_list li .bt_wrap .list + .list{margin-top:3.82vw;}
-	.exp_list li .bt_wrap .list .left{width: 21.49vw; line-height: 5.82vw;  border-radius: 3.52vw;}
+	.exp_list li .name{font-size: 1.4vw; padding-bottom:1vw;}
+	.exp_list li .bt_wrap{margin-top:1vw;}
+	.exp_list li .bt_wrap .list{gap:1.84vw; font-size: 1.2vw; flex-direction:column;}
+	.exp_list li .bt_wrap .list + .list{margin-top:1.8vw;}
+	.exp_list li .bt_wrap .list .left{width: 12vw; line-height: 4vw;  border-radius: 2.4vw;}
 	.exp_list li .bt_wrap .list .right{width:100%; margin-top:0;}
 	.exp_list li .bt_wrap .list .right p + p{margin-top:0.78vw;}
 
@@ -570,6 +567,35 @@ transition: transform 0.3s ease, opacity 0.3s ease;
 
 /* 반응형: 760px 이하에서 1열로 */
 @media (max-width: 760px) {
+
+/* 전문가 소개 */
+  .exp_list{display:flex; flex-wrap:wrap; gap: 40px 0; justify-content:space-between; list-style-type: none;}
+  .exp_list li{width:48.7%; min-height:520px; border-radius: 30px; border: 1px solid #D9D9D9; background: #FFF; padding:40px; position:relative;}
+  .exp_list li:hover{border: 1px solid #538baa;}
+  .exp_list li .name{font-size: 30px; font-weight: 800; padding-bottom:25px; border-bottom:1px solid #E7E7E7;}
+  .exp_list li .bt_wrap{margin-top:25px;}
+  .exp_list li .bt_wrap .list{display:flex; align-items:flex-start; gap:20px; font-size: 22px;}
+  .exp_list li .bt_wrap .list + .list{margin-top:15px;}
+  .exp_list li .bt_wrap .list .left{width: 130px; line-height: 40px; font-weight: 800; color: #FFF; text-align: center; border-radius: 30px; background: #619f85;}
+  .exp_list li .bt_wrap .list .right{color: #8E8E8E; width:calc(100% - 150px); word-break:keep-all; line-height:1.3; margin-top:6px;}
+  .exp_list li .bt_wrap .list .right p{word-break:keep-all;}
+  .exp_list li .bt_wrap .list .right p + p{margin-top:7px;}
+
+
+  /*전문가 소개 글 내부 layout*/
+    .exp_list{gap: 4.82vw 0;}
+    .exp_list li{width:100%; min-height:auto; border-radius: 3.52vw; padding:4.82vw;}
+    .exp_list li:before{width:34.51vw; height:34.51vw; bottom: 44%; transform:translate(-50%, 50%);}
+    .exp_list li.first:before{width: 14.71vw; height: 14.71vw; bottom:4.82vw; right:4.82vw;}
+    .exp_list li .name{font-size: 4.52vw; padding-bottom:3.99vw;}
+    .exp_list li .bt_wrap{margin-top:3.99vw;}
+    .exp_list li .bt_wrap .list{gap:1.84vw; font-size: 3.44vw; flex-direction:column;}
+    .exp_list li .bt_wrap .list + .list{margin-top:3.82vw;}
+    .exp_list li .bt_wrap .list .left{width: 21.49vw; line-height: 5.82vw;  border-radius: 3.52vw;}
+    .exp_list li .bt_wrap .list .right{width:100%; margin-top:0;}
+    .exp_list li .bt_wrap .list .right p + p{margin-top:0.78vw;}
+
+
     .experts-grid {
         grid-template-columns: 1fr;
         gap: 12px;
