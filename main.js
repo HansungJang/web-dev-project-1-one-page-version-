@@ -104,7 +104,13 @@ async function applyDataToUI(data) {
   initExpertListener();
 }
 
-// 전체 페이지 Update UI
+// 전체 페이지 Update UI 
+// 
+// [To Do / 26.06.29.] cache 함수 추가할 것
+// - 호출전에 cache로 요소 저장값이 있는지 확인 
+// - if, 존재 && (시간 < 24h) cache값으로 대체
+// - else 기존 호출방식으로 호출 
+
 // [추가] Firestore 데이터를 불러와 현재 활성화된 페이지 UI에 뿌려주는 핵심 함수
 window.updateUI = async function() {
   const currentPage = window.checkCurrentPage();
