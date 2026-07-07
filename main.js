@@ -111,6 +111,12 @@ async function applyDataToUI(data) {
 // - if, 존재 && (시간 < 24h) cache값으로 대체
 // - else 기존 호출방식으로 호출 
 
+// logic idea 
+// 1) 배열 형태로 된 elements 별 객체 ; Map() 에 저장 ; cache로 활용할 container 
+// 2) 데이터 유무 판별 / updateUI()에 추가 
+//    setTimeout()   / 불필요한 호출 중복 방지 
+
+
 // [추가] Firestore 데이터를 불러와 현재 활성화된 페이지 UI에 뿌려주는 핵심 함수
 window.updateUI = async function() {
   const currentPage = window.checkCurrentPage();

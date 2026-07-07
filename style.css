@@ -336,6 +336,7 @@ transition: transform 0.3s ease, opacity 0.3s ease;
 .program-slider {
     position: relative;
     overflow: hidden;             /* ← 핵심: 트랙 클리핑 */
+    overflow-x: auto;               /* 모바일에서 스와이프 가능 */
     margin-top: 48px;
     width: 100%;
 }
@@ -348,6 +349,7 @@ transition: transform 0.3s ease, opacity 0.3s ease;
     gap: 24px;
     /* transition 은 JS 에서 동적으로 on/off
        (리셋 시 순간이동, 슬라이드 시 ease) */
+    /* white-space: nowrap;               카드가 한 줄에 나열되도록 */
     will-change: transform;       /* GPU 레이어 힌트 */
 }
 
@@ -379,7 +381,7 @@ transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
 /* 인디케이터 점 */
-.slider-dots {
+/* .slider-dots {
     display: flex;
     justify-content: center;
     gap: 8px;
@@ -396,7 +398,7 @@ transition: transform 0.3s ease, opacity 0.3s ease;
 .dot.active {
     background: var(--c-sage);
     transform: scale(1.4);
-}
+} */
 
 /* 반응형: 카드 너비 축소 */
 @media (max-width: 760px) {
