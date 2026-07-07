@@ -169,7 +169,9 @@
 
                     </div><!-- /.program-track -->
 
-                    <!-- 인디케이터 (선택)
+                </div><!-- /.program-slider -->
+
+                <!-- 인디케이터 (선택) -->
                     <div class="slider-dots" id="sliderDots" aria-hidden="true">
                         <span class="dot active"></span>
                         <span class="dot"></span>
@@ -177,9 +179,7 @@
                         <span class="dot"></span>
                         <span class="dot"></span>
                         <span class="dot"></span>
-                    </div> -->
-
-                </div><!-- /.program-slider -->
+                    </div>
 
                 <a href="categories/specialties.html" class="btn-solid" style="margin-top:36px;">프로그램 자세히 보기</a>
             </section>
@@ -335,6 +335,25 @@
 
         document.querySelectorAll('.sr').forEach(el => observer.observe(el));
 
+            const track = document.getElementById('programTrack');
+            const dots  = document.querySelectorAll('.dot');
+            
+            
+            // 움직이는 효과 
+            container.addEventListener('scroll', ()=>{
+                const slideWidth = track.clientWidth;
+                const scrollLeft = track.scrollLeft;
+
+                const activeIndex = Math.round(scrollLeft / slideWidth);
+                dots.forEach((dot, index) => {
+                    if (index === activeIndex) {
+                        dot.classList.add('active');
+                    } else {
+                        dot.classList.remove('active');
+                    }
+            })}); 
+
+
         /* ──────────────────────────────────────────
         Program Slider — 2초 자동 슬라이드
         
@@ -354,9 +373,8 @@
             const TOTAL_REAL  = 6;          // 실제 카드 수 (클론 제외)
             const INTERVAL_MS = 2000;       // 슬라이드 간격 (ms)
             const SLIDE_DURATION = '0.6s';  // CSS transition 지속시간
-
-            const track = document.getElementById('programTrack');
-            const dots  = document.querySelectorAll('.dot');
+            
+            // 이동 애니메이션 
             if (!track) return;
 
             // 카드 1장 너비 = flex-basis(300) + gap(24)
