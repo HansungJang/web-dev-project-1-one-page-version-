@@ -332,30 +332,29 @@ transition: transform 0.3s ease, opacity 0.3s ease;
       padding: 0 6vw;
 }
 
-/* 뷰포트 창문: 트랙이 이 밖으로 나가면 보이지 않음 */
+/* 뷰포트 창문: 트랙이 이 밖으로 나가면 보이지 않음
 .program-slider {
     position: relative;
-    overflow: hidden;             /* ← 핵심: 트랙 클리핑 */
-    overflow-x: auto;             /* 모바일에서 스와이프 가능 */
+    overflow: hidden;              
+    overflow-x: auto;              
     margin-top: 48px;
     width: 100%;
-}
+} */
 
 /* 슬라이드 트랙: 카드를 가로로 한 줄에 배치
    JS 가 style.transform = 'translateX(Xpx)' 로 이동 제어
    transition 으로 슬라이드 애니메이션 부여 */
-.program-track {
+/* .program-track {
     display: flex;
     gap: 24px;
-    /* transition 은 JS 에서 동적으로 on/off
-       (리셋 시 순간이동, 슬라이드 시 ease) */
-    will-change: transform;       /* GPU 레이어 힌트 */
-}
+ 
+    will-change: transform;       
+} */
 
 /* 슬라이더 내부 field-card 너비 고정
    기존 fields-grid 의 grid 열 대신 flex item 으로 동작 */
-.program-track .field-card {
-    flex: 0 0 300px;              /* 너비 300px 고정, 줄어들지 않음 */
+/* .program-track .field-card {
+    flex: 0 0 300px;               
     background: var(--c-bg);
     padding: 32px 28px;
     border-left: 3px solid var(--c-sage);
@@ -377,25 +376,25 @@ transition: transform 0.3s ease, opacity 0.3s ease;
     color: var(--c-muted);
     font-weight: 300;
     line-height: 1.65;
-}
+} */
 
 /*인디케이터 기본 bar 비활성화*/
-.program-slider::-webkit-scrollbar {
+/* .program-slider::-webkit-scrollbar {
   display: none;
 }
 .program-slider {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  
+  scrollbar-width: none;  
   
   display: flex;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   width: 100%;
-}
+} */
 
 /* 인디케이터 점 */
-.slider-dots {
+/* .slider-dots {
     display: flex;
     justify-content: center;
     gap: 8px;
@@ -412,17 +411,92 @@ transition: transform 0.3s ease, opacity 0.3s ease;
 .dot.active {
     background: var(--c-sage);
     transform: scale(1.4);
-}
+} */
 
 /* 반응형: 카드 너비 축소 */
-@media (max-width: 760px) {
+/* @media (max-width: 760px) {
     .program-track .field-card { flex: 0 0 240px; }
     .sr-card.s1 {margin-top: 100px;}
     .wrap.main-section{ max-width: 1340px;
     margin-top: 8vw;
     margin-bottom: 4vw;
     padding: 0 6vw;}
+} */
+
+
+.program-slider {
+  position: relative;
+  overflow-x: auto;
+  overflow-y: visible;
+  margin-top: 48px;
+  width: 100%;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
+
+.program-slider::-webkit-scrollbar {
+  display: none;
+}
+
+.program-track {
+  display: flex;
+  gap: 24px;
+  width: max-content;
+  will-change: transform;
+}
+
+.program-track .field-card {
+  flex: 0 0 300px;
+  scroll-snap-align: start;
+  background: var(--c-bg);
+  padding: 32px 28px;
+  border-left: 3px solid var(--c-sage);
+  transition: transform var(--t), box-shadow var(--t), background var(--t);
+}
+
+.program-track .field-card:hover,
+.program-track .field-card.active {
+  transform: translateY(-5px);
+  background: var(--c-ivory);
+  box-shadow: var(--shadow-sm);
+}
+
+.slider-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin: 24px 0;
+}
+
+.slider-dot {
+  width: 8px;
+  height: 8px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--c-border);
+  padding: 0;
+  transition: background var(--t), transform var(--t);
+}
+
+.slider-dot:hover,
+.slider-dot:focus-visible,
+.slider-dot.active {
+  background: var(--c-sage);
+  transform: scale(1.45);
+  outline: none;
+}
+
+@media (max-width: 760px) {
+  .program-track .field-card {
+    flex-basis: 240px;
+  }
+}
+
+
+
+
 
 /* ══════════════════════════════════════════
    EXPERTS / HERO

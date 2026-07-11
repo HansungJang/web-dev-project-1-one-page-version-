@@ -153,7 +153,7 @@
                         <!--
                             ✅ 무한루프용 클론 카드 (JS로도 가능하나 명시적 HTML 클론이 더 단순)
                             마지막 카드 이후 처음으로 순간 리셋할 때 빈 화면 방지용
-                        -->
+                       
                         <div class="field-card" aria-hidden="true">
                             <h4>정신병리 및 정서관리</h4>
                             <p>우울, 불안, 공황 등 신경증부터 조현병, 조울병 등 전문적인 심리 개입이 필요한 문제를 다룹니다.</p>
@@ -166,19 +166,27 @@
                             <h4>관계와 가족</h4>
                             <p>대인관계 갈등, 가족 문제, 부부상담 및 효율적인 양육방법 코칭을 통해 관계의 회복을 돕습니다.</p>
                         </div>
-
+                     -->
                     </div><!-- /.program-track -->
 
                 </div><!-- /.program-slider -->
 
-                <!-- 인디케이터 (선택) -->
-                    <div class="slider-dots" id="sliderDots" aria-hidden="true">
+                <!-- 인디케이터 기존 dot css 요소 삽입 말고; <button> 활용 --> 
+                    <!-- <div class="slider-dots" id="sliderDots" aria-hidden="true">
                         <span class="dot active"></span>
                         <span class="dot"></span>
                         <span class="dot"></span>
                         <span class="dot"></span>
                         <span class="dot"></span>
                         <span class="dot"></span>
+                    </div> -->
+                    <div class="slider-dots" id="sliderDots" aria-label="Program slider controls">
+                    <button class="slider-dot active" type="button" data-slide="0" aria-label="1번 프로그램"></button>
+                    <button class="slider-dot" type="button" data-slide="1" aria-label="2번 프로그램"></button>
+                    <button class="slider-dot" type="button" data-slide="2" aria-label="3번 프로그램"></button>
+                    <button class="slider-dot" type="button" data-slide="3" aria-label="4번 프로그램"></button>
+                    <button class="slider-dot" type="button" data-slide="4" aria-label="5번 프로그램"></button>
+                    <button class="slider-dot" type="button" data-slide="5" aria-label="6번 프로그램"></button>
                     </div>
 
                 <a href="categories/specialties.html" class="btn-solid" style="margin-top:36px;">프로그램 자세히 보기</a>
@@ -326,122 +334,182 @@
     <script type="module" src="main.js" defer></script>
 
     <script>
-        // 스크롤 시 애니메이션 효과 (Observer)
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add('in');
+        (() => {
+        const slider = document.querySelector('.program-slider');
+        const track = document.getElementById('programTrack');
+        const cards = Array.from(track?.querySelectorAll('.field-card') || []);
+        const dots = Array.from(document.querySelectorAll('.slider-dot'));
+
+        if (!slider || !track || !cards.length || !dots.length) return;
+
+        const INTERVAL_MS = 3000;
+        let currentIndex = 0;
+        let timer = null;
+
+        function setActive(index) {
+            currentIndex = index;
+
+            cards.forEach((card, cardIndex) => {
+            card.classList.toggle('active', cardIndex === index);
             });
-        }, { threshold: 0.1 });
 
-        document.querySelectorAll('.sr').forEach(el => observer.observe(el));
+            dots.forEach((dot, dotIndex) => {
+            dot.classList.toggle('active', dotIndex === index);
+            });
+        }
 
-            const track = document.getElementById('programTrack');
-            const dots  = document.querySelectorAll('.dot');
-            
-            
-            // 움직이는 효과 
-            container.addEventListener('scroll', ()=>{
-                const slideWidth = track.clientWidth;
-                const scrollLeft = track.scrollLeft;
+        function goTo(index) {
+            const nextIndex = index >= cards.length ? 0 : index;
+            const targetCard = cards[nextIndex];
 
-                const activeIndex = Math.round(scrollLeft / slideWidth);
-                dots.forEach((dot, index) => {
-                    if (index === activeIndex) {
-                        dot.classList.add('active');
-                    } else {
-                        dot.classList.remove('active');
-                    }
-            })}); 
+            slider.scrollTo({
+            left: targetCard.offsetLeft,
+            behavior: index >= cards.length ? 'auto' : 'smooth'
+            });
 
+            setActive(nextIndex);
+        }
 
-        /* ──────────────────────────────────────────
-        Program Slider — 2초 자동 슬라이드
-        
-        동작 원리:
-        1. setInterval(2000) 으로 currentIndex 증가
-        2. track.style.transform = translateX(-offset) 으로 이동
-        3. index 가 원본 카드 수(6) 에 도달하면
-            transition 을 잠깐 끄고(순간이동) index=0 으로 리셋
-            → requestAnimationFrame 으로 한 프레임 후 transition 복원
-        
-        참고 MDN:
-        - setInterval      : developer.mozilla.org/ko/docs/Web/API/setInterval
-        - requestAnimationFrame : developer.mozilla.org/ko/docs/Web/API/Window/requestAnimationFrame
-        - HTMLElement.style: developer.mozilla.org/ko/docs/Web/API/HTMLElement/style
-        ────────────────────────────────────────── */
-        (function () {
-            const TOTAL_REAL  = 6;          // 실제 카드 수 (클론 제외)
-            const INTERVAL_MS = 2000;       // 슬라이드 간격 (ms)
-            const SLIDE_DURATION = '0.6s';  // CSS transition 지속시간
-            
-            // 이동 애니메이션 
-            if (!track) return;
+        function next() {
+            goTo(currentIndex + 1);
+        }
 
-            // 카드 1장 너비 = flex-basis(300) + gap(24)
-            const getCardWidth = () => {
-                const card = track.querySelector('.field-card');
-                if (!card) return 324;
-                const style = getComputedStyle(card);
-                return card.offsetWidth + parseInt(style.marginRight || 0) + 24;
-            };
+        function start() {
+            stop();
+            timer = setInterval(next, INTERVAL_MS);
+        }
 
-            let currentIndex = 0;
-            let timer;
+        function stop() {
+            if (timer) clearInterval(timer);
+        }
 
-            function goTo(index, animate = true) {
-                const cardW = getCardWidth();
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+            goTo(index);
+            start();
+            });
 
-                if (!animate) {
-                    // transition OFF → 순간이동 (무한루프 리셋)
-                    track.style.transition = 'none';
-                    track.style.transform  = `translateX(-${index * cardW}px)`;
+            dot.addEventListener('focus', () => {
+            setActive(index);
+            });
+        });
 
-                    // requestAnimationFrame 으로 한 프레임 후 transition 복원
-                    // (브라우저가 reflow 처리 후 다음 paint 타이밍에 복원)
-                    requestAnimationFrame(() => {
-                        requestAnimationFrame(() => {
-                            track.style.transition = `transform ${SLIDE_DURATION} cubic-bezier(0.4,0,0.2,1)`;
-                        });
-                    });
-                } else {
-                    track.style.transition = `transform ${SLIDE_DURATION} cubic-bezier(0.4,0,0.2,1)`;
-                    track.style.transform  = `translateX(-${index * cardW}px)`;
-                }
+        slider.addEventListener('scroll', () => {
+            const nearestIndex = cards.reduce((closestIndex, card, index) => {
+            const currentDistance = Math.abs(card.offsetLeft - slider.scrollLeft);
+            const closestDistance = Math.abs(cards[closestIndex].offsetLeft - slider.scrollLeft);
+            return currentDistance < closestDistance ? index : closestIndex;
+            }, 0);
 
-                // 인디케이터 업데이트
-                dots.forEach((d, i) => d.classList.toggle('active', i === index % TOTAL_REAL));
-            }
+            setActive(nearestIndex);
+        }, { passive: true });
 
-            function next() {
-                currentIndex++;
+        slider.addEventListener('mouseenter', stop);
+        slider.addEventListener('mouseleave', start);
+        slider.addEventListener('touchstart', stop, { passive: true });
+        slider.addEventListener('touchend', start, { passive: true });
 
-                if (currentIndex >= TOTAL_REAL) {
-                    // ① 마지막 → 클론 카드 위치로 슬라이드 (자연스럽게)
-                    goTo(currentIndex, true);
-
-                    // ② transition 완료(600ms) 후 index=0 으로 순간 리셋
-                    setTimeout(() => {
-                        currentIndex = 0;
-                        goTo(0, false);   // animate=false → 순간이동
-                    }, 650);
-                } else {
-                    goTo(currentIndex, true);
-                }
-            }
-
-            function startTimer() {
-                timer = setInterval(next, INTERVAL_MS);
-            }
-            function stopTimer()  { clearInterval(timer); }
-
-            // 호버 시 일시정지 (UX)
-            track.closest('.program-slider').addEventListener('mouseenter', stopTimer);
-            track.closest('.program-slider').addEventListener('mouseleave', startTimer);
-
-            // 초기 실행
-            goTo(0, false);
-            startTimer();
+        setActive(0);
+        start();
         })();
+
+        // // 스크롤 시 애니메이션 효과 (Observer)
+        // const observer = new IntersectionObserver((entries) => {
+        //     entries.forEach(entry => {
+        //         if (entry.isIntersecting) entry.target.classList.add('in');
+        //     });
+        // }, { threshold: 0.1 });
+
+        // document.querySelectorAll('.sr').forEach(el => observer.observe(el));
+
+        // /* ──────────────────────────────────────────
+        // Program Slider — 2초 자동 슬라이드
+        
+        // 동작 원리:
+        // 1. setInterval(2000) 으로 currentIndex 증가
+        // 2. track.style.transform = translateX(-offset) 으로 이동
+        // 3. index 가 원본 카드 수(6) 에 도달하면
+        //     transition 을 잠깐 끄고(순간이동) index=0 으로 리셋
+        //     → requestAnimationFrame 으로 한 프레임 후 transition 복원
+        
+        // 참고 MDN:
+        // - setInterval      : developer.mozilla.org/ko/docs/Web/API/setInterval
+        // - requestAnimationFrame : developer.mozilla.org/ko/docs/Web/API/Window/requestAnimationFrame
+        // - HTMLElement.style: developer.mozilla.org/ko/docs/Web/API/HTMLElement/style
+        // ────────────────────────────────────────── */
+        // (function () {
+        //     const TOTAL_REAL  = 6;          // 실제 카드 수 (클론 제외)
+        //     const INTERVAL_MS = 2000;       // 슬라이드 간격 (ms)
+        //     const SLIDE_DURATION = '0.6s';  // CSS transition 지속시간
+            
+        //     // 이동 애니메이션 
+        //     if (!track) return;
+
+        //     // 카드 1장 너비 = flex-basis(300) + gap(24)
+        //     const getCardWidth = () => {
+        //         const card = track.querySelector('.field-card');
+        //         if (!card) return 324;
+        //         const style = getComputedStyle(card);
+        //         return card.offsetWidth + parseInt(style.marginRight || 0) + 24;
+        //     };
+
+        //     let currentIndex = 0;
+        //     let timer;
+
+        //     function goTo(index, animate = true) {
+        //         const cardW = getCardWidth();
+
+        //         if (!animate) {
+        //             // transition OFF → 순간이동 (무한루프 리셋)
+        //             track.style.transition = 'none';
+        //             track.style.transform  = `translateX(-${index * cardW}px)`;
+
+        //             // requestAnimationFrame 으로 한 프레임 후 transition 복원
+        //             // (브라우저가 reflow 처리 후 다음 paint 타이밍에 복원)
+        //             requestAnimationFrame(() => {
+        //                 requestAnimationFrame(() => {
+        //                     track.style.transition = `transform ${SLIDE_DURATION} cubic-bezier(0.4,0,0.2,1)`;
+        //                 });
+        //             });
+        //         } else {
+        //             track.style.transition = `transform ${SLIDE_DURATION} cubic-bezier(0.4,0,0.2,1)`;
+        //             track.style.transform  = `translateX(-${index * cardW}px)`;
+        //         }
+
+        //         // 인디케이터 업데이트
+        //         dots.forEach((d, i) => d.classList.toggle('active', i === index % TOTAL_REAL));
+        //     }
+
+        //     function next() {
+        //         currentIndex++;
+
+        //         if (currentIndex >= TOTAL_REAL) {
+        //             // ① 마지막 → 클론 카드 위치로 슬라이드 (자연스럽게)
+        //             goTo(currentIndex, true);
+
+        //             // ② transition 완료(600ms) 후 index=0 으로 순간 리셋
+        //             setTimeout(() => {
+        //                 currentIndex = 0;
+        //                 goTo(0, false);   // animate=false → 순간이동
+        //             }, 650);
+        //         } else {
+        //             goTo(currentIndex, true);
+        //         }
+        //     }
+
+        //     function startTimer() {
+        //         timer = setInterval(next, INTERVAL_MS);
+        //     }
+        //     function stopTimer()  { clearInterval(timer); }
+
+        //     // 호버 시 일시정지 (UX)
+        //     track.closest('.program-slider').addEventListener('mouseenter', stopTimer);
+        //     track.closest('.program-slider').addEventListener('mouseleave', startTimer);
+
+        //     // 초기 실행
+        //     goTo(0, false);
+        //     startTimer();
+        // })();
     </script>
 </body>
 </html>
