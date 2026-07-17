@@ -9,7 +9,6 @@
   // [추가] experts.html 파일, 이미지 & 양력 업로드 
   // import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-storage.js";
   import { collection, onSnapshot, addDoc, deleteDoc, query, orderBy, updateDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
-
   // 1. Firebase 설정 (제공해주신 정보 유지)
   const firebaseConfig = {
     apiKey: "AIzaSyBHAG_rdo3NxBWEJIGSnt34dYsXeP5G2lg",
@@ -38,53 +37,11 @@
   const CONTENT_REF = doc(db, 'site', 'content');
   const TEXT_IDS = ['h-program','e-hero-h', 'e-hero-b', 'e-fields-h', 'e-info-h', 'e-cred-h', 'e-con-b', 'e-info-detail', 'copy-wright', 'e-c1', 'e-c2', 'e-c3', 'e-c4', 'e-c5', 'e-f1-h', 'e-f1-b', 'e-f2-h', 'e-f2-b', 'e-f3-h', 'e-f3-b', 'e-f4-h', 'e-f4-b', 'e-f5-h', 'e-f5-b', 'e-f6-h', 'e-f6-b', 'e-loc', 'e-email', 'e-email-link', 'e-map-link', 'tel', 'Fax', 'e-res', 'e-con-h'];
 
-
-
-
   // experts.html 
   // const storage = getStorage(app);
   const expertsCol = collection(db, 'experts');
   const ASSET_BASE_PATH = 'assets/experts/';
   const DEFAULT_EXPERT_IMG = 'assets/logo.png'; // 이미지 미설정 시 기본값
-
-  // // [중요] 초기 데이터 로드 함수
-  async function loadData() {
-    const CACHE_KEY = 'site_content_cache';
-    const TIME_KEY = 'site_content_time';
-    const cachedData = localStorage.getItem(CACHE_KEY);
-    const lastFetchTime = localStorage.getItem(TIME_KEY);
-    
-    const now = new Date().getTime();
-    const ONE_DAY = 24 * 60 * 60 * 1000; // 24시간을 밀리초로 계산
-
-    // 1. 먼저 로컬 캐시 데이터를 화면에 뿌림 (사용자에게 즉시 보여줌)
-    if (cachedData) {
-      applyDataToUI(JSON.parse(cachedData));
-    }
-
-    // 2. 조건부 DB 호출
-    // 캐시가 없거나, 마지막으로 가져온 지 24시간이 지났을 때만 DB에 접속
-    if (!cachedData || !lastFetchTime || (now - lastFetchTime > ONE_DAY)) {
-      try {
-        const snap = await getDoc(CONTENT_REF);
-        if (snap.exists()) {
-          const data = snap.data();
-          
-          // 데이터가 변경되었을 때만 UI 업데이트 및 캐시 갱신
-          if (JSON.stringify(data) !== cachedData) {
-            applyDataToUI(data);
-            localStorage.setItem(CACHE_KEY, JSON.stringify(data));
-            localStorage.setItem(TIME_KEY, now.toString()); // 업데이트 시간 기록
-            console.log("DB에서 새로운 데이터를 로드하고 캐시를 갱신했습니다.");
-          }
-        }
-      } catch (e) {
-        console.error("DB 로드 실패:", e);
-      }
-    } else {
-      console.log("24시간이 지나지 않아 로컬 캐시를 사용합니다. DB 호출 생략.");
-    }
-  }
 
 // UI에 데이터를 입히는 로직 분리
 // main.js
@@ -113,9 +70,94 @@ async function applyDataToUI(data) {
 
 // logic idea 
 // 1) 배열 형태로 된 elements 별 객체 ; Map() 에 저장 ; cache로 활용할 container 
-// 2) 데이터 유무 판별 / updateUI()에 추가 
-//    setTimeout()   / 불필요한 호출 중복 방지 
+let elementsCache = new Map();
 
+// CODEX - 개선 사항 1. 기존 loadUI() concept 활용; pageID 생성을 위함  
+// 그냥 MAP() 은 브라우저 종료 시 사라지므로, localStorage에 저장하는 방법도 고려 가능
+const CONTENT_CACHE_PREFIX = 'onepage:contents:';
+const CONTENT_CACHE_TTL = 24 * 60 * 60 * 1000; // 24시간 뒤 업데이트 위함 
+
+// CODEX - 개선 사항 2. 반복되는 firestore 호출로직 (함수/변수명 지정) 통해서 반복 최소화
+const CONTENT_DOCUMENTS = {
+  home: 'index',
+  apply: 'apply',
+  center: 'center',
+  procedure: 'procedure',
+  experts: 'experts',
+  location: 'location',
+  specialties: 'specialties'
+};
+
+// 2) 데이터 유무 판별 / updateUI()에 추가 
+// 2-1) cache의 데이터 key값 확인 
+function getCacheKey(pageName) {
+  return `${CONTENT_CACHE_PREFIX}${pageName}`;
+}
+// 2-2) cache에 저장되어 있는 data 가져오기 (getCache() 함수 )
+function readContentCache(pageName){
+  try {
+    const saved = localStorage.getItem(getCacheKey(pageName));
+    if (!saved) return null;
+
+    const cache = JSON.parse(saved);
+    // cache 사용하진 않는 경우 [1. 데이터 없거나, 양식 오류 / 2. 업데이트 시간 넘어간 경우]
+    if(!cache?.data || !cache?.saveAt) return null;
+    if(Date.now() - cache.saveAt > CONTENT_CACHE_TTL) return null; // TTL 초과 시 cache 무효화
+    
+    // cache 유효한 경우, data 반환
+    return cache.data;
+  } catch(error){
+    console.error("[readContentCache] cache 읽기 중 오류 발생:", error);
+    return null;
+  }
+}
+// 2-3) cache에 저장 logic 
+  function saveContentCache(pageName, data){
+    localStorage.setItem(
+      getCacheKey(pageName),
+      JSON.stringify({
+        saveAt: Date.now(),
+        data
+      })
+    );
+  }
+
+// 2-4) 업데이트시 cache 초기화 
+  function clearContentCache(pageName){
+    localStorage.removeItem(getCacheKey(pageName));
+  }
+
+// 2-5) content 가져오는 함수 
+async function getContent(pageName){
+  const cachedData = readContentCache(pageName); // 저장 되어있는 내용 확인
+
+  if(cachedData){
+    console.log(`[${pageName}] localStorage cache 사용`); 
+    return cachedData; 
+  }
+
+  // cached data가 없는 경우 
+  try{
+    const documentId = CONTENT_DOCUMENTS[pageName];
+    const snap = await getDoc(doc(db, 'contents', documentId)); 
+    
+    if(!snap.exists()){
+      console.warn(`[${pageName}] firestore에 없는 문서입니다.`); 
+      return null; 
+    }
+    const data = snap.data();
+    saveContentCache(pageName, data); 
+    console.log(`[${pageName}] firestore에서 호출 localstorage에 저장`); 
+    return data; 
+  } catch(error){
+    console.error(`[${pageName}] 로드 살패 :`, error);
+    return null; 
+  }
+}
+
+
+// 3) get~ 함수들 수정 (cache 삽입)
+// 4) 해당 페이지 수정 발생 -> cache null 처리 / get 해당 부분 수행하도록 수정  
 
 // [추가] Firestore 데이터를 불러와 현재 활성화된 페이지 UI에 뿌려주는 핵심 함수
 window.updateUI = async function() {
@@ -181,80 +223,15 @@ function mapDataToElements(obj) {
 }
 
 
-// [중요] 관리자 저장 함수 (전역 window 객체에 등록)
-// main.js
+// get함수 변경 
+window.getHomeContent = () => getContent('home'); 
+window.getApplyContent= () => getContent('apply'); 
+window.getCenterContent= () => getContent('center'); 
+window.getProcedureContent= () => getContent('procedure'); 
+window.getExpertsContent= () => getContent('experts'); 
+window.getLocationContent= () => getContent('location'); 
+window.getSpecialtiesContent= () => getContent('specialties'); 
 
-// [TO DO]
-// 1. 페이지별로 이미 DB에 저장된 항목 있는지 조사 
-window.getHomeContent = async () => {
-  try {
-    const snap = await getDoc(doc(db, 'contents', 'index'));
-    return snap.data();
-  } catch (e) {
-    console.error("Error fetching home content:", e);
-    return null;
-  }
-};
-
-window.getCenterContent = async () => {
-  try {
-    const snap = await getDoc(doc(db, 'contents', 'center'));
-    return snap.data();
-  } catch (e) {
-    console.error("Error fetching center content:", e);
-    return null;
-  }
-};
-
-window.getProcedureContent = async () => {  
-  try {
-    const snap = await getDoc(doc(db, 'contents', 'procedure'));
-    return snap.data();
-  } catch (e) {
-    console.error("Error fetching procedure content:", e);
-    return null;
-  }
-};
-
-window.getApplyContent = async () => {  
-  try {
-    const snap = await getDoc(doc(db, 'contents', 'apply'));
-    return snap.data();
-  } catch (e) {
-    console.error("Error fetching apply content:", e);
-    return null;
-  }
-};
-
-window.getExpertsContent = async () => {
-  try {
-    const snap = await getDoc(doc(db, 'contents', 'experts'));
-    return snap.data();
-  } catch (e) {
-    console.error("Error fetching experts content:", e);
-    return null;
-  }
-};
-
-window.getLocationContent = async () => {
-  try {
-    const snap = await getDoc(doc(db, 'contents', 'location'));
-    return snap.data();
-  } catch (e) {
-    console.error("Error fetching location content:", e);
-    return null;
-  }
-};
-
-window.getSpecialtiesContent = async () => {
-  try {
-    const snap = await getDoc(doc(db, 'contents', 'specialties'));
-    return snap.data();
-  } catch (e) {
-    console.error("Error fetching specialties content:", e);
-    return null;
-  }
-};
 
 // 2. 페이지별로 setDoc을 이용한 문서 형식 저장 
 window.saveHome = async () => {
@@ -267,9 +244,9 @@ window.saveHome = async () => {
     if (!original_content) {
       original_content = {};
     }
-
-    const homeDocRef = doc(db, "contents", "index");
     
+    const homeDocRef = getHomeContent();
+
     // 2. Save document using Optional Chaining (?.) for safe fallback inheritance
     await setDoc(homeDocRef, {
       "home-session1": {
@@ -327,7 +304,11 @@ window.saveHome = async () => {
                              original_content["home-session5"]?.["home-session5-sub"] || 
                              document.getElementById("home-session5-sub")?.innerText || ""
       }               
+      
     });
+
+    clearContentCache('index'); 
+
   } catch (error) {
     console.error("Error inside saveHome:", error);
     throw error; // Passes the error up to saveAll's catch block properly
@@ -389,7 +370,7 @@ window.saveCenter = async () => {
                            document.getElementById("center-body2_4")?.innerText
       }
     });
-
+    clearContentCache('center');
     console.log("Center content saved successfully.");
   } catch (error) {
     console.error("Error inside saveCenter:", error);
@@ -492,7 +473,7 @@ window.saveProcedure = async () => {
                                                document.getElementById("procedure-section2-body4-description")?.innerText
       }
     });
-
+    clearContentCache('procedure');
     console.log("Procedure content saved successfully.");
   } catch (error) {
     console.error("Error inside saveProcedure:", error);
@@ -565,7 +546,7 @@ window.saveApplyContent = async () => {
                               document.getElementById("contact-form-note3")?.innerText
       }
     });
-
+    clearContentCache('apply');
     console.log("Apply content saved successfully.");
   } catch (error) {
     console.error("Error inside saveApplyContent:", error);
@@ -620,7 +601,7 @@ window.saveExpertsContent = async () => {
                                original_content["experts-card-education"] || 
                                document.getElementById("experts-card-education")?.innerText
     });
-
+    clearContentCache('experts');
     console.log("Experts content saved successfully.");
   } catch (error) {
     console.error("Error inside saveExpertsContent:", error);
@@ -712,7 +693,7 @@ window.saveLocationContent = async () => {
                                   document.getElementById("location-card-bus-body")?.innerText
       }
     });
-
+    clearContentCache('location');
     console.log("Location content saved successfully.");
   } catch (error) {
     console.error("Error inside saveLocationContent:", error);
@@ -798,7 +779,7 @@ window.saveSpecialtiesContent = async () => {
                                     document.getElementById("fields-card6-description")?.innerText
       }
     });
-
+    clearContentCache('specialties');
     console.log("Specialties content saved successfully.");
   } catch (error) {
     console.error("Error inside saveSpecialtiesContent:", error);
