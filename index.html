@@ -65,7 +65,7 @@
 
 .contactInfo {
     box-sizing: border-box;
-    padding-top: 8px;
+    padding-top: 8vw;
 }
 
 
@@ -170,16 +170,6 @@
                     </div><!-- /.program-track -->
 
                 </div><!-- /.program-slider -->
-
-                <!-- 인디케이터 기존 dot css 요소 삽입 말고; <button> 활용 --> 
-                    <!-- <div class="slider-dots" id="sliderDots" aria-hidden="true">
-                        <span class="dot active"></span>
-                        <span class="dot"></span>
-                        <span class="dot"></span>
-                        <span class="dot"></span>
-                        <span class="dot"></span>
-                        <span class="dot"></span>
-                    </div> -->
                     <div class="slider-dots" id="sliderDots" aria-label="Program slider controls">
                     <button class="slider-dot active" type="button" data-slide="0" aria-label="1번 프로그램"></button>
                     <button class="slider-dot" type="button" data-slide="1" aria-label="2번 프로그램"></button>
@@ -250,7 +240,7 @@
                 <h2 class="sec-h" id="home-session5-title" contenteditable="false">상담 <em>절차 및 예약</em> 안내</h2>
                 <p class="sec-sub" id="home-session5-sub" contenteditable="false">편안한 첫 방문을 위해 상담 과정과 예약 방법을 안내해 드립니다.</p>
                 <div class="diagram-box">
-                    <img src="assets/procedure_diagram1.png" alt="상담 전체 절차 다이어그램" class="diagram-img">
+                    <img src="assets/procedure_diagram1.png" alt="상담 전체 절차 다이어그램" class="diagram-img" id="index_procedure-diagram-img">
                 </div>
                 <div class = "sr-card">
                     <a href="categories/procedure.html" class="btn-solid" style="margin-top:20px;">상담 알아보기</a>
@@ -270,7 +260,7 @@
                 <div></div>
                 <div class="map-box sr">
                     <a href="https://map.naver.com/" target="_blank" id="e-map-link">
-                    <img src="../assets/location.jpg" alt="지도 보기" id="img-map" style="width:100%; height:100%; object-fit:cover;">
+                    <img src="../assets/location.jpg" alt="지도 보기" id="img-map" style="width:100%; height:100%; contain:content;">
                     <div class="map-overlay" id="location-map-describe" contenteditable="false">클릭하시면 지도로 연결됩니다</div>
                     </a>
                 </div>
@@ -295,7 +285,7 @@
                         <div class="loc-ico">📞</div>
                         <div class="loc-meta">
                         <span class="loc-lbl" id="location-card-phone-title" contenteditable="false">전화번호</span>
-                        <span class="loc-val" id="location-card-phone-body" contenteditable="false">010-7577-6940</span>
+                        <span class="loc-val" id="location-card-phone-body" contenteditable="false">010-7577-6940 (문자연락만 가능)</span>
                         </div>
                     </li>
                     <li class="loc-item sr d4">
@@ -413,103 +403,6 @@
         start();
         })();
 
-        // // 스크롤 시 애니메이션 효과 (Observer)
-        // const observer = new IntersectionObserver((entries) => {
-        //     entries.forEach(entry => {
-        //         if (entry.isIntersecting) entry.target.classList.add('in');
-        //     });
-        // }, { threshold: 0.1 });
-
-        // document.querySelectorAll('.sr').forEach(el => observer.observe(el));
-
-        // /* ──────────────────────────────────────────
-        // Program Slider — 2초 자동 슬라이드
-        
-        // 동작 원리:
-        // 1. setInterval(2000) 으로 currentIndex 증가
-        // 2. track.style.transform = translateX(-offset) 으로 이동
-        // 3. index 가 원본 카드 수(6) 에 도달하면
-        //     transition 을 잠깐 끄고(순간이동) index=0 으로 리셋
-        //     → requestAnimationFrame 으로 한 프레임 후 transition 복원
-        
-        // 참고 MDN:
-        // - setInterval      : developer.mozilla.org/ko/docs/Web/API/setInterval
-        // - requestAnimationFrame : developer.mozilla.org/ko/docs/Web/API/Window/requestAnimationFrame
-        // - HTMLElement.style: developer.mozilla.org/ko/docs/Web/API/HTMLElement/style
-        // ────────────────────────────────────────── */
-        // (function () {
-        //     const TOTAL_REAL  = 6;          // 실제 카드 수 (클론 제외)
-        //     const INTERVAL_MS = 2000;       // 슬라이드 간격 (ms)
-        //     const SLIDE_DURATION = '0.6s';  // CSS transition 지속시간
-            
-        //     // 이동 애니메이션 
-        //     if (!track) return;
-
-        //     // 카드 1장 너비 = flex-basis(300) + gap(24)
-        //     const getCardWidth = () => {
-        //         const card = track.querySelector('.field-card');
-        //         if (!card) return 324;
-        //         const style = getComputedStyle(card);
-        //         return card.offsetWidth + parseInt(style.marginRight || 0) + 24;
-        //     };
-
-        //     let currentIndex = 0;
-        //     let timer;
-
-        //     function goTo(index, animate = true) {
-        //         const cardW = getCardWidth();
-
-        //         if (!animate) {
-        //             // transition OFF → 순간이동 (무한루프 리셋)
-        //             track.style.transition = 'none';
-        //             track.style.transform  = `translateX(-${index * cardW}px)`;
-
-        //             // requestAnimationFrame 으로 한 프레임 후 transition 복원
-        //             // (브라우저가 reflow 처리 후 다음 paint 타이밍에 복원)
-        //             requestAnimationFrame(() => {
-        //                 requestAnimationFrame(() => {
-        //                     track.style.transition = `transform ${SLIDE_DURATION} cubic-bezier(0.4,0,0.2,1)`;
-        //                 });
-        //             });
-        //         } else {
-        //             track.style.transition = `transform ${SLIDE_DURATION} cubic-bezier(0.4,0,0.2,1)`;
-        //             track.style.transform  = `translateX(-${index * cardW}px)`;
-        //         }
-
-        //         // 인디케이터 업데이트
-        //         dots.forEach((d, i) => d.classList.toggle('active', i === index % TOTAL_REAL));
-        //     }
-
-        //     function next() {
-        //         currentIndex++;
-
-        //         if (currentIndex >= TOTAL_REAL) {
-        //             // ① 마지막 → 클론 카드 위치로 슬라이드 (자연스럽게)
-        //             goTo(currentIndex, true);
-
-        //             // ② transition 완료(600ms) 후 index=0 으로 순간 리셋
-        //             setTimeout(() => {
-        //                 currentIndex = 0;
-        //                 goTo(0, false);   // animate=false → 순간이동
-        //             }, 650);
-        //         } else {
-        //             goTo(currentIndex, true);
-        //         }
-        //     }
-
-        //     function startTimer() {
-        //         timer = setInterval(next, INTERVAL_MS);
-        //     }
-        //     function stopTimer()  { clearInterval(timer); }
-
-        //     // 호버 시 일시정지 (UX)
-        //     track.closest('.program-slider').addEventListener('mouseenter', stopTimer);
-        //     track.closest('.program-slider').addEventListener('mouseleave', startTimer);
-
-        //     // 초기 실행
-        //     goTo(0, false);
-        //     startTimer();
-        // })();
     </script>
 </body>
 </html>

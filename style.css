@@ -165,7 +165,7 @@ nav.stuck {
 }
 
 .nav-logo {
-  height: 88px;
+  height: 7vw;
   width : auto;
   object-fit: contain;
 }
@@ -263,7 +263,7 @@ transition: transform 0.3s ease, opacity 0.3s ease;
 .sec-h {
   font-family: var(--f-display);
   font-size: clamp(34px, 4.5vw, 62px);
-  font-weight: 700; line-height: 1.1; word-break: keep-all;
+  font-weight: 700; line-height: 2.4; word-break: keep-all;
 }
 .sec-h em { font-style: normal; color: var(--c-sage-lt); font-weight: 600; font-family: nanum-gothic-regular, var(--f-body); }
 .sec-sub { font-size: 16px; line-height: 1.85; color: var(--c-muted); font-weight: 300; word-break: keep-all; text-align: center; }
@@ -277,7 +277,8 @@ transition: transform 0.3s ease, opacity 0.3s ease;
 .sr-card{
   /* display: flex; */
   align-items: center;
-}
+  margin-bottom: 4vw;
+ }
 
 .sr-card .btn-solid {
     display: block;         /* inline-block에서 block으로 변경 */
@@ -286,7 +287,7 @@ transition: transform 0.3s ease, opacity 0.3s ease;
     margin-right: auto;     /* 오른쪽 마진 자동 -> 중앙 배치 */
     margin-top: 20px;
     text-align: center;
-}
+ }
 
 .sr-card .diagram-img{
     display: block;         /* inline-block에서 block으로 변경 */
@@ -295,6 +296,14 @@ transition: transform 0.3s ease, opacity 0.3s ease;
     margin-right: auto;     /* 오른쪽 마진 자동 -> 중앙 배치 */
     margin-top: 20px;
     align-items: center;
+}
+
+.diagram-img{
+  max-width: 60%;
+}
+
+#index_procedure-diagram-img{
+  max-width: 100%;
 }
 
  .sr-card.center-intro {
@@ -306,10 +315,9 @@ transition: transform 0.3s ease, opacity 0.3s ease;
 
 /* 다이어그램 박스 및 이미지 설정 */
 .diagram-box-center {
-    width: 70%;            /* 부모 너비의 절반으로 설정 */
+    width: 50%;            /* 부모 너비의 절반으로 설정 */
     margin: 12vw auto 0;   /* 위쪽 마진 20px, 좌우 자동(중앙), 아래 0 */
-    /* padding: 24px 0 8vw; */
-    display: flex;
+     display: flex;
     justify-content: center;
 }
 
@@ -330,6 +338,10 @@ transition: transform 0.3s ease, opacity 0.3s ease;
       margin: 24vw auto;
       margin-bottom: 0;
       padding: 0 6vw;
+}
+
+#specialist-wrap{
+  padding: 4vw 6vw;
 }
 
 /* 뷰포트 창문: 트랙이 이 밖으로 나가면 보이지 않음
@@ -791,6 +803,11 @@ body.edit-mode [contenteditable="true"] {
   padding-bottom: 8px;
   background: var(--c-cream); /* Maintained original section color */
 }
+
+#location-body{
+  background: var(--c-cream);
+}
+
 .loc-grid {
   display: grid; grid-template-columns: 1fr 1fr;
   gap: 72px; align-items: start;
@@ -853,8 +870,11 @@ body.edit-mode [contenteditable="true"] {
 /* ══════════════════════════════════════════
    FOOTER ENHANCED STYLE
 ══════════════════════════════════════════ */
+#footer-wrap {
+  margin: 10vw auto;
+}
+
 footer {
-  background:  rgba(247,243,236,0.94);
   color: var(--c-muted);
   padding: 0 0 24px;
   font-family: var(--f-body);
@@ -1416,9 +1436,9 @@ body.edit-mode .edit-badge { display: block; }
 #therapist { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; }
 section#therapist{margin-top: 16vw;}
 .therapist-content { display: flex; flex-direction: column; justify-content: center; padding: 130px 4vw 54px 8vw; position: relative; z-index: 2; }
-.therapist-eyebrow { font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--c-sage); font-weight: 500; margin-bottom: 24px; display: flex; align-items: center; gap: 10px; animation: fadeUp 0.9s ease 0.1s both; }
+.therapist-eyebrow { font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--c-sage); font-weight: 500; margin-top: 8vw; margin-bottom: 8vw; display: flex; align-items: center; gap: 10px; animation: fadeUp 0.9s ease 0.1s both; }
 .therapist-eyebrow::before { content:''; width:28px; height:1px; background:var(--c-sage); }
-.therapist-h1 { font-family: var(--f-display); font-size: clamp(40px, 4.8vw, 72px); font-weight: 700; line-height: 1.15; word-break: keep-all; margin-bottom: 24px; animation: fadeUp 0.9s ease 0.22s both; }
+.therapist-h1 { font-family: var(--f-display); font-size: clamp(40px, 4.8vw, 72px); font-weight: 700; line-height: 1.15; word-break: keep-all; margin-top: 8vw; animation: fadeUp 0.9s ease 0.22s both; }
 .therapist-h3 { font-family: nanum-gothic-regular; font-size: clamp(20px, 2.4vw, 36px); color:var(--c-sage); font-weight: 500; line-height: 1.15; word-break: keep-all; margin-bottom: 12px; animation: fadeUp 0.9s ease 0.22s both; }
 .therapist-h1 em { font-family: var(--f-display); font-style: normal; color: var(--c-sage); font-weight: 400; }
 .therapist-body { font-size: 17px; line-height: 1.85; color: var(--c-muted); font-weight: 300; max-width: 460px; margin-bottom: 32px; word-break: keep-all; animation: fadeUp 0.9s ease 0.34s both; }
