@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>예약·문의 — Clove Therapy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Sans+KR:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+/* contact.html 전용 */
+.contact-section {
+  padding: 100px 0;
+  background: var(--c-cream);
+}
+.alt-contact-section {
+  padding: 80px 0;
+  background: var(--c-ivory);
+}
+.alt-contact-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 20px; margin-top: 40px;
+}
+.alt-card {
+  background: var(--c-bg);
+  padding: 28px 26px;
+  border-left: 3px solid var(--c-sage);
+  display: flex; flex-direction: column; gap: 10px;
+}
+.alt-card .a-icon { font-size: 26px; }
+.alt-card h4 { font-family: var(--f-display); font-size: 18px; font-weight: 700; }
+.alt-card p  { font-size: 14px; color: var(--c-muted); font-weight: 300; line-height: 1.65; }
+.alt-card .a-link {
+  font-size: 13px; color: var(--c-sage); font-weight: 500;
+  letter-spacing: 0.06em;
+  display: inline-flex; align-items: center; gap: 4px;
+  margin-top: 4px;
+}
+.privacy-note {
+  background: var(--c-ivory);
+  border: 1px solid var(--c-border);
+  padding: 18px 20px;
+  margin-top: 0;
+  font-size: 13px; color: var(--c-muted); line-height: 1.7; font-weight: 300;
+}
+@media (max-width: 760px) {
+  .alt-contact-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ADMIN BAR -->
+<div id="admin-bar">
+  <span class="ab-badge">관리자</span>
+  <span class="ab-hint">텍스트 클릭 편집 · 사진 드래그&드롭 교체</span>
+  <div class="ab-actions">
+    <button class="ab-btn save" onclick="saveAll()">💾 저장</button>
+    <button class="ab-btn" onclick="logout()">로그아웃</button>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a class="nav-brand" href="index.html">Clove <span>Therapy</span></a>
+  <button class="burger" id="burger" onclick="toggleMenu()" aria-label="메뉴">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-list" id="nav-list">
+    <li><a href="index.html"      onclick="closeMenu()">Home</a></li>
+    <li><a href="therapist.html"  onclick="closeMenu()">상담사</a></li>
+    <li><a href="process.html"    onclick="closeMenu()">CBT 효과·절차</a></li>
+    <li><a href="fees.html"       onclick="closeMenu()">비용·운영</a></li>
+    <li><a href="contact.html"    onclick="closeMenu()">예약·문의</a></li>
+    <li><a href="faq.html"        onclick="closeMenu()">FAQ</a></li>
+    <li><a href="manager.html" class="nav-mgr">Manager ↗</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="page-hero">
+  <div class="page-hero-content">
+    <p class="page-eyebrow" id="e-co-eye">예약 · 문의</p>
+    <h1 class="page-h1">
+      <span id="e-co-h1">여정의<br><em>시작.</em></span>
+    </h1>
+    <p class="page-hero-body" id="e-co-sub">
+      준비가 됐든, 아직 확신이 없든 괜찮습니다. 궁금한 점이 있으면 먼저 연락 주세요. 판단 없이 답변드립니다.
+    </p>
+    <div class="page-hero-btns">
+      <a href="#contact-form" class="btn-solid">예약 양식 작성</a>
+      <a href="faq.html" class="btn-line">자주 묻는 질문</a>
+    </div>
+  </div>
+  <div class="page-hero-photo drop-zone" id="drop-co-hero" data-key="img-co-hero">
+    <img id="img-co-hero"
+      src="https://images.squarespace-cdn.com/content/v1/624b503b5d73881124e70a24/1649102923989-HOTX3VP5FFBFQY94VTYO/Stocksy_comp_2793634.jpg?format=1500w"
+      alt="예약 페이지 이미지">
+    <div class="drop-overlay">
+      <div class="drop-icon">🖼</div>
+      <div class="drop-txt">이미지를 드래그하거나 클릭하여 교체</div>
+    </div>
+  </div>
+</section>
+
+<!-- 메인 문의 폼 -->
+<section class="contact-section" id="contact-form">
+  <div class="wrap">
+    <div class="con-grid">
+
+      <!-- 왼쪽 정보 -->
+      <div>
+        <p class="sec-tag sr">문의하기</p>
+        <h2 class="sec-h sr"><span id="e-co-form-h">첫 걸음을<br><em>내딛어 보세요</em></span></h2>
+        <p class="con-body sr" id="e-co-form-b">
+          아래 양식을 작성해 주시면 영업일 기준 1일 이내 답변드립니다. 이름과 이메일만으로도 접수 가능합니다.
+        </p>
+
+        <!-- 사전 체크리스트 -->
+        <div style="margin-top: 12px;">
+          <p class="sec-tag sr" style="margin-bottom: 12px;">예약 전 확인 사항</p>
+          <ul class="policy-list sr">
+            <li class="policy-item">
+              <span class="policy-dot"></span>
+              <span id="e-co-c1">초기 상담 비용: ₩80,000 / 50분</span>
+            </li>
+            <li class="policy-item">
+              <span class="policy-dot"></span>
+              <span id="e-co-c2">온라인 또는 대면 중 선택 가능</span>
+            </li>
+            <li class="policy-item">
+              <span class="policy-dot"></span>
+              <span id="e-co-c3">48시간 전 취소 시 전액 환불</span>
+            </li>
+            <li class="policy-item">
+              <span class="policy-dot"></span>
+              <span id="e-co-c4">상담 내용은 비밀이 보장됩니다</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- 위기 안내 -->
+        <div class="crisis-banner sr" style="margin-top: 32px;">
+          <h4>즉시 도움이 필요하신가요?</h4>
+          <p>
+            지금 당장 위험하다고 느껴지신다면 상담 예약보다 먼저 아래 기관에 연락하세요.<br>
+            <strong>자살예방상담전화:</strong> <a href="tel:1393">1393</a> (24시간)<br>
+            <strong>정신건강위기상담전화:</strong> <a href="tel:1577-0199">1577-0199</a> (24시간)<br>
+            <strong>응급상황:</strong> <a href="tel:119">119</a>
+          </p>
+        </div>
+      </div>
+
+      <!-- 오른쪽 폼 -->
+      <div class="sr">
+        <div class="privacy-note" id="e-co-privacy">
+          🔒 아래 양식에 입력하신 정보는 예약 및 상담 목적으로만 사용되며, 제3자에게 제공되지 않습니다.
+        </div>
+        <br>
+        <div class="form">
+          <div class="form-row">
+            <div class="fg">
+              <label for="f-name">이름 *</label>
+              <input type="text" id="f-name" placeholder="성함을 입력해 주세요">
+            </div>
+            <div class="fg">
+              <label for="f-email">이메일 *</label>
+              <input type="email" id="f-email" placeholder="이메일 주소">
+            </div>
+          </div>
+          <div class="fg">
+            <label for="f-phone-con">연락처 (선택)</label>
+            <input type="tel" id="f-phone-con" placeholder="010-0000-0000">
+          </div>
+          <div class="fg">
+            <label for="f-svc">관심 상담 유형</label>
+            <select id="f-svc">
+              <option value="" disabled selected>선택해 주세요…</option>
+              <option>불안장애 / 공황</option>
+              <option>우울 / 무기력</option>
+              <option>강박증 (OCD)</option>
+              <option>외상 / PTSD</option>
+              <option>자존감 / 자기비판</option>
+              <option>관계 문제</option>
+              <option>아직 잘 모르겠어요</option>
+            </select>
+          </div>
+          <div class="fg">
+            <label for="f-modality">상담 방식 선호</label>
+            <select id="f-modality">
+              <option value="" disabled selected>선택해 주세요…</option>
+              <option>대면 상담 (방문)</option>
+              <option>화상 상담 (Zoom)</option>
+              <option>화상 상담 (카카오)</option>
+              <option>상관없어요</option>
+            </select>
+          </div>
+          <div class="fg">
+            <label for="f-msg">메시지 (선택)</label>
+            <textarea id="f-msg" placeholder="현재 어려움이나 상담에 기대하시는 것을 간단히 적어 주세요. 작성하지 않아도 괜찮습니다."></textarea>
+          </div>
+          <button class="btn-solid" style="width:100%;" onclick="submitForm(event)">예약 요청 보내기</button>
+          <p class="form-note" id="e-co-form-note">영업일 기준 1일 이내 이메일로 답변드립니다.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- 대체 연락 수단 -->
+<section id="location">
+  <div class="wrap">
+    <div class="loc-grid">
+
+      <div>
+        <p class="sec-tag sr">오시는 길</p>
+        <h2 class="sec-h sr"><span id="e-loc-h">저희 <em>스튜디오</em>를 방문하세요</span></h2>
+        <p class="loc-body sr" id="e-loc-b">
+          클로브 테라피는 웨스트 빌리지 중심부, 도시의 소음으로부터 벗어난 치유의 공간입니다.
+        </p>
+
+        <ul class="loc-list">
+          <li class="loc-item sr">
+            <div class="loc-ico">📍</div>
+            <div class="loc-meta">
+              <span class="loc-lbl">주소</span>
+              <span class="loc-val" id="e-addr">8 Clarkson Street<br>New York, NY 10014</span>
+            </div>
+          </li>
+          <li class="loc-item sr d2">
+            <div class="loc-ico">📞</div>
+            <div class="loc-meta">
+              <span class="loc-lbl">전화</span>
+              <span class="loc-val" id="e-phone">(212) 555-0192</span>
+            </div>
+          </li>
+          <li class="loc-item sr d3">
+            <div class="loc-ico">✉️</div>
+            <div class="loc-meta">
+              <span class="loc-lbl">이메일</span>
+              <span class="loc-val" id="e-email">hello@clovetherapy.com</span>
+              <a class="a-link" href="mailto:hello@clovetherapy.com" id="e-co-a3l">hello@clovetherapy.com</a>
+            </div>
+          </li>
+          <li class="loc-item sr d4">
+            <div class="loc-ico">💬</div>
+            <div class="loc-meta">
+              <span class="loc-lbl">카카오톡</span>
+              <span class="loc-val" id="e-kakao">Clove Therapy</span>
+              <a class="a-link" href="#" id="e-co-a2l">카카오 채널 열기 →</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="map-box sr">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3024.2219901290355!2d-74.00790168428942!3d40.72921757932939!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259fbeda44c4f%3A0x9a9b5bf0af78fee0!2s8%20Clarkson%20St%2C%20New%20York%2C%20NY%2010014!5e0!3m2!1sko!2skr!4v1617000000000!5m2!1sko!2skr"
+          allowfullscreen loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="Clove Therapy 위치">
+        </iframe>
+    </div>
+    <div></div>
+  </div>
+</section>
+
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-row">
+    <div class="foot-brand">Clove Therapy</div>
+    <ul class="foot-links">
+      <li><a href="therapist.html">상담사</a></li>
+      <li><a href="process.html">CBT 효과·절차</a></li>
+      <li><a href="fees.html">비용</a></li>
+      <li><a href="contact.html">예약</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+    </ul>
+    <p class="foot-copy">© 2024 Clove Therapy · 8 Clarkson St, New York</p>
+  </div>
+</footer>
+
+<div class="edit-badge">✏ 편집 모드</div>
+<div id="toast"></div>
+<input type="file" id="file-input" accept="image/*" style="display:none">
+
+<script>
+window.PAGE_TEXT_IDS = [
+  'e-co-eye','e-co-h1','e-co-sub',
+  'e-co-form-h','e-co-form-b',
+  'e-co-c1','e-co-c2','e-co-c3','e-co-c4',
+  'e-co-privacy','e-co-form-note',
+  'e-co-alt-h',
+  'e-co-a1t','e-co-a1b','e-co-a1l',
+  'e-co-a2t','e-co-a2b','e-co-a2l',
+  'e-co-a3t','e-co-a3b','e-co-a3l'
+];
+window.PAGE_DROP_ZONES = ['drop-co-hero'];
+</script>
+<script src="main.js"></script>
+</body>
+</html>

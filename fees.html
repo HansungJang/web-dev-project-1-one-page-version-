@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>비용·운영 정보 — Clove Therapy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Sans+KR:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,300;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+/* fees.html 전용 */
+.fees-main-section {
+  padding: 100px 0;
+  background: var(--c-cream);
+}
+.fees-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 80px; align-items: start;
+}
+.fee-sub {
+  font-size: 16px; line-height: 1.85; color: var(--c-muted);
+  font-weight: 300; margin: 22px 0 8px; word-break: keep-all;
+}
+.fee-disclaimer {
+  font-size: 12px; color: var(--c-muted); font-weight: 300;
+  border-left: 3px solid var(--c-earth);
+  padding: 10px 14px; margin-top: 24px; line-height: 1.7;
+}
+.modality-cards {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 28px;
+}
+.mod-card {
+  background: var(--c-bg);
+  padding: 24px 22px;
+  border-left: 3px solid var(--c-sage);
+}
+.mod-card .m-icon { font-size: 24px; margin-bottom: 12px; }
+.mod-card h4 { font-family: var(--f-display); font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+.mod-card p  { font-size: 13px; color: var(--c-muted); line-height: 1.65; font-weight: 300; }
+@media (max-width: 860px) {
+  .fees-grid { grid-template-columns: 1fr; gap: 52px; }
+  .modality-cards { grid-template-columns: 1fr; }
+}
+@media (max-width: 540px) {
+  .fee-table td, .fee-table th { padding: 12px 10px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ADMIN BAR -->
+<div id="admin-bar">
+  <span class="ab-badge">관리자</span>
+  <span class="ab-hint">텍스트 클릭 편집 · 사진 드래그&드롭 교체</span>
+  <div class="ab-actions">
+    <button class="ab-btn save" onclick="saveAll()">💾 저장</button>
+    <button class="ab-btn" onclick="logout()">로그아웃</button>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a class="nav-brand" href="index.html">Clove <span>Therapy</span></a>
+  <button class="burger" id="burger" onclick="toggleMenu()" aria-label="메뉴">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-list" id="nav-list">
+    <li><a href="index.html"      onclick="closeMenu()">Home</a></li>
+    <li><a href="therapist.html"  onclick="closeMenu()">상담사</a></li>
+    <li><a href="process.html"    onclick="closeMenu()">CBT 효과·절차</a></li>
+    <li><a href="fees.html"       onclick="closeMenu()">비용·운영</a></li>
+    <li><a href="contact.html"    onclick="closeMenu()">예약·문의</a></li>
+    <li><a href="faq.html"        onclick="closeMenu()">FAQ</a></li>
+    <li><a href="manager.html" class="nav-mgr">Manager ↗</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="page-hero">
+  <div class="page-hero-content">
+    <p class="page-eyebrow" id="e-fe-eye">비용 · 운영 정보</p>
+    <h1 class="page-h1">
+      <span id="e-fe-h1">투명한<br><em>비용 안내.</em></span>
+    </h1>
+    <p class="page-hero-body" id="e-fe-sub">
+      회기 시간, 비용 범위, 취소 정책, 온·오프라인 이용 방법 등 상담을 시작하기 전에 알아야 할 모든 실질적 정보를 정리했습니다.
+    </p>
+    <div class="page-hero-btns">
+      <a href="#fees-main" class="btn-solid">비용 확인하기</a>
+      <a href="contact.html" class="btn-line">상담 신청</a>
+    </div>
+  </div>
+  <div class="page-hero-photo drop-zone" id="drop-fe-hero" data-key="img-fe-hero">
+    <img id="img-fe-hero"
+      src="https://images.squarespace-cdn.com/content/v1/624b503b5d73881124e70a24/1649102923989-HOTX3VP5FFBFQY94VTYO/Stocksy_comp_2793634.jpg?format=1500w"
+      alt="상담실 이미지">
+    <div class="drop-overlay">
+      <div class="drop-icon">🖼</div>
+      <div class="drop-txt">이미지를 드래그하거나 클릭하여 교체</div>
+    </div>
+  </div>
+</section>
+
+<!-- 비용 메인 섹션 -->
+<section class="fees-main-section" id="fees-main">
+  <div class="wrap">
+    <div class="fees-grid">
+
+      <!-- 왼쪽: 비용 테이블 -->
+      <div>
+        <p class="sec-tag sr">회기 비용</p>
+        <h2 class="sec-h sr"><span id="e-fe-fee-h">회기 <em>안내</em></span></h2>
+        <p class="fee-sub sr" id="e-fe-fee-sub">
+          아래 비용은 기준 안내이며, 최종 비용은 초기 상담 후 확정됩니다.
+        </p>
+
+        <table class="fee-table sr">
+          <thead>
+            <tr>
+              <th>항목</th>
+              <th>내용</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td id="e-fe-row1a">초기 상담 (50분)</td>
+              <td id="e-fe-row1b">₩80,000 — 첫 회기 탐색 및 목표 설정 포함</td>
+            </tr>
+            <tr>
+              <td id="e-fe-row2a">일반 개인 상담 (50분)</td>
+              <td id="e-fe-row2b">₩100,000 — 표준 CBT 개인 회기</td>
+            </tr>
+            <tr>
+              <td id="e-fe-row3a">집중 회기 (80분)</td>
+              <td id="e-fe-row3b">₩150,000 — 심화 탐색 또는 외상 처리 필요 시</td>
+            </tr>
+            <tr>
+              <td id="e-fe-row4a">온라인 상담 (50분)</td>
+              <td id="e-fe-row4b">₩90,000 — Zoom 또는 카카오 화상통화</td>
+            </tr>
+            <tr>
+              <td id="e-fe-row5a">부스터 세션 (30분)</td>
+              <td id="e-fe-row5b">₩50,000 — 종결 후 유지 점검 목적</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p class="fee-disclaimer sr" id="e-fe-disclaimer">
+          상담비는 회기 당일 현장 또는 사전 계좌이체로 납부하시면 됩니다. 보험 적용은 불가하며, 영수증 발급은 요청 시 가능합니다.
+        </p>
+      </div>
+
+      <!-- 오른쪽: 정책 + 모달리티 -->
+      <div>
+        <p class="sec-tag sr">취소 · 변경 정책</p>
+        <h2 class="sec-h sr" style="font-size: clamp(26px, 3vw, 40px);"><span id="e-fe-policy-h">예약 변경 <em>규정</em></span></h2>
+        <ul class="policy-list sr">
+          <li class="policy-item">
+            <span class="policy-dot"></span>
+            <span id="e-fe-p1">예약 48시간 전 취소: 전액 환불</span>
+          </li>
+          <li class="policy-item">
+            <span class="policy-dot"></span>
+            <span id="e-fe-p2">예약 24시간 전 취소: 50% 취소 수수료 발생</span>
+          </li>
+          <li class="policy-item">
+            <span class="policy-dot"></span>
+            <span id="e-fe-p3">당일 취소 또는 노쇼: 회기 비용 전액 청구</span>
+          </li>
+          <li class="policy-item">
+            <span class="policy-dot"></span>
+            <span id="e-fe-p4">부득이한 사유(응급상황 등)는 개별 협의 가능</span>
+          </li>
+          <li class="policy-item">
+            <span class="policy-dot"></span>
+            <span id="e-fe-p5">일정 변경은 카카오 또는 이메일로 연락주세요</span>
+          </li>
+        </ul>
+
+        <div style="margin-top: 48px;">
+          <p class="sec-tag sr">상담 방식</p>
+          <h2 class="sec-h sr" style="font-size: clamp(26px, 3vw, 40px);"><span id="e-fe-mod-h">온라인 & <em>오프라인</em></span></h2>
+          <div class="modality-cards">
+            <div class="mod-card sr d1">
+              <div class="m-icon">🏢</div>
+              <h4 id="e-fe-m1t">대면 상담</h4>
+              <p id="e-fe-m1b">8 Clarkson St, New York. 독립된 프라이빗 룸에서 진행됩니다.</p>
+            </div>
+            <div class="mod-card sr d2">
+              <div class="m-icon">💻</div>
+              <h4 id="e-fe-m2t">화상 상담</h4>
+              <p id="e-fe-m2b">Zoom 또는 카카오 화상통화. 조용한 사적 공간에서 접속해 주세요.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- 위치 & 운영시간 (기존 location 요소 재사용) -->
+<section id="location-info">
+  <div class="wrap">
+    <div class="loc-grid">
+      <div>
+        <p class="sec-tag sr">오시는 길</p>
+        <h2 class="sec-h sr"><span id="e-fe-loc-h">상담실 <em>위치</em></span></h2>
+        <p class="loc-body sr" id="e-fe-loc-b">
+          웨스트 빌리지 중심부에 위치한 프라이빗 상담 공간입니다. 지하철 및 버스 이용이 편리합니다.
+        </p>
+        <ul class="loc-list">
+          <li class="loc-item sr">
+            <div class="loc-ico">📍</div>
+            <div class="loc-meta">
+              <span class="loc-lbl">주소</span>
+              <span class="loc-val" id="e-fe-addr">8 Clarkson Street<br>New York, NY 10014</span>
+            </div>
+          </li>
+          <li class="loc-item sr d1">
+            <div class="loc-ico">🕐</div>
+            <div class="loc-meta">
+              <span class="loc-lbl">운영 시간</span>
+              <span class="loc-val" id="e-fe-hours">월–금: 오전 9시 – 오후 8시<br>토: 오전 10시 – 오후 4시<br>일: 휴무</span>
+            </div>
+          </li>
+          <li class="loc-item sr d2">
+            <div class="loc-ico">📞</div>
+            <div class="loc-meta">
+              <span class="loc-lbl">전화</span>
+              <span class="loc-val" id="e-fe-phone">(212) 555-0192</span>
+            </div>
+          </li>
+          <li class="loc-item sr d3">
+            <div class="loc-ico">✉️</div>
+            <div class="loc-meta">
+              <span class="loc-lbl">이메일</span>
+              <span class="loc-val" id="e-fe-email">hello@clovetherapy.com</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="map-box sr">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3024.2219901290355!2d-74.00790168428942!3d40.72921757932939!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259fbeda44c4f%3A0x9a9b5bf0af78fee0!2s8%20Clarkson%20St%2C%20New%20York%2C%20NY%2010014!5e0!3m2!1sko!2skr!4v1617000000000!5m2!1sko!2skr"
+          allowfullscreen loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="Clove Therapy 위치">
+        </iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA STRIP → contact.html -->
+<div class="cta-strip">
+  <div class="wrap">
+    <p class="cta-strip-label">다음 단계</p>
+    <h2 class="cta-strip-h">상담을 신청할 준비가 되셨나요?</h2>
+    <p class="cta-strip-sub">예약 양식을 작성하시면 영업일 기준 1일 이내 연락드립니다.</p>
+    <a href="contact.html" class="btn-cta">상담 신청하기 →</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-row">
+    <div class="foot-brand">Clove Therapy</div>
+    <ul class="foot-links">
+      <li><a href="therapist.html">상담사</a></li>
+      <li><a href="process.html">CBT 효과·절차</a></li>
+      <li><a href="fees.html">비용</a></li>
+      <li><a href="contact.html">예약</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+    </ul>
+    <p class="foot-copy">© 2024 Clove Therapy · 8 Clarkson St, New York</p>
+  </div>
+</footer>
+
+<div class="edit-badge">✏ 편집 모드</div>
+<div id="toast"></div>
+<input type="file" id="file-input" accept="image/*" style="display:none">
+
+<script>
+window.PAGE_TEXT_IDS = [
+  'e-fe-eye','e-fe-h1','e-fe-sub',
+  'e-fe-fee-h','e-fe-fee-sub','e-fe-disclaimer',
+  'e-fe-row1a','e-fe-row1b','e-fe-row2a','e-fe-row2b',
+  'e-fe-row3a','e-fe-row3b','e-fe-row4a','e-fe-row4b',
+  'e-fe-row5a','e-fe-row5b',
+  'e-fe-policy-h','e-fe-p1','e-fe-p2','e-fe-p3','e-fe-p4','e-fe-p5',
+  'e-fe-mod-h','e-fe-m1t','e-fe-m1b','e-fe-m2t','e-fe-m2b',
+  'e-fe-loc-h','e-fe-loc-b','e-fe-addr','e-fe-hours','e-fe-phone','e-fe-email'
+];
+window.PAGE_DROP_ZONES = ['drop-fe-hero'];
+</script>
+<script src="main.js"></script>
+</body>
+</html>
