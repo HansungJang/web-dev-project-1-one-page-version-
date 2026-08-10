@@ -43,6 +43,10 @@
   const ASSET_BASE_PATH = 'assets/experts/';
   const DEFAULT_EXPERT_IMG = 'assets/logo.png'; // 이미지 미설정 시 기본값
 
+  // aboutme.html 
+  const isAboutmeSurveyPage = window.location.href.includes("aboutme.html");
+
+
 // UI에 데이터를 입히는 로직 분리
 // main.js
 
@@ -161,6 +165,8 @@ async function getContent(pageName){
 
 // [추가] Firestore 데이터를 불러와 현재 활성화된 페이지 UI에 뿌려주는 핵심 함수
 window.updateUI = async function() {
+  if(isAboutmeSurveyPage) return; 
+
   const currentPage = window.checkCurrentPage();
   console.log(`[updateUI] 현재 페이지(${currentPage})의 데이터를 Firestore에서 불러옵니다.`);
 
@@ -1279,8 +1285,6 @@ onAuthStateChanged(auth, (user) => {
       });
     }
 
-
-
  // 1. Storage Connection Check Function
 // window.checkStorageConnection = async () => {
 //   try {
@@ -1307,6 +1311,8 @@ window.checkAssetsFolder = () => {
 
 // 2. Real-time Expert Listener
 function initExpertListener() {
+  if(isAboutmeSurveyPage) return; 
+
   const q = query(expertsCol, orderBy("createdAt", "asc"));
   
   onSnapshot(q, (snapshot) => {

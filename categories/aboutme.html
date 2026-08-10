@@ -430,6 +430,7 @@ typeSelect.addEventListener('change', (e) => {
             if (confirm("다음 문항으로 넘어가시겠습니까?\n(취소 시 현재 문항 보충 작성)")) {
                 moveNext();
                 renderQuestion(); 
+                document.getElementById('answer-input').focus();
             } else {
                 addMessage("현재 문항에 내용을 이어서 입력해주세요.", 'bot');
             }
