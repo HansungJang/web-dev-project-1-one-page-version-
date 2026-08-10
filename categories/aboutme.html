@@ -366,6 +366,8 @@ typeSelect.addEventListener('change', (e) => {
         state.queIdx = 0;
         state.doneCount = 0;
         state.totalCount = surveyData.reduce((sum, cat) => sum + cat.questions.length, 0);
+        // 기존 renderQuestion() 삭제 
+        deleteAllMessages(); // 기존 메시지 삭제
         addMessage(`"${typeSelect.options[typeSelect.selectedIndex].text}" 설문이 선택되었습니다. 진단을 시작합니다.`, 'bot');
     }
     // 이후 surveyData를 활용해 UI를 렌더링하는 함수를 호출하면 됩니다.
@@ -383,6 +385,14 @@ typeSelect.addEventListener('change', (e) => {
         });
     });
 
+    // 기존 메시지 삭제
+    function deleteAllMessages() {
+        const chatWin = document.getElementById('chat-window');
+        while (chatWin.firstChild) {
+            chatWin.removeChild(chatWin.firstChild);
+        }
+    }
+
     // 질문 렌더링
     function renderQuestion() {
         if(surveyData.length === 0) {
@@ -392,7 +402,7 @@ typeSelect.addEventListener('change', (e) => {
         
         const qText = surveyData[state.catIdx].questions[state.queIdx];
         addMessage(`[${surveyData[state.catIdx].title}] ${qText}`, 'bot');
-        updateUI();
+        updateIndicatorUI();
     }
 
     // 메시지 추가
@@ -419,6 +429,7 @@ typeSelect.addEventListener('change', (e) => {
         setTimeout(() => {
             if (confirm("다음 문항으로 넘어가시겠습니까?\n(취소 시 현재 문항 보충 작성)")) {
                 moveNext();
+                renderQuestion(); 
             } else {
                 addMessage("현재 문항에 내용을 이어서 입력해주세요.", 'bot');
             }
@@ -444,15 +455,12 @@ typeSelect.addEventListener('change', (e) => {
 
         if (state.catIdx >= surveyData.length) {
             console.log('donecount:', state.doneCount, 'totalcount:', state.totalCount); 
-            updateUI();
             completeSurvey();
-        } else {
-            renderQuestion();
-        }
+        }          
     }
 
     // UI 업데이트 (진행도)
-    function updateUI() {
+    function updateIndicatorUI() {
         const percent = Math.floor((state.doneCount / state.totalCount) * 100);
         document.getElementById('progress-fill').style.width = `${percent}%`;
         document.getElementById('progress-percent').innerText = `${percent}%`;
