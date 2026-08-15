@@ -1252,7 +1252,7 @@ body.edit-mode .edit-badge { display: block; }
 
 .survey-selector-wrapper {
     max-width: 450px;
-    margin: 120px auto 40px auto;
+    margin: 20vw auto 2vw auto;
     padding: 0 20px;
     text-align: center;
 }
